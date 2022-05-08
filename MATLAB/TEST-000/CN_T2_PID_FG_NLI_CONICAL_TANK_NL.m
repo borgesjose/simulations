@@ -18,6 +18,30 @@
 %   --------------------
 %       1 - a1 z^-1 
 
+%% Passo 1, definir o vetor tempo:
+    Ts = 10; % periodo de amostragem para processo de um tanque ( Landau,2006)
+    Tsim = 150
+    nptos = Tsim/Ts;
+    ts = linspace(0,Tsim,nptos+1);
+%% Passo 2 - Definições:
+
+%Dados do probelma:
+
+h0 = 0.01; % ponto inicial
+
+u = zeros(nptos+1,1); % variavel de entrada
+h = zeros(nptos+1,1); % variavel de saida
+
+Cv = 0.97 %velocity coefficient (water 0.97)
+Cc = 0.97 %contraction coefficient (sharp edge aperture 0.62, well rounded aperture 0.97)
+
+Cd = Cc*Cv % discharge coefficient
+
+r = 0.008;% raio do orificio de saida em metros
+
+A = pi*r^2;% Area do orificio de saida
+
+%%
 Tc = 10;
 
 b1 = 0.0396;
@@ -102,9 +126,12 @@ ruido = rlevel*rand(1,1000);
 
     for i=5:nptos,
 
-         y(i) =-a1*y(i-1)-a2*y(i-2)+b1*u(i-1)+b2*u(i-2);
+         %y(i) =-a1*y(i-1)-a2*y(i-2)+b1*u(i-1)+b2*u(i-2);
+         [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i),Cd),[0,Ts],h(i));
+         h0 = y(end); % take the last point
+         h(i+1) = h0; % store the height for plotting
           
-         erro(i)=ref(i)- y(i)+ruido(i); %Erro
+         erro(i)=ref(i)- h(i)+ruido(i); %Erro
 
          rate(i)=(erro(i)-erro(i-1));%/Tc; %Rate of erro
 
