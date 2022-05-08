@@ -1,13 +1,12 @@
 function [h,u]=rele_h_nl(n, Tc, d, eps, A,Cd);
     
-    dmax = d + 5e-4;
-    dmin = d - 3e-4;
+    dmax = d + 9e-4;
+    dmin = d - 9e-4;
     
     for i=1:n,
         y(i)=0;
-        ref(i)= 0.8;
+        ref(i)= 1.5;
     end;
-
     e(1)=0; e(2)=0; 
     h(1)=0.01 ; h(2)=0.01 ; h(3)=0.01 ; h(4)=0.01; h(5)=0.01;
 

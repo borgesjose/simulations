@@ -39,19 +39,19 @@ A = pi*r^2;% Area do orificio de saida
 
     n = 20; % Numero de pontos de análise
 
-    eps = 0.2; 
+    eps = 0.0; 
     d = 10e-4;
 
     nptos = 100;
 
 % Chama a função rele com histerese passando os paramentros do rele e os polos e ganho do proceso de 2 ordem
 % Retorna o vetor yr, e ur com os resultados da aplicação do relé: 
-    dmax = d + 9e-4;
+    dmax = d + 1e-4;
     dmin = d - 9e-4;
     
     for i=1:n,
         y(i)=0;
-        ref(i)= 1.5;
+        ref(i)= 0.2;
     end;
 
     e(1)=0; e(2)=0; 
@@ -81,15 +81,14 @@ A = pi*r^2;% Area do orificio de saida
     grid;
     plot(h,'c-');
     hold on;
-    plot(ref(1:n));
+    plot(ref(:n));
     figure;
     plot(u);
-    
 %% 4 Identificar os parametros a partir do experimento com relé:
     
     
     
-    [gw,w,arm,Kp]=Identificar(n, d, eps,Ts,h,u);
+    [gw,w,arm,Kp]=Identificar(n, d, eps,Ts,yr,ur);
 %%
     Ku = -1/gw;
     Tu = (2*pi)/w; 
