@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 % Universidade Federal do Piaui�                      %
 % Campus Ministro Petronio Portela                    %
-% Copyright 2022 -José Borges do Carmo Neto-         %
-% @author José Borges do Carmo Neto                  %
+% Copyright 2022 -Jose Borges do Carmo Neto-         %
+% @author Jose Borges do Carmo Neto                  %
 % @email jose.borges90@hotmail.com                    %
 %  Simulation Control of conical tank                 %
 %                                                     %
@@ -13,9 +13,9 @@ clear;
 clc;
 %Passo 1, definir o vetor tempo:
     Ts = 10; % periodo de amostragem para processo de um tanque ( Landau,2006)
-    Tsim = 150
+    Tsim = 1500
     nptos = Tsim/Ts;
-    ts = linspace(0,Tsim,nptos+1);
+    ts = linspace(0,Tsim,nptos);
     
 %% Passo 2 - Definition:
 
@@ -47,22 +47,15 @@ A = pi*r^2;% Area do orificio de saida
 %     %u(i)=.0009;
 % end ;
 %%
-%Aplicando o CN-PID-FG:
 
- %turnpoint = 500;%floor(rand*nptos);
-
-
-for i=1:nptos+1,
-    if (i<=nptos/4)  ref(i)=.5; end;
+for i=1:nptos,
+    if (i<=nptos/4)  ref(i)=.6; end;
     if (i>nptos/4)   ref(i) = .6; end;
     if (i>nptos/2 & i<=3*nptos/4)  ref(i)=.6; end;
     if (i>3*nptos/4)   ref(i) = .6; end;
 end ;
-% for i=1:nptos,
-%     ref(i)=30;
-% end ;
 
-for i=1:nptos+1,
+for i=1:nptos,
     if(i>nptos/2 & i< 5+nptos/2 ) 
         disturbio(i) = ref(i)*0.2e-3;
     else disturbio(i) = 0; end;
@@ -71,7 +64,7 @@ end ;
 ref = ref+disturbio
 
 clear h;
-h(4)=0.01 ; h(3)=0.01 ; h(2)=0.01 ; h(1)=0.01 ; 
+h(4)=h0 ; h(3)=h0 ; h(2)=h0 ; h(1)=h0 ; 
 u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
 
 
@@ -80,15 +73,19 @@ erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 L=2;%Provavelmente o valor de limite das memberships functions
 
 %%
-Tc = 10;
+Tc = Ts;
 Tamostra = Tc;
 %nptos = 800;
-Kc = 4.7561;
-Ti = 38.6378;
-Td = 9.6594;
+Kc = .7561;
+Ti = 50.6378;
+Td = 50.6594;
 
-%% Definições do Controlador: 
-PID = 1
+% Kc = 1;
+% Ti = 1000;
+% Td = 0;
+
+%% Controller definition: 
+PID = 0
 Am_min = 2; 
 Am_max = 5;
 Theta_m_min = 45;
@@ -115,9 +112,9 @@ for i=4:nptos
     
     %u(i+1) = ref(i);   % store the Qin value
    
-    [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i),Cd),[0,Ts],h(i));
+    [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd),[0,Ts],h(i-1));
     h0 = y(end); % take the last point
-    h(i+1) = h0; % store the height for plotting
+    h(i) = h0; % store the height for plotting
     
     erro(i)=ref(i) - h(i) + ruido(i); %Erro
 
@@ -145,7 +142,11 @@ for i=4:nptos
 
                 u(i)= u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2);
                 
-             tempo(i)=i*Tamostra;
+                %saturadores:
+                if(u(i)<5e-5) u(i)=5e-5;end;
+                if(u(i)>5e-3) u(i)=5e-3;end;
+             
+                tempo(i)=i*Tamostra;
 
 end
 %%
@@ -175,11 +176,11 @@ legend();
 %plotar Kp,Kd,Ki
 figure;
 grid;
-plot(tempo,Kci,'g-');
+plot(tempo,Kc,'g-');
 hold on;
-plot(tempo,Kdi);
+plot(tempo,Kd);
 hold on;
-plot(tempo,Kii);
+plot(tempo,Ki);
 title('FT2-PID-FG: Kp,Ki,Kd')
 legend('Kc','Kd','Ki')
 %%
