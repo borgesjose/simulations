@@ -1,29 +1,22 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-% Universidade Federal do Piauí                       %
+% Universidade Federal do PiauÃ­                       %
 % Campus Ministro Petronio Portela                    %
-% Copyright 2022 -José Borges do Carmo Neto-          %
-% @author José Borges do Carmo Neto                   %
+% Copyright 2022 -JosÃ© Borges do Carmo Neto-          %
+% @author JosÃ© Borges do Carmo Neto                   %
 % @email jose.borges90@hotmail.com                    %
-%  -- Level control of a conical tank using Interval  %
-%  Type-2 Fuzzy Logic PID controllers for the Phase   %
-%  and Gain Margins of the System                     % 
-%  nas margens de fase e de ganho                     %
-%  -- Version: 1.0  - 20/02/2022                      %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%
-% O processo: 
-% Hz_planta =
-%  
-%     b1 z^-1 + b2 z^-2
-%   --------------------
-%       1 - a1 z^-1 
+%  Simulation conical tank                            %
+%                                                     %
+%  -- Version: 1.0  - 02/05/2022                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Passo 1, definir o vetor tempo:
+
+%Passo 1, definir o vetor tempo:
     Ts = 10; % periodo de amostragem para processo de um tanque ( Landau,2006)
-    Tsim = 150
+    Tsim = 1500
     nptos = Tsim/Ts;
     ts = linspace(0,Tsim,nptos+1);
-%% Passo 2 - Definições:
+    
+%% Passo 2 - DefiniÃ§Ãµes:
 
 %Dados do probelma:
 
@@ -42,72 +35,63 @@ r = 0.008;% raio do orificio de saida em metros
 A = pi*r^2;% Area do orificio de saida
 
 %%
-Tc = 10;
+% definindo a referencia de controle 
 
-b1 = 0.0396;
-b2 = 0.0090;
 
-a1 = -0.8226;
-a2 = 0; 
-
-z = tf('z', Tc )
-
-ftz = (b1*(z^-1)+ b2*(z^-2))/(1 + a1*(z^-1)+ a2*(z^-2));
-
-% figure;
-% step(ftz,50)
-
-%% Aplicando o relé:
-Tc = 10;
-Tamostra = Tc;
-nptos = 800;
-Kc = 4.7561;
-Ti = 38.6378;
-Td = 9.6594;
-
-% d = 80;
-% eps = 1;
-% %[Kc,Ti,Td] = Ident_com_rele(Tamostra,nptos,d,eps);
-% [Kc,Ti,Td] = Ident_com_rele_ZN(Tamostra,nptos,d,eps);
-
-%% Definições do Controlador: 
-PID = 0
-Am_min = 2; 
-Am_max = 5;
-Theta_m_min = 45;
-Theta_m_max = 72;
-     
+% Calculando o input
+%  for i=1:nptos, 
+%     if (i<=nptos/3)  u(i)=.0010; end;
+%     if (i>nptos/3 & i<=2*nptos/3 )   u(i) = .0012; end;
+%     if (i>2*nptos/3)   u(i) = .0001; end;
+%     %u(i)=.0009;
+% end ;
+%%
 %Aplicando o CN-PID-FG:
 
  %turnpoint = 500;%floor(rand*nptos);
 
 
-for i=1:nptos,
-    if (i<=nptos/4)  ref(i)=10; end;
-    if (i>nptos/4)   ref(i) = 50; end;
-    if (i>nptos/2 & i<=3*nptos/4)  ref(i)=25; end;
-    if (i>3*nptos/4)   ref(i) = 60; end;
+for i=1:nptos+1,
+    if (i<=nptos/4)  ref(i)=10e-4; end;
+    if (i>nptos/4)   ref(i) = 50e-4; end;
+    if (i>nptos/2 & i<=3*nptos/4)  ref(i)=25e-4; end;
+    if (i>3*nptos/4)   ref(i) = 60e-4; end;
 end ;
 % for i=1:nptos,
 %     ref(i)=30;
 % end ;
 
-for i=1:nptos,
+for i=1:nptos+1,
     if(i>nptos/2 & i< 5+nptos/2 ) 
-        disturbio(i) = ref(i)*0.2;
+        disturbio(i) = ref(i)*0.2e-3;
     else disturbio(i) = 0; end;
 end ;
 
 ref = ref+disturbio
 
 clear h;
-h(4)=0 ; h(3)=0 ; h(2)=0 ; h(1)=0 ; 
-u(1)=0 ; u(2)=0 ; u(3)=0; u(4)=0;
+h(4)=0.01 ; h(3)=0.01 ; h(2)=0.01 ; h(1)=0.01 ; 
+u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
 
 
 erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
 L=4;%Provavelmente o valor de limite das memberships functions
+
+%%
+Tc = 10;
+Tamostra = Tc;
+%nptos = 800;
+Kc = 4.7561;
+Ti = 38.6378;
+Td = 9.6594;
+
+%% DefiniÃ§Ãµes do Controlador: 
+PID = 1
+Am_min = 2; 
+Am_max = 5;
+Theta_m_min = 45;
+Theta_m_max = 72;
 
 %%
 %randpmo criado aleatoriamente por mim
@@ -124,19 +108,22 @@ Param =[gene,1,1];
 rlevel = 0;
 ruido = rlevel*rand(1,1000);
 
-    for i=5:nptos,
 
-         %y(i) =-a1*y(i-1)-a2*y(i-2)+b1*u(i-1)+b2*u(i-2);
-         [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i),Cd),[0,Ts],h(i));
-         h0 = y(end); % take the last point
-         h(i+1) = h0; % store the height for plotting
-          
-         erro(i)=ref(i)- h(i)+ruido(i); %Erro
+%% Simulation with ode45;
+for i=5:nptos
+    
+    %u(i+1) = ref(i);   % store the Qin value
+   
+    [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i),Cd),[0,Ts],h0);
+    h0 = y(end); % take the last point
+    h(i+1) = h0; % store the height for plotting
+    
+    erro(i)=ref(i)- h(i)+ruido(i); %Erro
 
-         rate(i)=(erro(i)-erro(i-1));%/Tc; %Rate of erro
+    rate(i)=(erro(i)-erro(i-1));%/Tc; %Rate of erro
 
          if (PID == 0)
-             %Aqui na chamada da função é possivel escolher entre linear input(LI) e não linear input(NLI)
+             %Aqui na chamada da funÃ§Ã£o Ã© possivel escolher entre linear input(LI) e nÃ£o linear input(NLI)
              %Am(i) = Inferencia_T2(erro(i),rate(i),L,Param,'LI');
              %Am(i) = Inferencia_T2_S(erro(i),rate(i),L,Param,'LI');
              Am(i) =Inferencia_T2(erro(i),rate(i),L,Param,'LI');
@@ -144,12 +131,8 @@ ruido = rlevel*rand(1,1000);
              Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
          else
              Ami = 1; end;%Am(i) = 1;
-         
-          
 
-      
-
-    %Controlador:
+         %Controlador:
                 
                 Kp(i)= Kc/Ami;
                 Kd(i)= (Td)*Kc/Ami;
@@ -160,13 +143,19 @@ ruido = rlevel*rand(1,1000);
                 gama = (Kc/Ami)*(Td)/Tamostra;
 
                 u(i)= u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2);
+                
+             tempo(i)=i*Tamostra;
 
-
-           tempo(i)=i*Tamostra;
-            
-          %fprintf('amostra:  %d \t entrada:  %6.3f \t saida:  %4.0f\n',i,u(i),y(i));
-
-     end ;
+end
+%%
+% plot results
+figure;
+plot(ts,h,'-r','LineWidth', 3,'DisplayName','height'); hold on
+plot(ts,ref,'k:','LineWidth', 3,'DisplayName','input'); hold off
+ylabel('Tank Height');
+xlabel('Time (s)');
+legend();
+%%
 
      if (PID == 0)
      ISE_t2  = objfunc(erro,tempo,'ISE')
