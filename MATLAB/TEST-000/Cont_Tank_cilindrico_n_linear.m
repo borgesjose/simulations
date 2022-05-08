@@ -47,33 +47,10 @@ end ;
     %u(i)=.0009;
 end ;
 
-%% 3 - Aplicando o rele:
-% Agora é o momento de aplicar o relé a planta: (rele com histerese)
+%% 3 Identificar os parametros a partir do experimento com relé:
 
-    n = 200; % Numero de pontos de análise
+    [gw,w,arm,Kp]=Identificar(n, d, eps,Tc,yr,ur);
 
-    eps = 0.2; 
-    d = 10e-4;
-
-    nptos = 1000
-
-% Chama a função rele com histerese passando os paramentros do rele e os polos e ganho do proceso de 2 ordem
-% Retorna o vetor yr, e ur com os resultados da aplicação do relé: 
-
-    [yr,ur] = rele_h_nl(n,Ts,d,eps,A,Cd); 
-%%
-    figure;
-    grid;
-    plot(yr,'c-');
-    hold on;
-      figure;
-    plot(ur);
-%% 4 Identificar os parametros a partir do experimento com relé:
-    
-    
-    
-    [gw,w,arm,Kp]=Identificar(n, d, eps,Ts,yr,ur);
-%%
     Ku = -1/gw;
     Tu = (2*pi)/w; 
 

@@ -10,52 +10,70 @@
 %  -- Version: 1.0  - 30/04/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-%% 1 - Tratando o processo:
+%Passo 1, definir o vetor tempo:
+    Ts = .1; % periodo de amostragem para processo de um tanque ( Landau,2006)
+    Tsim = 150
+    nptos = Tsim/Ts;
+    ts = linspace(0,Tsim,nptos+1);
+%% Passo 2 - Definições:
 
-% Nesta etapa o processo é discretizado:
-% Sendo:
+%Dados do probelma:
 
-    p1 = (1/2.5);
-    p2 = (1/3.75);
+h0 = 0.01; % ponto inicial
 
-    k = 2*p1*p2;
-    
-    Tc=0.2;
-    Tamostra = Tc;
-    
-% Discretizamos o processo utilizando um segurador de ordem zero:
+u = zeros(nptos+1,1); % variavel de entrada
+h = zeros(nptos+1,1); % variavel de saida
 
-    s = tf('s');
+Cv = 0.97 %velocity coefficient (water 0.97)
+Cc = 0.97 %contraction coefficient (sharp edge aperture 0.62, well rounded aperture 0.97)
 
-    ft = k/((s+p1)*(s+p2))
+Cd = Cc*Cv % discharge coefficient
 
-    ftz = c2d(ft,Tc,'zoh')
+r = 0.008;% raio do orificio de saida em metros
 
-%% 2 - Aplicando o rele:
+A = pi*r^2;% Area do orificio de saida
+
+% definindo a referencia de controle 
+for i=1:nptos+1,
+    if (i<=nptos/5)  ref(i)=.5; end;
+    if (i>nptos/5)   ref(i) = .5; end;
+end ;
+
+% Calculando o input
+ for i=1:nptos, 
+    if (i<=nptos/3)  u(i)=.0010; end;
+    if (i>nptos/3 & i<=2*nptos/3 )   u(i) = .0012; end;
+    if (i>2*nptos/3)   u(i) = .0001; end;
+    %u(i)=.0009;
+end ;
+
+%% 3 - Aplicando o rele:
 % Agora é o momento de aplicar o relé a planta: (rele com histerese)
 
-    n = 200; % Numero de pontos de análise
+    n = 2000; % Numero de pontos de análise
 
-    eps = 0.2; 
-    d = 0.5;
+    eps = 0.5; 
+    d = 10e-4;
 
-    nptos = 1000
+    nptos = 1000;
 
 % Chama a função rele com histerese passando os paramentros do rele e os polos e ganho do proceso de 2 ordem
 % Retorna o vetor yr, e ur com os resultados da aplicação do relé: 
 
-    [yr,ur] = rele_h(n,Tc,d,eps,[p1,p2],k); 
-
-%     figure;
-%     grid;
-%     plot(yr,'c-');
-%     hold on;
-%     plot(ur);
-
-%% 3 Identificar os parametros a partir do experimento com relé:
-
-    [gw,w,arm,Kp]=Identificar(n, d, eps,Tc,yr,ur);
-
+    [yr,ur] = rele_h_nl(n,Ts,d,eps,A,Cd); 
+%%
+    figure;
+    grid;
+    plot(yr,'c-');
+    hold on;
+    figure;
+    plot(ur);
+%% 4 Identificar os parametros a partir do experimento com relé:
+    
+    
+    
+    [gw,w,arm,Kp]=Identificar(n, d, eps,Ts,yr,ur);
+%%
     Ku = -1/gw;
     Tu = (2*pi)/w; 
 
@@ -65,18 +83,6 @@
     b = sin(w*L)/(w*Ku);
     a = (c + cos(w*L))/(w^2);
     
-%% 3.1 teste modelo:
-% 
-% % step(ft,50)
-% % hold on;
-%  Gp = exp(-s*L)/(a*s^2 + b*s + c)
-% % step(Gp,50)
-% % 
-% % ft
-% 
-% nyquist(ft)
-% hold on
-% nyquist(Gp)
 %% Definições do controlador AT-PID-FG: 
 
     Am = 3;
@@ -110,21 +116,15 @@ rlevel = 0.0;
 ruido = rlevel*rand(1,nptos);
 
 for i=5:nptos,
-
-P1(i) = p1+rlevel*rand; % Aplicando ruido na modelagem
-P2(i) = p2+ruido(i);  % Aplicando ruido na modelagem
-k = 2*P1(i)*P2(i); 
     
-    %[c0,c1,c2,r0,r1,r2] = discretiza_zoh(P1(i),P2(i),k,Tc); %chama a função que discretiza o processo utilizano um ZOH;
-    % if (i==550),r1 = - 1.84;r2 = 0.9109;  end % Ruptura no modelo
-     
-     [~,h] = ode45(@(t,y) tank_cilindrical(t,y,u(i)),[0 0.1],Level0);
+
+     [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i),Cd),[0,Ts],h0);
+     h0 = y(end); % take the last point
+     h(i+1) = h0; % store the height for plotting
      
      y(i) = h(end); % take the last point
      z(i+1) = Level0; % store the level for plotting
      sps(i+1) = ref(i);
-     
-     %-r1*y(i-1)-r2*y(i-2)+c0*u(i-2)+c1*u(i-3)+c2*u(i-4); % equação da diferença do processo
      
      erro(i)=ref(i)-y(i); %Erro
       
