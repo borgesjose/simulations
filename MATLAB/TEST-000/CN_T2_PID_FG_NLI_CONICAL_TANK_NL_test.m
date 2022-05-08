@@ -1,12 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-% Universidade Federal do Piauí                       %
+% Universidade Federal do Piaui�                      %
 % Campus Ministro Petronio Portela                    %
-% Copyright 2022 -José Borges do Carmo Neto-          %
-% @author José Borges do Carmo Neto                   %
+% Copyright 2022 -José Borges do Carmo Neto-         %
+% @author José Borges do Carmo Neto                  %
 % @email jose.borges90@hotmail.com                    %
-%  Simulation conical tank                            %
+%  Simulation Control of conical tank                 %
 %                                                     %
-%  -- Version: 1.0  - 02/05/2022                      %
+%  -- Version: 1.0  - 08/05/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clear;
@@ -17,7 +17,7 @@ clc;
     nptos = Tsim/Ts;
     ts = linspace(0,Tsim,nptos+1);
     
-%% Passo 2 - Definições:
+%% Passo 2 - Definition:
 
 %Dados do probelma:
 
@@ -77,7 +77,7 @@ u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
 
 erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
-L=4;%Provavelmente o valor de limite das memberships functions
+L=2;%Provavelmente o valor de limite das memberships functions
 
 %%
 Tc = 10;
@@ -169,3 +169,21 @@ legend();
      ITAE_pid = objfunc(erro,tempo,'ITAE')
      IAE_pid  = objfunc(erro,tempo,'IAE')
      end;
+     
+     
+%%
+%plotar Kp,Kd,Ki
+figure;
+grid;
+plot(tempo,Kci,'g-');
+hold on;
+plot(tempo,Kdi);
+hold on;
+plot(tempo,Kii);
+title('FT2-PID-FG: Kp,Ki,Kd')
+legend('Kc','Kd','Ki')
+%%
+figure;
+grid;
+plot(tempo,Am,'g-');
+title('FT2-PID-FG: Am')

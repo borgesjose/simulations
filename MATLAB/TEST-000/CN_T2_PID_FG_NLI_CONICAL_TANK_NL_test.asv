@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-% Universidade Federal do Piauí                       %
+% Universidade Federal do Piaui�                       %
 % Campus Ministro Petronio Portela                    %
 % Copyright 2022 -José Borges do Carmo Neto-          %
 % @author José Borges do Carmo Neto                   %
@@ -9,10 +9,11 @@
 %  -- Version: 1.0  - 02/05/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+clear;
+clc;
 %Passo 1, definir o vetor tempo:
     Ts = 10; % periodo de amostragem para processo de um tanque ( Landau,2006)
-    Tsim = 1500
+    Tsim = 150
     nptos = Tsim/Ts;
     ts = linspace(0,Tsim,nptos+1);
     
@@ -52,10 +53,10 @@ A = pi*r^2;% Area do orificio de saida
 
 
 for i=1:nptos+1,
-    if (i<=nptos/4)  ref(i)=10e-4; end;
-    if (i>nptos/4)   ref(i) = 50e-4; end;
-    if (i>nptos/2 & i<=3*nptos/4)  ref(i)=25e-4; end;
-    if (i>3*nptos/4)   ref(i) = 60e-4; end;
+    if (i<=nptos/4)  ref(i)=.5; end;
+    if (i>nptos/4)   ref(i) = .6; end;
+    if (i>nptos/2 & i<=3*nptos/4)  ref(i)=.6; end;
+    if (i>3*nptos/4)   ref(i) = .6; end;
 end ;
 % for i=1:nptos,
 %     ref(i)=30;
@@ -76,7 +77,7 @@ u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
 
 erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
-L=4;%Provavelmente o valor de limite das memberships functions
+L=2;%Provavelmente o valor de limite das memberships functions
 
 %%
 Tc = 10;
@@ -110,17 +111,17 @@ ruido = rlevel*rand(1,1000);
 
 
 %% Simulation with ode45;
-for i=5:nptos
+for i=4:nptos
     
     %u(i+1) = ref(i);   % store the Qin value
    
-    [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i),Cd),[0,Ts],h0);
+    [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i),Cd),[0,Ts],h(i));
     h0 = y(end); % take the last point
     h(i+1) = h0; % store the height for plotting
     
-    erro(i)=ref(i)- h(i)+ruido(i); %Erro
+    erro(i)=ref(i) - h(i) + ruido(i); %Erro
 
-    rate(i)=(erro(i)-erro(i-1));%/Tc; %Rate of erro
+    rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
          if (PID == 0)
              %Aqui na chamada da função é possivel escolher entre linear input(LI) e não linear input(NLI)
