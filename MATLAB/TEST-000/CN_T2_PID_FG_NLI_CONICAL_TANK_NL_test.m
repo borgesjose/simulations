@@ -1,19 +1,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 % Universidade Federal do Piaui­                      %
 % Campus Ministro Petronio Portela                    %
-% Copyright 2022 -Jose Borges do Carmo Neto-         %
-% @author Jose Borges do Carmo Neto                  %
+% Copyright 2022 -Jose Borges do Carmo Neto-          %
+% @author Jose Borges do Carmo Neto                   %
 % @email jose.borges90@hotmail.com                    %
-%  Simulation Control of conical tank                 %
+%  TEST 01 - Simulation Control of conical tank       %
 %                                                     %
 %  -- Version: 1.0  - 08/05/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clear;
 clc;
+
 %Passo 1, definir o vetor tempo:
-    Ts = 10; % periodo de amostragem para processo de um tanque ( Landau,2006)
-    Tsim = 1500
+    Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
+    Tsim = 5000
     nptos = Tsim/Ts;
     ts = linspace(0,Tsim,nptos);
     
@@ -49,10 +50,10 @@ A = pi*r^2;% Area do orificio de saida
 %%
 
 for i=1:nptos,
-    if (i<=nptos/4)  ref(i)=.6; end;
-    if (i>nptos/4)   ref(i) = .6; end;
-    if (i>nptos/2 & i<=3*nptos/4)  ref(i)=.6; end;
-    if (i>3*nptos/4)   ref(i) = .6; end;
+    if (i<=nptos/4)  ref(i)=4; end;
+    if (i>nptos/4)   ref(i) = 3; end;
+    if (i>nptos/2 & i<=3*nptos/4)  ref(i)=2; end;
+    if (i>3*nptos/4)   ref(i) = 1; end;
 end ;
 
 for i=1:nptos,
@@ -76,16 +77,16 @@ L=2;%Provavelmente o valor de limite das memberships functions
 Tc = Ts;
 Tamostra = Tc;
 %nptos = 800;
-Kc = .7561;
-Ti = 50.6378;
-Td = 50.6594;
+Kc = 0.0061;
+Ti = 150.6378;
+Td = 2.6594;
 
 % Kc = 1;
 % Ti = 1000;
 % Td = 0;
 
 %% Controller definition: 
-PID = 0
+PID = 1
 Am_min = 2; 
 Am_max = 5;
 Theta_m_min = 45;
@@ -184,7 +185,10 @@ plot(tempo,Ki);
 title('FT2-PID-FG: Kp,Ki,Kd')
 legend('Kc','Kd','Ki')
 %%
-figure;
-grid;
-plot(tempo,Am,'g-');
-title('FT2-PID-FG: Am')
+if (PID == 0)
+    figure;
+    grid;
+    plot(tempo,Am,'g-');
+    title('FT2-PID-FG: Am')
+ else
+            disp('Not Ami'); end;
