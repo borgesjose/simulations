@@ -14,7 +14,7 @@ clc;
 
 %Passo 1, definir o vetor tempo:
     Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
-    Tsim = 5000
+    Tsim = 1000
     nptos = Tsim/Ts;
     ts = linspace(0,Tsim,nptos);
     
@@ -40,21 +40,20 @@ A = pi*r^2;% Area do orificio de saida
 % definindo a referencia de controle 
 
 
-% Calculando o input
-%  for i=1:nptos, 
-%     if (i<=nptos/3)  u(i)=.0010; end;
-%     if (i>nptos/3 & i<=2*nptos/3 )   u(i) = .0012; end;
-%     if (i>2*nptos/3)   u(i) = .0001; end;
-%     %u(i)=.0009;
+% for i=1:nptos,
+%     if (i<=nptos/4)  ref(i)= .4; end;
+%     if (i>nptos/4)   ref(i) = .3; end;
+%     if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .2; end;
+%     if (i>3*nptos/4)   ref(i) = .1; end;
 % end ;
-%%
-
 for i=1:nptos,
-    if (i<=nptos/4)  ref(i)=4; end;
-    if (i>nptos/4)   ref(i) = 3; end;
-    if (i>nptos/2 & i<=3*nptos/4)  ref(i)=2; end;
-    if (i>3*nptos/4)   ref(i) = 1; end;
+    if (i<=nptos/4)  ref(i)= .4; end;
+    if (i>nptos/4)   ref(i) = .5; end;
+    if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .6; end;
+    if (i>3*nptos/4)   ref(i) = .65; end;
 end ;
+
+%  for i=1:nptos,ref(i)= .4;end ;
 
 for i=1:nptos,
     if(i>nptos/2 & i< 5+nptos/2 ) 
@@ -71,22 +70,18 @@ u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
 
 erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
-L=2;%Provavelmente o valor de limite das memberships functions
+L=2;% valor de limite das memberships functions
 
 %%
 Tc = Ts;
 Tamostra = Tc;
-%nptos = 800;
-Kc = 0.0061;
-Ti = 150.6378;
-Td = 2.6594;
 
-% Kc = 1;
-% Ti = 1000;
-% Td = 0;
+Kc = 0.0001;
+Ti = 1.1;
+Td = 0.0794;
 
 %% Controller definition: 
-PID = 1
+PID = 0
 Am_min = 2; 
 Am_max = 5;
 Theta_m_min = 45;
@@ -154,7 +149,7 @@ end
 % plot results
 figure;
 plot(ts,h,'-r','LineWidth', 3,'DisplayName','height'); hold on
-plot(ts,ref,'k:','LineWidth', 3,'DisplayName','input'); hold off
+plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
 ylabel('Tank Height');
 xlabel('Time (s)');
 legend();

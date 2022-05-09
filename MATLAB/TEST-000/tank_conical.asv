@@ -3,8 +3,8 @@ function dh_dt = tank_conical(t,y,A,Qin,Cd)
     
     g = 9.81;
     H = 0.7; % Altura
-    R1 = 0.10; % Raio em metros
-    R2 = 0.05; % Raio da base do cilindro
+    R1 = 0.042; % Raio em metros
+    R2 = 0.01; % Raio da base do cilindro
     
     b = A*Cd*sqrt(2*g);
 
