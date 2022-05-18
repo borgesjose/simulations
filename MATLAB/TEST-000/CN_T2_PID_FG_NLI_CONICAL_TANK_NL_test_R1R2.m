@@ -164,7 +164,7 @@ for ii=1:length(R_1)
         title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2)])
        
         %savefig(['asdd',num2str(ii),num2str(jj)])
-        saveas(gcf,['asdd',num2str(ii),num2str(jj)])
+        saveas(gcf,['asdd',num2str(ii),num2str(jj),'.png'])
         %['Resposta-Tanque-R1:', num2str(R1) , 'R2:' , num2str(R2),'.fig']
         %%
 
