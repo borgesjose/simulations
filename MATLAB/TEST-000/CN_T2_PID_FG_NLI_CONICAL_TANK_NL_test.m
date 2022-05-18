@@ -102,6 +102,9 @@ Param =[gene,1,1];
 rlevel = 0;
 ruido = rlevel*rand(1,1000);
 
+R1 = 0.15; % Raio em metros
+R2 = 0.025; % Raio da base do cilindro
+    
 
 %% Simulation with ode45;
 for i=4:nptos

@@ -100,11 +100,8 @@
         rlevel = 0;
         ruido = rlevel*rand(1,1000);
         
-        
-R_1 = [0.20, 0.15, 0.12, 0.10];
-
+R_1 = [0.020, 0.015, 0.012, 0.010];
 R_2 = [0.08,0.05,0.025,0.010];
-
 %% Simulation with ode45;
 for ii=1:length(R_1)
     
@@ -162,9 +159,9 @@ for ii=1:length(R_1)
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
         title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2)])
-       
-        %savefig(['asdd',num2str(ii),num2str(jj)])
-        saveas(gcf,['asdd',num2str(ii),num2str(jj)])
+        legend();
+        
+        savefig('asdd')
         %['Resposta-Tanque-R1:', num2str(R1) , 'R2:' , num2str(R2),'.fig']
         %%
 
@@ -181,6 +178,17 @@ for ii=1:length(R_1)
              end;
 
 
+        %%
+        %plotar Kp,Kd,Ki
+        figure;
+        grid;
+        plot(tempo,Kc,'g-');
+        hold on;
+        plot(tempo,Kd);
+        hold on;
+        plot(tempo,Ki);
+        title('FT2-PID-FG: Kp,Ki,Kd')
+        legend('Kc','Kd','Ki')
         %%
         if (PID == 0)
             figure;

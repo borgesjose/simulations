@@ -8,7 +8,17 @@
 %                                                     %
 %  -- Version: 1.0  - 08/05/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
+clear;
+clc;
+RR1 = [0.020,0.015,0.012,0.010];
+RR2 = [0.08,0.05,0.025,0.010];
+for rr1=1:length(RR1)
+    
+    R1 = RR1[rr1]
+    
+    for rr2=1:length(RR2)
+    
+    R2 = RR2[rr1]
 
         %Passo 1, definir o vetor tempo:
             Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
@@ -99,19 +109,9 @@
         Param =[gene,1,1];
         rlevel = 0;
         ruido = rlevel*rand(1,1000);
-        
-        
-R_1 = [0.20, 0.15, 0.12, 0.10];
 
-R_2 = [0.08,0.05,0.025,0.010];
 
-%% Simulation with ode45;
-for ii=1:length(R_1)
-    
-    R1 = R_1(ii);
-    for jj=1:length(R_2)
-    
-        R2 = R_2(jj);
+        %% Simulation with ode45;
         for i=4:nptos
 
             %u(i+1) = ref(i);   % store the Qin value
@@ -155,17 +155,16 @@ for ii=1:length(R_1)
         end
         %%
         % plot results
-        
         figure;
         plot(ts,h,'-r','LineWidth', 3,'DisplayName','height'); hold on
         plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
         title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2)])
-       
-        %savefig(['asdd',num2str(ii),num2str(jj)])
-        saveas(gcf,['asdd',num2str(ii),num2str(jj)])
-        %['Resposta-Tanque-R1:', num2str(R1) , 'R2:' , num2str(R2),'.fig']
+        legend();
+        
+        savefig(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2)])
+        
         %%
 
              if (PID == 0)
@@ -181,6 +180,17 @@ for ii=1:length(R_1)
              end;
 
 
+        %%
+        %plotar Kp,Kd,Ki
+        figure;
+        grid;
+        plot(tempo,Kc,'g-');
+        hold on;
+        plot(tempo,Kd);
+        hold on;
+        plot(tempo,Ki);
+        title('FT2-PID-FG: Kp,Ki,Kd')
+        legend('Kc','Kd','Ki')
         %%
         if (PID == 0)
             figure;
