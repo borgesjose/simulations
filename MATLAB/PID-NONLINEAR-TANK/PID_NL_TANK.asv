@@ -4,9 +4,9 @@
 % Copyright 2022 -Jose Borges do Carmo Neto-          %
 % @author Jose Borges do Carmo Neto                   %
 % @email jose.borges90@hotmail.com                    %
-%  TEST 01 - Simulation Control of conical tank       %
+%  PID Control of conical tank                        %
 %                                                     %
-%  -- Version: 1.0  - 08/05/2022                      %
+%  -- Version: 1.0  - 17/05/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clear;
@@ -35,9 +35,6 @@ Cd = Cc*Cv % discharge coefficient
 r = 0.008;% raio do orificio de saida em metros
 
 A = pi*r^2;% Area do orificio de saida
-
-R1 = 0.15
-R2 = 0.025
 
 %%
 % definindo a referencia de controle 
@@ -84,7 +81,7 @@ Ti = 1.1;
 Td = 0.0794;
 
 %% Controller definition: 
-PID = 1
+PID = 0
 Am_min = 2; 
 Am_max = 5;
 Theta_m_min = 45;
@@ -111,7 +108,7 @@ for i=4:nptos
     
     %u(i+1) = ref(i);   % store the Qin value
    
-    [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
+    [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd),[0,Ts],h(i-1));
     h0 = y(end); % take the last point
     h(i) = h0; % store the height for plotting
     
@@ -153,25 +150,16 @@ end
 figure;
 plot(ts,h,'-r','LineWidth', 3,'DisplayName','height'); hold on
 plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
-ylabel('Tank Height (m)');
+ylabel('Tank Height');
 xlabel('Time (s)');
-title(['Resposta Tanque - R1: ', num2str(R1) , '- R2: ' + num2str(R2)])
 legend();
-%%
+%% Métricas de desempenho
 
-     if (PID == 0)
-     ISE_t2  = objfunc(erro,tempo,'ISE')
-     ITSE_t2 = objfunc(erro,tempo,'ITSE')
-     ITAE_t2 = objfunc(erro,tempo,'ITAE')
-     IAE_t2  = objfunc(erro,tempo,'IAE')
-     else
      ISE_pid  = objfunc(erro,tempo,'ISE')
      ITSE_pid = objfunc(erro,tempo,'ITSE')
      ITAE_pid = objfunc(erro,tempo,'ITAE')
      IAE_pid  = objfunc(erro,tempo,'IAE')
-     end;
-     
-     
+  
 %%
 %plotar Kp,Kd,Ki
 figure;
@@ -183,11 +171,3 @@ hold on;
 plot(tempo,Ki);
 title('FT2-PID-FG: Kp,Ki,Kd')
 legend('Kc','Kd','Ki')
-%%
-if (PID == 0)
-    figure;
-    grid;
-    plot(tempo,Am,'g-');
-    title('FT2-PID-FG: Am')
- else
-            disp('Not Ami'); end;

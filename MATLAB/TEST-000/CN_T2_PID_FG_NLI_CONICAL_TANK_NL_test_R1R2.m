@@ -9,6 +9,7 @@
 %  -- Version: 1.0  - 08/05/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+for rr in 
 clear;
 clc;
 
@@ -35,9 +36,6 @@ Cd = Cc*Cv % discharge coefficient
 r = 0.008;% raio do orificio de saida em metros
 
 A = pi*r^2;% Area do orificio de saida
-
-R1 = 0.15
-R2 = 0.025
 
 %%
 % definindo a referencia de controle 
@@ -155,7 +153,7 @@ plot(ts,h,'-r','LineWidth', 3,'DisplayName','height'); hold on
 plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
 ylabel('Tank Height (m)');
 xlabel('Time (s)');
-title(['Resposta Tanque - R1: ', num2str(R1) , '- R2: ' + num2str(R2)])
+title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2)])
 legend();
 %%
 

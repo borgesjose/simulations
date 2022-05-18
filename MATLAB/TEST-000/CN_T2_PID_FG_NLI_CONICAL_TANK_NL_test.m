@@ -81,7 +81,7 @@ Ti = 1.1;
 Td = 0.0794;
 
 %% Controller definition: 
-PID = 0
+PID = 1
 Am_min = 2; 
 Am_max = 5;
 Theta_m_min = 45;
@@ -108,7 +108,7 @@ for i=4:nptos
     
     %u(i+1) = ref(i);   % store the Qin value
    
-    [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd),[0,Ts],h(i-1));
+    [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
     h0 = y(end); % take the last point
     h(i) = h0; % store the height for plotting
     
@@ -150,8 +150,9 @@ end
 figure;
 plot(ts,h,'-r','LineWidth', 3,'DisplayName','height'); hold on
 plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
-ylabel('Tank Height');
+ylabel('Tank Height (m)');
 xlabel('Time (s)');
+title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2)])
 legend();
 %%
 
