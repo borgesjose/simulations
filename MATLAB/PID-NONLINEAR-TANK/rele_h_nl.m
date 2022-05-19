@@ -5,7 +5,7 @@ function [h,u]=rele_h_nl(n, Tc, d, eps, A,Cd);
     
     for i=1:n,
         y(i)=0;
-        ref(i)= 0.15;
+        ref(i)= 1.5;
     end;
     e(1)=0; e(2)=0; 
     h(1)=0.01 ; h(2)=0.01 ; h(3)=0.01 ; h(4)=0.01; h(5)=0.01;

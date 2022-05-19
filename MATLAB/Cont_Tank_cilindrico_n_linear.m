@@ -11,7 +11,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 %Passo 1, definir o vetor tempo:
-    Ts = 10; % periodo de amostragem para processo de um tanque ( Landau,2006)
+    Ts = 5; % periodo de amostragem para processo de um tanque ( Landau,2006)
     Tsim = 150
     nptos = Tsim/Ts;
     ts = linspace(0,Tsim,nptos+1);
@@ -50,10 +50,10 @@ end ;
 %% 3 - Aplicando o rele:
 % Agora é o momento de aplicar o relé a planta: (rele com histerese)
 
-    n = 20; % Numero de pontos de análise
+    n = 30; % Numero de pontos de análise
 
-    eps = 0.2; 
-    d = 10e-4;
+    eps = 0.01; 
+    d = 12e-4;
 
     nptos = 100;
 

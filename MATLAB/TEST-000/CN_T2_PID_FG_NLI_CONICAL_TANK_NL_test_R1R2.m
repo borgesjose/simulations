@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
++%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 % Universidade Federal do Piaui­                      %
 % Campus Ministro Petronio Portela                    %
 % Copyright 2022 -Jose Borges do Carmo Neto-          %
