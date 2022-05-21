@@ -45,17 +45,12 @@
         %     if (i>3*nptos/4)   ref(i) = .1; end;
         % end ;
         for i=1:nptos,
-<<<<<<< HEAD
+
             if (i<=nptos/4)  ref(i)= .05; end;
             if (i>nptos/4)   ref(i) = .05; end;
             if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .05; end;
             if (i>3*nptos/4)   ref(i) = .05; end;
-=======
-            if (i<=nptos/4)  ref(i)= .1; end;
-            if (i>nptos/4)   ref(i) = .65; end;
-            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .65; end;
-            if (i>3*nptos/4)   ref(i) = .65; end;
->>>>>>> 6e6fa112eacce0102e6fbd18629af7f7242b822f
+
         end ;
 
         %  for i=1:nptos,ref(i)= .4;end ;
@@ -81,15 +76,15 @@
         Tc = Ts;
         Tamostra = Tc;
 
-<<<<<<< HEAD
+
         Kc = .00005;
         Ti = 0.2;
         Td = 0.079;
-=======
-        Kc = 0.0001;
-        Ti = 1.5;
-        Td = 0.1894;
->>>>>>> 6e6fa112eacce0102e6fbd18629af7f7242b822f
+% =======
+%         Kc = 0.0001;
+%         Ti = 1.5;
+%         Td = 0.1894;
+% >>>>>>> 6e6fa112eacce0102e6fbd18629af7f7242b822f
 
         %% Controller definition: 
         PID = 1
@@ -118,11 +113,11 @@
 % 
 % R_2 = [0.08,0.05,0.025,0.010];
 
-<<<<<<< HEAD
+
 R_1 = [0.20];
-=======
-R_1 = [0.15];
->>>>>>> 6e6fa112eacce0102e6fbd18629af7f7242b822f
+% =======
+% R_1 = [0.15];
+% >>>>>>> 6e6fa112eacce0102e6fbd18629af7f7242b822f
 
 R_2 = [0.01];
 
