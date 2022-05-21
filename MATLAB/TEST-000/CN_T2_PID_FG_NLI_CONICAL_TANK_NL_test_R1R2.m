@@ -12,7 +12,7 @@
 
         %Passo 1, definir o vetor tempo:
             Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
-            Tsim = 1000
+            Tsim = 500
             nptos = Tsim/Ts;
             ts = linspace(0,Tsim,nptos);
 
@@ -20,7 +20,7 @@
 
         %Dados do probelma:
 
-        h0 = 0.01; % ponto inicial
+        h0 = 0.001; % ponto inicial
 
         u = zeros(nptos+1,1); % variavel de entrada
         h = zeros(nptos+1,1); % variavel de saida
@@ -30,7 +30,7 @@
 
         Cd = Cc*Cv % discharge coefficient
 
-        r = 0.008;% raio do orificio de saida em metros
+        r = 0.01;% raio do orificio de saida em metros
 
         A = pi*r^2;% Area do orificio de saida
 
@@ -45,10 +45,10 @@
         %     if (i>3*nptos/4)   ref(i) = .1; end;
         % end ;
         for i=1:nptos,
-            if (i<=nptos/4)  ref(i)= .4; end;
-            if (i>nptos/4)   ref(i) = .5; end;
-            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .6; end;
-            if (i>3*nptos/4)   ref(i) = .65; end;
+            if (i<=nptos/4)  ref(i)= .05; end;
+            if (i>nptos/4)   ref(i) = .05; end;
+            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .05; end;
+            if (i>3*nptos/4)   ref(i) = .05; end;
         end ;
 
         %  for i=1:nptos,ref(i)= .4;end ;
@@ -59,7 +59,7 @@
             else disturbio(i) = 0; end;
         end ;
 
-        ref = ref+disturbio
+        ref = ref + disturbio;
 
         clear h;
         h(4)=h0 ; h(3)=h0 ; h(2)=h0 ; h(1)=h0 ; 
@@ -74,9 +74,9 @@
         Tc = Ts;
         Tamostra = Tc;
 
-        Kc = 0.0001;
-        Ti = 1.1;
-        Td = 0.0794;
+        Kc = .00005;
+        Ti = 0.2;
+        Td = 0.079;
 
         %% Controller definition: 
         PID = 1
@@ -101,9 +101,14 @@
         ruido = rlevel*rand(1,1000);
         
         
-R_1 = [0.20, 0.15, 0.12, 0.10];
+% R_1 = [0.20, 0.15, 0.12, 0.10];
+% 
+% R_2 = [0.08,0.05,0.025,0.010];
 
-R_2 = [0.08,0.05,0.025,0.010];
+R_1 = [0.20];
+
+R_2 = [0.01];
+
 
 %% Simulation with ode45;
 for ii=1:length(R_1)
