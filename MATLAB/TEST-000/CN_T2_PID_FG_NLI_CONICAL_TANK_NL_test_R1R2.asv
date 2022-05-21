@@ -9,6 +9,7 @@
 %  -- Version: 1.0  - 08/05/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
+
         %Passo 1, definir o vetor tempo:
             Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
             Tsim = 1000
@@ -19,7 +20,7 @@
 
         %Dados do probelma:
 
-        h0 = 0.01; % ponto inicial
+        h0 = 0.001; % ponto inicial
 
         u = zeros(nptos+1,1); % variavel de entrada
         h = zeros(nptos+1,1); % variavel de saida
@@ -29,7 +30,7 @@
 
         Cd = Cc*Cv % discharge coefficient
 
-        r = 0.008;% raio do orificio de saida em metros
+        r = 0.01;% raio do orificio de saida em metros
 
         A = pi*r^2;% Area do orificio de saida
 
@@ -44,9 +45,9 @@
         %     if (i>3*nptos/4)   ref(i) = .1; end;
         % end ;
         for i=1:nptos,
-            if (i<=nptos/4)  ref(i)= .4; end;
-            if (i>nptos/4)   ref(i) = .5; end;
-            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .6; end;
+            if (i<=nptos/4)  ref(i)= .1; end;
+            if (i>nptos/4)   ref(i) = .2; end;
+            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .3; end;
             if (i>3*nptos/4)   ref(i) = .65; end;
         end ;
 
@@ -74,8 +75,8 @@
         Tamostra = Tc;
 
         Kc = 0.0001;
-        Ti = 1.1;
-        Td = 0.0794;
+        Ti = 1.5;
+        Td = 0.1894;
 
         %% Controller definition: 
         PID = 1
@@ -99,13 +100,20 @@
         rlevel = 0;
         ruido = rlevel*rand(1,1000);
         
-R_1 = [0.020, 0.015, 0.012, 0.010];
-R_2 = [0.08,0.05,0.025,0.010];
+        
+% R_1 = [0.20, 0.15, 0.12, 0.10];
+% 
+% R_2 = [0.08,0.05,0.025,0.010];
+
+R_1 = [0.15];
+
+R_2 = [0.010];
+
+
 %% Simulation with ode45;
 for ii=1:length(R_1)
     
     R1 = R_1(ii);
-    %R1 = 0.15;
     for jj=1:length(R_2)
     
         R2 = R_2(jj);
@@ -159,10 +167,10 @@ for ii=1:length(R_1)
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
         title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2)])
-        legend();
-        
-        savefig(['Resposta-Tanque-R1:', num2str(R1) , 'R2:' , num2str(R2),'.fig'])
-        
+       
+        %savefig(['asdd',num2str(ii),num2str(jj)])
+        saveas(gcf,['asdd',num2str(ii),num2str(jj),'.png'])
+        %['Resposta-Tanque-R1:', num2str(R1) , 'R2:' , num2str(R2),'.fig']
         %%
 
              if (PID == 0)
@@ -178,17 +186,6 @@ for ii=1:length(R_1)
              end;
 
 
-        %%
-        %plotar Kp,Kd,Ki
-        figure;
-        grid;
-        plot(tempo,Kc,'g-');
-        hold on;
-        plot(tempo,Kd);
-        hold on;
-        plot(tempo,Ki);
-        title('FT2-PID-FG: Kp,Ki,Kd')
-        legend('Kc','Kd','Ki')
         %%
         if (PID == 0)
             figure;

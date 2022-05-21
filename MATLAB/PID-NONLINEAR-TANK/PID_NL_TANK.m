@@ -39,21 +39,12 @@ A = pi*r^2;% Area do orificio de saida
 %%
 % definindo a referencia de controle 
 
-
-% for i=1:nptos,
-%     if (i<=nptos/4)  ref(i)= .4; end;
-%     if (i>nptos/4)   ref(i) = .3; end;
-%     if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .2; end;
-%     if (i>3*nptos/4)   ref(i) = .1; end;
-% end ;
 for i=1:nptos,
     if (i<=nptos/4)  ref(i)= .4; end;
     if (i>nptos/4)   ref(i) = .5; end;
     if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .6; end;
     if (i>3*nptos/4)   ref(i) = .65; end;
 end ;
-
-%  for i=1:nptos,ref(i)= .4;end ;
 
 for i=1:nptos,
     if(i>nptos/2 & i< 5+nptos/2 ) 
