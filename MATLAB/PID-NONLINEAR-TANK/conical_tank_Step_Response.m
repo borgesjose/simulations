@@ -68,5 +68,15 @@ ylabel('Sinal de entrada');
 xlabel('Time (s)');
 legend();
 %%
+L =  0.02;
+T1 = 2.83
+K = h(nptos)
 
-Kc = (u(nptos)/h(nptos))*((58-43)/(0.01))
+% Kc = 1.2*((T1)/(K*L))
+% Ti = 2*L
+% Td = 0.5*L
+
+Kc = 1.2*(u(nptos)-u(1)/h(nptos))*((T1)/(0.158))
+Ti = 2*0.158
+Td = 0.5*0.158
+

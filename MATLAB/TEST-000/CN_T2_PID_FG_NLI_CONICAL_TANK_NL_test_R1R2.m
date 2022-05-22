@@ -46,10 +46,10 @@
         % end ;
         for i=1:nptos,
 
-            if (i<=nptos/4)  ref(i)= .05; end;
-            if (i>nptos/4)   ref(i) = .05; end;
-            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .05; end;
-            if (i>3*nptos/4)   ref(i) = .05; end;
+            if (i<=nptos/4)  ref(i)= .25; end;
+            if (i>nptos/4)   ref(i) = .25; end;
+            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .25; end;
+            if (i>3*nptos/4)   ref(i) = .25; end;
 
         end ;
 

@@ -29,7 +29,7 @@
 
         Cd = Cc*Cv % discharge coefficient
 
-        r = 0.01;% raio do orificio de saida em metros
+        r = 0.007;% raio do orificio de saida em metros
 
         A = pi*r^2;% Area do orificio de saida
         
@@ -40,17 +40,18 @@
         % 'AT' é Astrom .
 
         Ctype = 'ZN'; 
+        patamar = 0.25
         
         Tamostra = Ts;
-        
+    
         % definindo a referencia de controle 
         
         for i=1:nptos,
 
-            if (i<=nptos/4)  ref(i)= .05; end;
-            if (i>nptos/4)   ref(i) = .05; end;
-            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= .05; end;
-            if (i>3*nptos/4)   ref(i) = .05; end;
+            if (i<=nptos/4)  ref(i)= patamar; end;
+            if (i>nptos/4)   ref(i) = patamar; end;
+            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= patamar; end;
+            if (i>3*nptos/4)   ref(i) = patamar; end;
 
         end ;
 
@@ -60,32 +61,36 @@
         erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
 
+        
+        
 
-        if Ctype == 'ZN':
+        if (Ctype == 'ZN')
+            L =  0.158;
+            T1 = 2.83;
+            Kc = 1.2*(3.8000e-04/0.2056)*((T1)/(L))*10^-3
+            Ti = 2*L
+            Td = 0.5*L         
+        end;
+        
+        if (Ctype == 'CC')
             Kc = .0001;
             Ti = 0.2;
             Td = 0.079;            
         end;
         
-        if Ctype == 'CC':
-            Kc = .0001;
-            Ti = 0.2;
-            Td = 0.079;            
-        end;
-        
-        if Ctype == 'AT':
+        if (Ctype == 'AT')
             Kc = .0001;
             Ti = 0.2;
             Td = 0.079;            
             
-            
-        else:
-            disp("Selecione um controlador: ZN , CC, AT ") 
-            %SINTONIA PROFESSOR:
-            Kc = .0001;
-            Ti = 0.2;
-            Td = 0.079;
-        end;    
+        end;   
+%         else
+%             disp("Selecione um controlador: ZN , CC, AT ") 
+%             %SINTONIA PROFESSOR:
+%             Kc = .0001;
+%             Ti = 0.2;
+%             Td = 0.079;
+%         end;    
             
         
 
@@ -117,7 +122,7 @@
 
                         %saturadores:
                         if(u(i)<5e-5) u(i)=5e-5;end;
-                        if(u(i)>5e-3) u(i)=5e-3;end;
+                        if(u(i)>3.8000e-04) u(i)=3.8000e-04;end;
 
                         tempo(i)=i*Tamostra;
 
@@ -131,16 +136,17 @@
         plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
-        title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2)])
+        title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
        
         figure;
         plot(ts,u,'k:','LineWidth', 3,'DisplayName','input'); hold off
         ylabel('Sinal de entrada');
         xlabel('Time (s)');
         legend();
+        title('Sinal de Controle')
 
         %savefig(['asdd',num2str(ii),num2str(jj)])
-        saveas(gcf,['asdd',num2str(ii),num2str(jj),'.png'])
+        %saveas(gcf,['asdd',num2str(ii),num2str(jj),'.png'])
         %['Resposta-Tanque-R1:', num2str(R1) , 'R2:' , num2str(R2),'.fig']
         
         %%

@@ -10,7 +10,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Passo 1, definir o vetor tempo:
             Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
-            Tsim = 500
+            Tsim = 500;
             nptos = Tsim/Ts;
             ts = linspace(0,Tsim,nptos);
 
@@ -34,6 +34,12 @@
         A = pi*r^2;% Area do orificio de saida
         
         %% Passo 3 - Controller definition: 
+        % Ctype definie o tipo de sintonia do controaldor: 
+        % 'ZN' é Ziegle-Nichols , 
+        % 'CC' é Choen Coon, 
+        % 'AT' é Astrom .
+
+        Ctype = 'ZN'; 
         
         Tamostra = Ts;
         
@@ -53,36 +59,37 @@
         u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
         erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
-        % Ctype definie o tipo de sintonia do controaldor: 
-        % 'ZN' é Ziegle-Nichols , 
-        % 'CC' é Choen Coon, 
-        % 'AT' é Astrom .
-
-        Ctype = 'ZN';
 
         
- 
-        if Ctype == 'ZN':
+        
+
+        if (Ctype == 'ZN')
+            L =  0.158;
+            T1 = 2.83;
+            Kc = 1.2*(3.8000e-04/0.2056)*((T1)/(L))
+            Ti = 2*L
+            Td = 0.5*L         
+        end;
+        
+        if (Ctype == 'CC')
             Kc = .0001;
             Ti = 0.2;
             Td = 0.079;            
         end;
         
-        if Ctype == 'CC':
-            
-        end;
-        
-        if Ctype == 'AT':
-            
-            
-            
-        else:
-            
-            %SINTONIA PROFESSOR:
+        if (Ctype == 'AT')
             Kc = .0001;
             Ti = 0.2;
-            Td = 0.079;
-        end;    
+            Td = 0.079;            
+            
+        end;   
+%         else
+%             disp("Selecione um controlador: ZN , CC, AT ") 
+%             %SINTONIA PROFESSOR:
+%             Kc = .0001;
+%             Ti = 0.2;
+%             Td = 0.079;
+%         end;    
             
         
 
@@ -137,7 +144,7 @@
         legend();
 
         %savefig(['asdd',num2str(ii),num2str(jj)])
-        saveas(gcf,['asdd',num2str(ii),num2str(jj),'.png'])
+        %saveas(gcf,['asdd',num2str(ii),num2str(jj),'.png'])
         %['Resposta-Tanque-R1:', num2str(R1) , 'R2:' , num2str(R2),'.fig']
         
         %%
