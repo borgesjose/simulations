@@ -80,7 +80,7 @@
             
             
         else:
-            disp("Selecione um controlador: ZN , CC, AT") 
+            disp("Selecione um controlador: ZN , CC, AT ") 
             %SINTONIA PROFESSOR:
             Kc = .0001;
             Ti = 0.2;
