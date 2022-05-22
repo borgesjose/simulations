@@ -10,7 +10,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Passo 1, definir o vetor tempo:
             Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
-            Tsim = 500;
+            Tsim = 1000;
             nptos = Tsim/Ts;
             ts = linspace(0,Tsim,nptos);
 
@@ -37,11 +37,12 @@
         % Ctype definie o tipo de sintonia do controaldor: 
         % 'ZN' é Ziegle-Nichols , 
         % 'CC' é Choen Coon, 
-        % 'AT' é Astrom .
+        % 'AT' é Astrom 
+        % 'PR' é a sintomnia do professor
 
-        Ctype = 'ZN'; 
-        patamar = 0.25
-        
+        Ctype = 'PR'%'ZN'; 
+        patamar = 0.05
+        passo = 0.1
         Tamostra = Ts;
     
         % definindo a referencia de controle 
@@ -49,9 +50,9 @@
         for i=1:nptos,
 
             if (i<=nptos/4)  ref(i)= patamar; end;
-            if (i>nptos/4)   ref(i) = patamar; end;
-            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= patamar; end;
-            if (i>3*nptos/4)   ref(i) = patamar; end;
+            if (i>nptos/4)   ref(i) = patamar + passo ; end;
+            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= patamar + passo; end;
+            if (i>3*nptos/4)   ref(i) = patamar + 2*passo; end;
 
         end ;
 
@@ -60,9 +61,6 @@
         u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
         erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
-
-        
-        
 
         if (Ctype == 'ZN')
             L =  0.158;
@@ -84,13 +82,14 @@
             Td = 0.079;            
             
         end;   
-%         else
-%             disp("Selecione um controlador: ZN , CC, AT ") 
-%             %SINTONIA PROFESSOR:
-%             Kc = .0001;
-%             Ti = 0.2;
-%             Td = 0.079;
-%         end;    
+        
+        if(Ctype == 'PR')
+            disp("Selecione um controlador: ZN , CC, AT ") 
+            %SINTONIA PROFESSOR:
+            Kc = .00005;
+            Ti = 0.2;
+            Td = 0.079;
+        end;    
             
         
 
@@ -137,17 +136,17 @@
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
         title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
-       
+        
+        %saveas(gcf,['resultado_R1=',num2str(r),'.png'])
+        
         figure;
         plot(ts,u,'k:','LineWidth', 3,'DisplayName','input'); hold off
-        ylabel('Sinal de entrada');
+        ylabel('Sinal de entrada m³/s');
         xlabel('Time (s)');
         legend();
-        title('Sinal de Controle')
-
-        %savefig(['asdd',num2str(ii),num2str(jj)])
-        %saveas(gcf,['asdd',num2str(ii),num2str(jj),'.png'])
-        %['Resposta-Tanque-R1:', num2str(R1) , 'R2:' , num2str(R2),'.fig']
+        title(['Sinal de Controle- R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
+        %saveas(gcf,['Sinal_de_controle_R1_',num2str(R1),'R2_',num2str(R2), 'r_',num2str(r),'.png'])
+        
         
         %%
              ISE_pid  = objfunc(erro,tempo,'ISE')
