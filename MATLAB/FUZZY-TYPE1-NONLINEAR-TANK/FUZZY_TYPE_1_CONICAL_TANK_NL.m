@@ -104,8 +104,8 @@
             erro(i)=ref(i) - h(i); %Erro
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
-            
-            Ami = 1; 
+            Am(i) = Inferencia_T1(erro(i),rate(i),L);
+            Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
             
             
                         %Controlador:
@@ -136,7 +136,7 @@
         plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
-        title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
+        title(['Fuzzy tipo 1 - Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
         
         %saveas(gcf,['resultado_R1=',num2str(r),'.png'])
         
@@ -145,7 +145,7 @@
         ylabel('Sinal de entrada m³/s');
         xlabel('Time (s)');
         legend();
-        title(['Sinal de Controle- R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
+        title(['Fuzzy tipo 1 - Sinal de Controle - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
         %saveas(gcf,['Sinal_de_controle_R1_',num2str(R1),'R2_',num2str(R2), 'r_',num2str(r),'.png'])
         
         
