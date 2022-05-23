@@ -4,7 +4,7 @@
 % Copyright 2022 -Jose Borges do Carmo Neto-          %
 % @author Jose Borges do Carmo Neto                   %
 % @email jose.borges90@hotmail.com                    %
-%  PID ziegler nichols aplied a conical tank          %
+%  PID FUZZY TIPO 1 aplied a conical tank             %
 %                                                     %
 %  -- Version: 1.0  - 21/05/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -38,11 +38,11 @@
         % 'ZN' é Ziegle-Nichols , 
         % 'CC' é Choen Coon, 
         % 'AT' é Astrom 
-        
+        % 'PR' é a sintomnia do professor
 
-        Ctype = 'PR'%'ZN'; 
+        Ctype = 'ZN'%'ZN'; 
         patamar = 0.05
-        passo = 0.1
+        passo = 0.0
         Tamostra = Ts;
     
         % definindo a referencia de controle 
@@ -86,7 +86,7 @@
         if(Ctype == 'PR')
             disp("Selecione um controlador: ZN , CC, AT ") 
             %SINTONIA PROFESSOR:
-            Kc = .0001;
+            Kc = .00005;
             Ti = 0.2;
             Td = 0.079;
         end;    
