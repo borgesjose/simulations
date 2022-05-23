@@ -41,7 +41,7 @@
         % 'PR' é a sintomnia do professor
 
         Ctype = 'ZN'%'ZN'; 
-        patamar = 0.05
+        patamar = 0.25
         passo = 0.0
         Tamostra = Ts;
     
@@ -51,7 +51,7 @@
 
             if (i<=nptos/4)  ref(i)= patamar; end;
             if (i>nptos/4)   ref(i) = patamar + passo ; end;
-            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= patamar + passo; end;
+            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= patamar + 2*passo; end;
             if (i>3*nptos/4)   ref(i) = patamar + 2*passo; end;
 
         end ;
@@ -63,11 +63,11 @@
 
 
         if (Ctype == 'ZN')
-            L =  0.158;
+            Tdead =  0.158;
             T1 = 2.83;
-            Kc = 1.2*(3.8000e-04/0.2056)*((T1)/(L))*10^-3
-            Ti = 2*L
-            Td = 0.5*L         
+            Kc = 1.2*(3.8000e-04/0.2056)*((T1)/(Tdead))*10^-3
+            Ti = 2*Tdead
+            Td = 0.5*Tdead         
         end;
         
         if (Ctype == 'CC')
@@ -90,8 +90,13 @@
             Ti = 0.2;
             Td = 0.079;
         end;    
-            
         
+%%        
+        Am_min = 1; 
+        Am_max = 6;
+        Theta_m_min = 45;
+        Theta_m_max = 72;
+        L = 8;
 
         %% Simulation with ode45;
 
@@ -149,9 +154,24 @@
         %saveas(gcf,['Sinal_de_controle_R1_',num2str(R1),'R2_',num2str(R2), 'r_',num2str(r),'.png'])
         
         
-        %%
+            %%
              ISE_ft1  = objfunc(erro,tempo,'ISE')
              ITSE_ft1 = objfunc(erro,tempo,'ITSE')
              ITAE_ft1 = objfunc(erro,tempo,'ITAE')
              IAE_ft1  = objfunc(erro,tempo,'IAE')
        
+            %% plotar Kp,Kd,Ki
+            figure;
+            grid;
+            plot(tempo,Kp,'g-');
+            hold on;
+            plot(tempo,Kd);
+            hold on;
+            plot(tempo,Ki);
+            title('FT1-PID-FG: Kp,Ki,Kd')
+            legend('Kc','Kd','Ki')
+            %%
+            figure;
+            grid;
+            plot(tempo,Am,'g-');
+            title('FT1-PID-FG: Am')

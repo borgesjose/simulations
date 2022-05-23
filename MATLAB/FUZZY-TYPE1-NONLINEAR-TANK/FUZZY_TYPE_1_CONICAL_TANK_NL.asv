@@ -40,8 +40,8 @@
         % 'AT' é Astrom 
         % 'PR' é a sintomnia do professor
 
-        Ctype = 'ZN'%'ZN'; 
-        patamar = 0.05
+        Ctype = 'PR'%'ZN'; 
+        patamar = 0.25
         passo = 0.0
         Tamostra = Ts;
     
@@ -63,11 +63,11 @@
 
 
         if (Ctype == 'ZN')
-            L =  0.158;
+            Tdead =  0.158;
             T1 = 2.83;
-            Kc = 1.2*(3.8000e-04/0.2056)*((T1)/(L))*10^-3
-            Ti = 2*L
-            Td = 0.5*L         
+            Kc = 1.2*(3.8000e-04/0.2056)*((T1)/(Tdead))*10^-3
+            Ti = 2*Tdead
+            Td = 0.5*Tdead         
         end;
         
         if (Ctype == 'CC')
@@ -90,8 +90,13 @@
             Ti = 0.2;
             Td = 0.079;
         end;    
-            
         
+%%        
+        Am_min = 2; 
+        Am_max = 5;
+        Theta_m_min = 45;
+        Theta_m_max = 72;
+        L = 2;
 
         %% Simulation with ode45;
 
@@ -104,10 +109,8 @@
             erro(i)=ref(i) - h(i); %Erro
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
-            Am(i) =Inferencia_T2(erro(i),rate(i),L,Param,'LI');
-            %[Am(i),yl(i),yr(i),l(i),r(i)]=EIASC(R(:,1)',R(:,2)',Y(:,1)',Y(:,2)'); 
+            Am(i) = Inferencia_T1(erro(i),rate(i),L);
             Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
-            Ami = 1; 
             
             
                         %Controlador:
@@ -138,7 +141,7 @@
         plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
-        title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
+        title(['Fuzzy tipo 1 - Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
         
         %saveas(gcf,['resultado_R1=',num2str(r),'.png'])
         
@@ -147,13 +150,28 @@
         ylabel('Sinal de entrada m³/s');
         xlabel('Time (s)');
         legend();
-        title(['Sinal de Controle- R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
+        title(['Fuzzy tipo 1 - Sinal de Controle - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
         %saveas(gcf,['Sinal_de_controle_R1_',num2str(R1),'R2_',num2str(R2), 'r_',num2str(r),'.png'])
         
         
-        %%
+            %%
              ISE_ft1  = objfunc(erro,tempo,'ISE')
              ITSE_ft1 = objfunc(erro,tempo,'ITSE')
              ITAE_ft1 = objfunc(erro,tempo,'ITAE')
              IAE_ft1  = objfunc(erro,tempo,'IAE')
        
+            %% plotar Kp,Kd,Ki
+            figure;
+            grid;
+            plot(tempo,Kp,'g-');
+            hold on;
+            plot(tempo,Kd);
+            hold on;
+            plot(tempo,Ki);
+            title('FT1-PID-FG: Kp,Ki,Kd')
+            legend('Kc','Kd','Ki')
+            %%
+            figure;
+            grid;
+            plot(tempo,Am,'g-');
+            title('FT1-PID-FG: Am')
