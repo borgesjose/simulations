@@ -30,19 +30,19 @@ Cc = 0.97 %contraction coefficient (sharp edge aperture 0.62, well rounded apert
 
 Cd = Cc*Cv % discharge coefficient
 
-r = 0.008;% raio do orificio de saida em metros
+r = 0.01;% raio do orificio de saida em metros
 
 A = pi*r^2;% Area do orificio de saida
 
-    R1 = 0.15; % Raio em metros
-    R2 = 0.025; % Raio da base do cilindro
+    R1 = 0.10; % Raio em metros
+    R2 = 0.01; % Raio da base do cilindro
 %%
 % Calculando o input
-
+vazao_max = .00038;
  for i=1:nptos, 
     if (i<=nptos/3)  u(i)=.000001; end;
-    if (i>nptos/3 & i<=2*nptos/3 )   u(i) = .00038; end;
-    if (i>2*nptos/3)   u(i) = .00038; end;
+    if (i>nptos/3 & i<=2*nptos/3 )   u(i) = 2*vazao_max; end;
+    if (i>2*nptos/3)   u(i) = 2*vazao_max; end;
 end ;
 
 % Simulation with ode45;

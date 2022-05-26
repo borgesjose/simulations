@@ -18,7 +18,7 @@
 
         h0 = 0.001; % ponto inicial
                  
-        R1 = 0.20;
+        R1 = 0.10;
         R2 = 0.01;
         
         u = zeros(nptos,1); % variavel de entrada
@@ -29,7 +29,8 @@
 
         Cd = Cc*Cv % discharge coefficient
 
-        r = 0.007;% raio do orificio de saida em metros
+        r = 0.005
+        ;% raio do orificio de saida em metros
 
         A = pi*r^2;% Area do orificio de saida
         
@@ -40,9 +41,9 @@
         % 'AT' é Astrom 
         % 'PR' é a sintomnia do professor
 
-        Ctype = 'PR'%'ZN'; 
+        Ctype = 'ZN'%'ZN'; 
         patamar = 0.05
-        passo = 0.1
+        passo = 0.0
         Tamostra = Ts;
     
         % definindo a referencia de controle 
@@ -89,6 +90,7 @@
             Kc = .00005;
             Ti = 0.2;
             Td = 0.079;
+            %Td = 0.0;
         end;    
             
         
@@ -121,7 +123,7 @@
 
                         %saturadores:
                         if(u(i)<5e-5) u(i)=5e-5;end;
-                        if(u(i)>3.8000e-04) u(i)=3.8000e-04;end;
+                        if(u(i)>2*3.8000e-04) u(i)=2*3.8000e-04;end;
 
                         tempo(i)=i*Tamostra;
 
