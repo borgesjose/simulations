@@ -84,6 +84,16 @@
             
         end;   
         
+        if (Ctype == 'FG')
+             
+            K = AT_PID_FG(Am,L,a,b,c);
+            
+            Kc = K(1);
+            Ti = Kc/K(2);
+            Td = K(3)/Kc;
+            
+        end; 
+        
         if(Ctype == 'PR')
             disp("Selecione um controlador: ZN , CC, AT ") 
             %SINTONIA PROFESSOR:
@@ -147,7 +157,8 @@
         xlabel('Time (s)');
         legend();
         title(['Sinal de Controle- R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
-        %saveas(gcf,['Sinal_de_controle_R1_',num2str(R1),'R2_',num2str(R2), 'r_',num2str(r),'.png'])
+        %saveas(gcf,['Sinal_de_controle_R1_',num2str(R1),'R2_',num2str(R2),
+        %'r_',num2str(r),'.png']) 
         
         
         %%
