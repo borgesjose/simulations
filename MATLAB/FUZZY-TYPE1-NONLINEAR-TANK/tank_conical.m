@@ -2,7 +2,7 @@ function dh_dt = tank_conical(t,y,A,Qin,Cd,R1,R2)
     % calculate derivative of the Level
     
     g = 9.81;
-    H = 0.3; % Altura
+    H = 0.375; % Altura
     %R1 = 0.20; % Raio em metros
     %R2 = 0.01; % Raio da base do cilindro
     
