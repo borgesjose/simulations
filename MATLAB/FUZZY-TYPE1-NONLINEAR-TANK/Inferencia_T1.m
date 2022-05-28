@@ -1,7 +1,7 @@
 function Am = Inferencia_T1(erro,r,L) 
       % Função que descreve a inferencia do controlador PID-FT1-FG na
       % forma analitica, recebendo como paramentros o erro e a variação do
-      % erro e o valor de atraso de trnasporte do modelo.
+      % erro e o valor de atraso de transporte do modelo.
 
 
 %    {***********Região IC-1*****************}
