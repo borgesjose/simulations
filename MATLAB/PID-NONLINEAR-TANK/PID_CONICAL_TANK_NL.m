@@ -18,7 +18,7 @@
 
         h0 = 0.001; % ponto inicial
                  
-        R1 = 0.10;
+        R1 = 0.125;
         R2 = 0.01;
         
         u = zeros(nptos,1); % variavel de entrada
@@ -43,7 +43,7 @@
 
         Ctype = 'ZN'%'ZN'; 
         patamar = 0.05
-        passo = 0.0
+        passo = 0.1
         Tamostra = Ts;
     
         % definindo a referencia de controle 
