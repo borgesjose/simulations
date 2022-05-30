@@ -23,7 +23,13 @@ def tra_mf_t1(x,param):
     
     return y
 
+def Rshoulder_mf_t1(x,param):
+    c = param[0];
+    d = param[1];  
 
+    y = max(min([1,(d-x)/(d-c)]),0);
+    
+    return y
 
 def Lshoulder_mf_t1(x,param):
     a = param[0];
