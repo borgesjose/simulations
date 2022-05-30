@@ -40,3 +40,8 @@ def Lshoulder_mf_t1(x,param):
     
     return y
 
+def gauss_mf_t1(x,m,rho):
+    import math
+    y = math.exp(-(1/2)*((x-m)/rho)**2)
+
+    return y
