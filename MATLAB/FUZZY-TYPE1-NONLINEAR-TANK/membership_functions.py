@@ -57,7 +57,7 @@ def cauchy_mf_t1(x,param):
     return y
 
 
-def cauchy_mf_t1(x,param):
+def sigmoid_mf_t1(x,param):
     import math
     a = param[0];
     c = param[1];

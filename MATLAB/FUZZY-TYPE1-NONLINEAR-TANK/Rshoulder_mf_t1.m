@@ -1,4 +1,8 @@
 function y = Rshoulder_mf_t1(x,param)
+
+%Retorna os valores de uma MF R-Shoulder com os paramentros, 
+% [c, d], em um dado ponto x
+
     c = param(1);   
     d = param(2);
     
