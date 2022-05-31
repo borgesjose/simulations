@@ -55,3 +55,14 @@ def cauchy_mf_t1(x,param):
     y = 1/(1 + abs((x-c)/a)**(2*b))
 
     return y
+
+
+def cauchy_mf_t1(x,param):
+    import math
+    a = param[0];
+    c = param[1];
+    
+    
+    y = 1/(1 + math.exp(-a*(x-c)))
+
+    return y
