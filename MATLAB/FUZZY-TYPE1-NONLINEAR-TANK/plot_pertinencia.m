@@ -9,15 +9,17 @@ erro = -2*L:0.001:2*L;
 rate = -2*L:0.001:2*L;
 
 param = [-L/2,0,L/2];
-paramT = [-L,-L/2,L/2,L]
+paramT = [-L,-L/2,L/2,L];
+
+
 for i=1:length(x), % De 1 até o No. total de medidas da variavel linguistica...
-  erro(i) = tri_mf_t1(x(i),param);
+  zero(i) = tri_mf_t1(x(i),param);
   rate(i) = tra_mf_t1(x(i),paramT); 
   %pertinencias(x(i),y(i),L,'LI');  % pertinencia aos conjuntos fuzzy (curvatura)
 %   M=[M; mi];
 %   M1=[M1; mo];
-end
+end 
 
 figure; hold on
-plot(x,erro,'r-'); % gráfico conjunto fuzzy erro NEGATIVO
+plot(x,zero,'r-'); % gráfico conjunto fuzzy erro NEGATIVO
 plot(x,rate,'b-'); % gráfico conjunto fuzzy erro NEGATIVO
