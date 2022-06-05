@@ -33,7 +33,7 @@
 
         A = pi*r^2;% Area do orificio de saida
         
-        %% Passo 3 - Controller definition: 
+        %% Passo 3 - PID Controller definition: 
         % Ctype definie o tipo de sintonia do controaldor: 
         % 'ZN' é Ziegle-Nichols , 
         % 'CC' é Choen Coon, 
@@ -103,12 +103,24 @@
             Td = 0.079;
         end;    
         
-%%        
+%% Passo 4 - FUZZY Controller definition:        
         Am_min = 1; 
         Am_max = 6;
         Theta_m_min = 45;
         Theta_m_max = 72;
         L = 8;
+        
+        %Funções de pertinencia para o erro:
+        
+        erro_N = 
+        erro_Z =  
+        erro_P = 
+        
+        % Funções de pertinencia para o rate:
+        rate_N = 
+        rate_Z = 
+        rate_P = 
+        
 
         %% Simulation with ode45;
 

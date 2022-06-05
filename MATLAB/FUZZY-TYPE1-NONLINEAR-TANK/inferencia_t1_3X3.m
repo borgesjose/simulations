@@ -1,6 +1,10 @@
 function output = inferencia_t1_3X3(pert_erro,pert_rate),
-
-% Copert_rate 
+%
+% Implementacao de um controlador Fuzzy baseado em margem de fase e de ganho 
+% do tipo Gain Scheduling
+%
+% Autor: jose borges
+% Data: 04/03/2022 
 
 
 % REGRA 1:  

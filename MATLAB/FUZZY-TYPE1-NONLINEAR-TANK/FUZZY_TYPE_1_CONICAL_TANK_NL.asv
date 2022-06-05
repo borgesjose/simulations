@@ -33,12 +33,12 @@
 
         A = pi*r^2;% Area do orificio de saida
         
-        %% Passo 3 - Controller definition: 
+        %% Passo 3 - PID Controller definition: 
         % Ctype definie o tipo de sintonia do controaldor: 
         % 'ZN' é Ziegle-Nichols , 
         % 'CC' é Choen Coon, 
         % 'AT' é Astrom,
-        % 'FG' é 
+        % 'FG' é AT-PID-FG,
         % 'PR' é a sintomnia do professor
 
         Ctype = 'ZN'%'ZN'; 
@@ -82,7 +82,18 @@
             Ti = 0.2;
             Td = 0.079;            
             
-        end;   
+        end;
+        
+        if (Ctype == 'FG')
+            
+            
+            K = AT_PID_FG(Am,L,a,b,c)
+            
+            Kc = K(1);
+            Ti = Kc/K(2);
+            Td = K(3)/Kc;
+            
+        end; 
         
         if(Ctype == 'PR')
             disp("Selecione um controlador: ZN , CC, AT ") 
@@ -92,7 +103,7 @@
             Td = 0.079;
         end;    
         
-%%        
+%% Passo 4 - FUZZY Controller definition:        
         Am_min = 1; 
         Am_max = 6;
         Theta_m_min = 45;
