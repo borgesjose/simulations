@@ -108,7 +108,19 @@
         Am_max = 6;
         Theta_m_min = 45;
         Theta_m_max = 72;
-        L = 8;
+        L = 2;
+        
+        %Funções de pertinencia para o erro:
+        
+        erro_N = Rshoulder_t1(,);
+        erro_Z = tri_mf_t1(,); 
+        erro_P = Lshoulder_t1(,);
+        
+        % Funções de pertinencia para o rate:
+        rate_N = Rshoulder_t1(,);
+        rate_Z = tri_mf_t1(,);
+        rate_P = Lshoulder_t1(,);
+        
 
         %% Simulation with ode45;
 
@@ -121,7 +133,9 @@
             erro(i)=ref(i) - h(i); %Erro
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
-            Am(i) = Inferencia_T1(erro(i),rate(i),L);
+            Am(i) = FT1_pid(erro(i),rate(i),L);
+            %Inferencia_T1(erro(i),rate(i),L);
+            
             Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
             
             

@@ -108,19 +108,7 @@
         Am_max = 6;
         Theta_m_min = 45;
         Theta_m_max = 72;
-        L = 8;
-        
-        %Funções de pertinencia para o erro:
-        
-        erro_N = 
-        erro_Z =  
-        erro_P = 
-        
-        % Funções de pertinencia para o rate:
-        rate_N = 
-        rate_Z = 
-        rate_P = 
-        
+        L = 2;        
 
         %% Simulation with ode45;
 
@@ -133,7 +121,9 @@
             erro(i)=ref(i) - h(i); %Erro
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
-            Am(i) = Inferencia_T1(erro(i),rate(i),L);
+            Am(i) = FT1_pid(erro(i),rate(i),L);
+            %Inferencia_T1(erro(i),rate(i),L);
+            
             Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
             
             
