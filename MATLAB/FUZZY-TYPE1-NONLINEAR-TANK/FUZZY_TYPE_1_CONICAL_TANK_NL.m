@@ -13,7 +13,7 @@
             Tsim = 1000;
             nptos = Tsim/Ts;
             ts = linspace(0,Tsim,nptos);
-
+            
         %% Passo 2 - Dados do probelma:
 
         h0 = 0.001; % ponto inicial
@@ -122,7 +122,7 @@
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
             Am(i) = FT1_pid(erro(i),rate(i),L);
-            %Inferencia_T1(erro(i),rate(i),L);
+             %Am(i) = Inferencia_T1(erro(i),rate(i),L);
             
             Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
             
