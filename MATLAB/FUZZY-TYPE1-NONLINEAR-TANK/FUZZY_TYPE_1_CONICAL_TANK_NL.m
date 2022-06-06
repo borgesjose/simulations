@@ -109,7 +109,8 @@
         Theta_m_min = 45;
         Theta_m_max = 72;
         L = 2;        
-
+        
+       % o vetor parametros dá os valores das MF's
         %% Simulation with ode45;
 
         for i=4:nptos
