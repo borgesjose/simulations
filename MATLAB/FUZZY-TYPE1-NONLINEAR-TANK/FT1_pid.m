@@ -1,4 +1,4 @@
-function Am = FT1_pid(erro,rate,L)
+function Am = FT1_pid(erro,rate,L,param)
         
         % Retorna o valor de Am para o controlador  fuzzy  pid de tipo 1; 
 

@@ -10,7 +10,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Passo 1, definir o vetor tempo:
             Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
-            Tsim = 1000;
+            Tsim = 2000;
             nptos = Tsim/Ts;
             ts = linspace(0,Tsim,nptos);
             
@@ -42,8 +42,8 @@
         % 'PR' é a sintomnia do professor
 
         Ctype = 'ZN'%'ZN'; 
-        patamar = 0.25
-        passo = 0.0
+        patamar = 0.05
+        passo = 0.1
         Tamostra = Ts;
     
         % definindo a referencia de controle 
@@ -104,8 +104,8 @@
         end;    
         
 %% Passo 4 - FUZZY Controller definition:        
-        Am_min = 1; 
-        Am_max = 6;
+        Am_min = 2; 
+        Am_max = 5;
         Theta_m_min = 45;
         Theta_m_max = 72;
         L = 2;        
@@ -121,8 +121,8 @@
             erro(i)=ref(i) - h(i); %Erro
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
-            Am(i) = FT1_pid(erro(i),rate(i),L);
-             %Am(i) = Inferencia_T1(erro(i),rate(i),L);
+            Am(i) = FT1_pid(erro(i),rate(i),L,param);
+            %Am(i) = Inferencia_T1(erro(i),rate(i),L);
             
             Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
             
