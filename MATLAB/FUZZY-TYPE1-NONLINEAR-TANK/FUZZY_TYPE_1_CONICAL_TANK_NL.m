@@ -111,6 +111,9 @@
         L = 2;        
         
        % o vetor parametros dá os valores das MF's
+       
+       param = []
+       
         %% Simulation with ode45;
 
         for i=4:nptos
