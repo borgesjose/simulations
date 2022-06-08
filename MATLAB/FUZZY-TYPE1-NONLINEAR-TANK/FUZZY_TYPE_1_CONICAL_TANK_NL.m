@@ -112,7 +112,9 @@
         
        % o vetor parametros dá os valores das MF's
        
-       param = []
+       %param = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14];
+       
+       param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
        
         %% Simulation with ode45;
 
@@ -125,7 +127,7 @@
             erro(i)=ref(i) - h(i); %Erro
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
-            Am(i) = FT1_pid(erro(i),rate(i),L,param);
+            Am(i) = FT1_pid_ag(erro(i),rate(i),L,param);
             %Am(i) = Inferencia_T1(erro(i),rate(i),L);
             
             Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
