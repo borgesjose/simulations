@@ -153,13 +153,15 @@ ruido = rlevel*rand(1,1000);
           %fprintf('amostra:  %d \t entrada:  %6.3f \t saida:  %4.0f\n',i,u(i),y(i));
 
      end ;
-
+H=nptos;
      if (PID == 0)
+     I_t2 = esforco_ponderado(erro,u,H,100)
      ISE_t2  = objfunc(erro,tempo,'ISE')
      ITSE_t2 = objfunc(erro,tempo,'ITSE')
      ITAE_t2 = objfunc(erro,tempo,'ITAE')
      IAE_t2  = objfunc(erro,tempo,'IAE')
      else
+     I_pid = esforco_ponderado(erro,u,H,100)
      ISE_pid  = objfunc(erro,tempo,'ISE')
      ITSE_pid = objfunc(erro,tempo,'ITSE')
      ITAE_pid = objfunc(erro,tempo,'ITAE')
