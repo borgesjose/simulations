@@ -18,7 +18,7 @@
 
         h0 = 0.001; % ponto inicial
                  
-        R1 = 0.20;
+        R1 = 0.125;
         R2 = 0.01;
         
         u = zeros(nptos,1); % variavel de entrada
@@ -29,7 +29,7 @@
 
         Cd = Cc*Cv % discharge coefficient
 
-        r = 0.007;% raio do orificio de saida em metros
+        r = 0.005;% raio do orificio de saida em metros
 
         A = pi*r^2;% Area do orificio de saida
         

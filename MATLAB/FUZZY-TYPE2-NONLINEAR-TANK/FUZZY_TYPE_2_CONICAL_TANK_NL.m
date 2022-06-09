@@ -31,7 +31,7 @@
 
         Cd = Cc*Cv % discharge coefficient
 
-        r = 0.007;% raio do orificio de saida em metros
+        r = 0.005;% raio do orificio de saida em metros
 
         A = pi*r^2;% Area do orificio de saida
 
