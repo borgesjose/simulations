@@ -20,7 +20,7 @@
 
         h0 = 0.001; % ponto inicial
                  
-        R1 = 0.20;
+        R1 = 0.125;
         R2 = 0.01;
         
         u = zeros(nptos,1); % variavel de entrada
@@ -112,6 +112,7 @@ gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0
 Param =[gene,1,1];
 rlevel = 0.2;
 ruido = rlevel*rand(1,1000);
+Itype = 'LI'
 %%
     for i=4:nptos,
 
@@ -126,7 +127,7 @@ ruido = rlevel*rand(1,1000);
              %Aqui na chamada da função é possivel escolher entre linear input(LI) e não linear input(NLI)
              %Am(i) = Inferencia_T2(erro(i),rate(i),L,Param,'LI');
              %Am(i) = Inferencia_T2_S(erro(i),rate(i),L,Param,'LI');
-             Am(i) =Inferencia_T2(erro(i),rate(i),L,Param,'LI');
+             Am(i) =Inferencia_T2(erro(i),rate(i),L,Param,Itype);
              %[Am(i),yl(i),yr(i),l(i),r(i)]=EIASC(R(:,1)',R(:,2)',Y(:,1)',Y(:,2)'); 
              Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
          else
@@ -154,18 +155,18 @@ ruido = rlevel*rand(1,1000);
 
      end ;
 H=nptos;
-     if (PID == 0)
-     I_t2 = esforco_ponderado(erro,u,H,100)
-     ISE_t2  = objfunc(erro,tempo,'ISE')
-     ITSE_t2 = objfunc(erro,tempo,'ITSE')
-     ITAE_t2 = objfunc(erro,tempo,'ITAE')
-     IAE_t2  = objfunc(erro,tempo,'IAE')
-     else
-     I_pid = esforco_ponderado(erro,u,H,100)
-     ISE_pid  = objfunc(erro,tempo,'ISE')
-     ITSE_pid = objfunc(erro,tempo,'ITSE')
-     ITAE_pid = objfunc(erro,tempo,'ITAE')
-     IAE_pid  = objfunc(erro,tempo,'IAE')
+     if (Itype == 'LI')
+     I_t2_li = esforco_ponderado(erro,u,H,100)
+     ISE_t2_li  = objfunc(erro,tempo,'ISE')
+     ITSE_t2_li = objfunc(erro,tempo,'ITSE')
+     ITAE_t2_li = objfunc(erro,tempo,'ITAE')
+     IAE_t2_li  = objfunc(erro,tempo,'IAE')
+     elseif (Itype == 'NLI')
+     I_t2_nli = esforco_ponderado(erro,u,H,100)
+     ISE_t2_nli  = objfunc(erro,tempo,'ISE')
+     ITSE_t2_nli = objfunc(erro,tempo,'ITSE')
+     ITAE_t2_nli = objfunc(erro,tempo,'ITAE')
+     IAE_t2_nli  = objfunc(erro,tempo,'IAE')
      end;
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     
 %PLOTAGEM

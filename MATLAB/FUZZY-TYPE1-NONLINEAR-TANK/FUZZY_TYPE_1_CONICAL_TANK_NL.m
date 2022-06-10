@@ -177,10 +177,10 @@
             %%
             H=nptos;
              I_t1 = esforco_ponderado(erro,u,H,100)
-             ISE_f1  = objfunc(erro,tempo,'ISE')
-             ITSE_f1 = objfunc(erro,tempo,'ITSE')
-             ITAE_f1 = objfunc(erro,tempo,'ITAE')
-             IAE_f1  = objfunc(erro,tempo,'IAE')
+             ISE_t1  = objfunc(erro,tempo,'ISE')
+             ITSE_t1 = objfunc(erro,tempo,'ITSE')
+             ITAE_t1 = objfunc(erro,tempo,'ITAE')
+             IAE_t1  = objfunc(erro,tempo,'IAE')
        
             %% plotar Kp,Kd,Ki
             figure;

@@ -9,18 +9,42 @@
 %  and Gain Margins of the System                     % 
 %  nas margens de fase e de ganho                     %
 %  -- Version: 1.0  - 07/06/2022                      %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %% Passo 1, definir o vetor tempo:
+            Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
+            Tsim = 2000;
+            nptos = Tsim/Ts;
+            ts = linspace(0,Tsim,nptos);
+            
+        %% Passo 2 - Dados do probelma:
 
-Tc = 10;
+        h0 = 0.001; % ponto inicial
+                 
+        R1 = 0.125;
+        R2 = 0.01;
+        
+        u = zeros(nptos,1); % variavel de entrada
+        h = zeros(nptos,1); % variavel de saida
+
+        Cv = 0.97 %velocity coefficient (water 0.97)
+        Cc = 0.97 %contraction coefficient (sharp edge aperture 0.62, well rounded aperture 0.97)
+
+        Cd = Cc*Cv % discharge coefficient
+
+        r = 0.005;% raio do orificio de saida em metros
+
+        A = pi*r^2;% Area do orificio de saida
+
+        Tc = Ts;
 
 %% Aplicando o relé:
-Tc = 10;
-Tamostra = Tc;
-nptos = 800;
-Kc = 4.7561;
-Ti = 38.6378;
-Td = 9.6594;
+
+% Tc = 10;
+% Tamostra = Tc;
+% nptos = 800;
+% Kc = 4.7561;
+% Ti = 38.6378;
+% Td = 9.6594;
 
 % d = 80;
 % eps = 1;
@@ -39,32 +63,40 @@ Theta_m_max = 72;
 %turnpoint = 500;%floor(rand*nptos);
 
 
-for i=1:nptos,
-    if (i<=nptos/4)  ref(i)=10; end;
-    if (i>nptos/4)   ref(i) = 50; end;
-    if (i>nptos/2 & i<=3*nptos/4)  ref(i)=25; end;
-    if (i>3*nptos/4)   ref(i) = 60; end;
-end ;
-% for i=1:nptos,
-%     ref(i)=30;
-% end ;
+        patamar = 0.05
+        passo = 0.1
+        Tamostra = Ts;
+    
+        % definindo a referencia de controle 
+        
+        for i=1:nptos,
 
-for i=1:nptos,
-    if(i>nptos/2 & i< 5+nptos/2 ) 
-        disturbio(i) = ref(i)*0.2;
-    else disturbio(i) = 0; end;
-end ;
+            if (i<=nptos/4)  ref(i)= patamar; end;
+            if (i>nptos/4)   ref(i) = patamar + passo ; end;
+            if (i>nptos/2 & i<=3*nptos/4)  ref(i)= patamar + 2*passo; end;
+            if (i>3*nptos/4)   ref(i) = patamar + 2*passo; end;
+
+        end ;
 
 %ref = ref+disturbio
 
-clear y;
-y(4)=0 ; y(3)=0 ; y(2)=0 ; y(1)=0 ; 
-u(1)=0 ; u(2)=0 ; u(3)=0; u(4)=0;
+        h(4)=h0 ; h(3)=h0 ; h(2)=h0 ; h(1)=h0 ; 
+        u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
+        erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
 
-erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
-
-L=2;%Provavelmente o valor de limite das memberships functions
+%% Passo 4 - FUZZY Controller definition:        
+        Am_min = 2; 
+        Am_max = 5;
+        Theta_m_min = 45;
+        Theta_m_max = 72;
+        L = 2; %Provavelmente o valor de limite das memberships functions       
+        
+       % o vetor parametros dá os valores das MF's
+       
+       %param = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14];
+       
+       %param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
 
 %%
 %randpmo criado aleatoriamente por mim
@@ -81,19 +113,20 @@ Param =[gene,1,1];
 rlevel = 0.2;
 ruido = rlevel*rand(1,1000);
 %%
-    for i=5:nptos,
+    for i=4:nptos,
 
-         y(i) =-a1*y(i-1)-a2*y(i-2)+b1*u(i-1)+b2*u(i-2);
+            [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
+            h0 = y(end); % take the last point
+            h(i) = h0; % store the height for plotting
           
-         erro(i)=ref(i)- y(i);%+ruido(i); %Erro
-
-         rate(i)=(erro(i)-erro(i-1));%/Tc; %Rate of erro
+            erro(i)=ref(i) - h(i); %Erro
+            rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
          if (PID == 0)
              %Aqui na chamada da função é possivel escolher entre linear input(LI) e não linear input(NLI)
              %Am(i) = Inferencia_T2(erro(i),rate(i),L,Param,'LI');
              %Am(i) = Inferencia_T2_S(erro(i),rate(i),L,Param,'LI');
-             Am(i) =Inferencia_T2_SB(erro(i),rate(i),L,Param,'LI');
+             Am(i) =Inferencia_T2(erro(i),rate(i),L,Param,'LI');
              %[Am(i),yl(i),yr(i),l(i),r(i)]=EIASC(R(:,1)',R(:,2)',Y(:,1)',Y(:,2)'); 
              Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
          else
@@ -120,13 +153,15 @@ ruido = rlevel*rand(1,1000);
           %fprintf('amostra:  %d \t entrada:  %6.3f \t saida:  %4.0f\n',i,u(i),y(i));
 
      end ;
-
+H=nptos;
      if (PID == 0)
+     I_t2 = esforco_ponderado(erro,u,H,100)
      ISE_t2  = objfunc(erro,tempo,'ISE')
      ITSE_t2 = objfunc(erro,tempo,'ITSE')
      ITAE_t2 = objfunc(erro,tempo,'ITAE')
      IAE_t2  = objfunc(erro,tempo,'IAE')
-     else
+     elseif ( )
+     I_t2_nli = esforco_ponderado(erro,u,H,100)
      ISE_pid  = objfunc(erro,tempo,'ISE')
      ITSE_pid = objfunc(erro,tempo,'ITSE')
      ITAE_pid = objfunc(erro,tempo,'ITAE')
@@ -143,19 +178,55 @@ plot(tempo,Ki,'r-');
 plot(tempo,Kd,'m-');
 legend('Kp','Ki','Kd')
 %%
-%Saida do processo:
-figure;
-grid;
-plot(tempo,y,'b-');
-hold on;
-plot(tempo,u,'r-');
+        figure;
+        plot(ts,h,'-r','LineWidth', 3,'DisplayName','height'); hold on
+        plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
+        ylabel('Tank Height (m)');
+        xlabel('Time (s)');
+        title(['Fuzzy tipo 2 - Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
+        
+        %saveas(gcf,['resultado_R1=',num2str(r),'.png'])
+        
+        figure;
+        plot(ts,u,'k:','LineWidth', 3,'DisplayName','input'); hold off
+        ylabel('Sinal de entrada m³/s');
+        xlabel('Time (s)');
+        legend();
+        title(['Fuzzy tipo 2 - Sinal de Controle - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
+        %saveas(gcf,['Sinal_de_controle_R1_',num2str(R1),'R2_',num2str(R2), 'r_',num2str(r),'.png'])
 
-%title(['T2,NLI: ISE:', num2str(ISE_t2), ', ITSE:' ,num2str(ITSE_t2),', IAE:' ,num2str(IAE_t2), ', ITAE:' ,num2str(ITAE_t2)])
-%title('Resposta ao degrau com mudança referência')
-%legend('Type-1-CN-PID-FG','Type-2-CN-PID-FG')
-plot(tempo,ref,'r--');
-xlabel('tempo(s)');
-ylabel('y(t)');
-% text1= {'T1: ISE:', num2str(ISE_t1), ', ITSE:' ,num2str(ITSE_t1),', IAE:' ,num2str(IAE_t1), ', ITAE:' ,num2str(ITAE_t1)}
-% text2= {'T2,IM-1: ISE:', num2str(ISE_t2), ', ITSE:' ,num2str(ITSE_t2),', IAE:' ,num2str(IAE_t2), ', ITAE:' ,num2str(ITAE_t2)}
-% text([100],[0.5],text2)
+
+
+
+%% Saida do processo:
+% figure;
+% grid;
+% plot(tempo,y,'b-');
+% hold on;
+% plot(tempo,u,'r-');
+% 
+% %title(['T2,NLI: ISE:', num2str(ISE_t2), ', ITSE:' ,num2str(ITSE_t2),', IAE:' ,num2str(IAE_t2), ', ITAE:' ,num2str(ITAE_t2)])
+% %title('Resposta ao degrau com mudança referência')
+% %legend('Type-1-CN-PID-FG','Type-2-CN-PID-FG')
+% plot(tempo,ref,'r--');
+% xlabel('tempo(s)');
+% ylabel('y(t)');
+% % text1= {'T1: ISE:', num2str(ISE_t1), ', ITSE:' ,num2str(ITSE_t1),', IAE:' ,num2str(IAE_t1), ', ITAE:' ,num2str(ITAE_t1)}
+% % text2= {'T2,IM-1: ISE:', num2str(ISE_t2), ', ITSE:' ,num2str(ITSE_t2),', IAE:' ,num2str(IAE_t2), ', ITAE:' ,num2str(ITAE_t2)}
+% % text([100],[0.5],text2)
+
+ %% plotar Kp,Kd,Ki
+%             figure;
+%             grid;
+%             plot(tempo,Kp,'g-');
+%             hold on;
+%             plot(tempo,Kd);
+%             hold on;
+%             plot(tempo,Ki);
+%             title('FT1-PID-FG: Kp,Ki,Kd')
+%             legend('Kc','Kd','Ki')
+            %%
+            figure;
+            grid;
+            plot(tempo,Am,'g-');
+            title('FT1-PID-FG: Am')

@@ -1,4 +1,4 @@
-function Am =inferencia(erro,rate,L,T,Itype)
+function Am =inferencia_T2(erro,rate,L,T,Itype)
 %%
 %% Maquina de inferencia TYPE-2
 %% 
@@ -6,7 +6,12 @@ function Am =inferencia(erro,rate,L,T,Itype)
 %% Autor: jose borges 
 %% Data: 04/03/2019
 
-[mi mo]=pertinencias_T2_NL(erro,rate,L,T,Itype);   % Pertinencias para variavel de entrada ERRO
+if (Itype == 'LI')
+    [mi mo]=pertinencias_T2(erro,rate,L,T,Itype); % Pertinencias para variavel de entrada ERRO
+
+elseif (Itype == 'NLI')
+    [mi mo]=pertinencias_T2_NL(erro,rate,L,T,Itype); 
+end;
 
 % Forma do vetor mi
 % mi = [Nb,Zb,Pb,Zu,Zl,Nu,Nl,Pu,Pl]
