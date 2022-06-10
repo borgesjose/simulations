@@ -6,10 +6,10 @@ function Am =inferencia_T2(erro,rate,L,T,Itype)
 %% Autor: jose borges 
 %% Data: 04/03/2019
 
-if (Itype == 'LI')
+if (Itype == 'L')
     [mi mo]=pertinencias_T2(erro,rate,L,T,Itype); % Pertinencias para variavel de entrada ERRO
 
-elseif (Itype == 'NLI')
+elseif (Itype == 'N')
     [mi mo]=pertinencias_T2_NL(erro,rate,L,T,Itype); 
 end;
 

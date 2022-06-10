@@ -12,7 +12,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Passo 1, definir o vetor tempo:
             Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
-            Tsim = 2000;
+            Tsim = 500;
             nptos = Tsim/Ts;
             ts = linspace(0,Tsim,nptos);
             
@@ -62,9 +62,9 @@ Theta_m_max = 72;
 
 %turnpoint = 500;%floor(rand*nptos);
 
-
-        patamar = 0.05
-        passo = 0.1
+        Ctype = 'ZN'%'ZN';
+        patamar = 0.25
+        passo = 0.0
         Tamostra = Ts;
     
         % definindo a referencia de controle 
@@ -84,6 +84,46 @@ Theta_m_max = 72;
         u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
         erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
+        if (Ctype == 'ZN')
+            Tdead =  0.158;
+            T1 = 2.83;
+            Kc = 1.2*(3.8000e-04/0.2056)*((T1)/(Tdead))*10^-3
+            Ti = 2*Tdead
+            Td = 0.5*Tdead         
+        end;
+        
+        if (Ctype == 'CC')
+            Kc = .0001;
+            Ti = 0.2;
+            Td = 0.079;            
+        end;
+        
+        if (Ctype == 'AT')
+            Kc = .0001;
+            Ti = 0.2;
+            Td = 0.079;            
+            
+        end;
+        
+        if (Ctype == 'FG')
+            
+            
+            K = AT_PID_FG(Am,L,a,b,c)
+            
+            Kc = K(1);
+            Ti = Kc/K(2);
+            Td = K(3)/Kc;
+            
+        end; 
+        
+        if(Ctype == 'PR')
+            disp("Selecione um controlador: ZN , CC, AT ") 
+            %SINTONIA PROFESSOR:
+            Kc = .00005;
+            Ti = 0.2;
+            Td = 0.079;
+        end;    
+        
 
 %% Passo 4 - FUZZY Controller definition:        
         Am_min = 2; 
@@ -112,7 +152,7 @@ gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0
 Param =[gene,1,1];
 rlevel = 0.2;
 ruido = rlevel*rand(1,1000);
-Itype = 'LI'
+Itype = 'L'
 %%
     for i=4:nptos,
 
@@ -155,13 +195,13 @@ Itype = 'LI'
 
      end ;
 H=nptos;
-     if (Itype == 'LI')
+     if (Itype == 'L')
      I_t2_li = esforco_ponderado(erro,u,H,100)
      ISE_t2_li  = objfunc(erro,tempo,'ISE')
      ITSE_t2_li = objfunc(erro,tempo,'ITSE')
      ITAE_t2_li = objfunc(erro,tempo,'ITAE')
      IAE_t2_li  = objfunc(erro,tempo,'IAE')
-     elseif (Itype == 'NLI')
+     elseif (Itype == 'N')
      I_t2_nli = esforco_ponderado(erro,u,H,100)
      ISE_t2_nli  = objfunc(erro,tempo,'ISE')
      ITSE_t2_nli = objfunc(erro,tempo,'ITSE')
@@ -230,4 +270,4 @@ legend('Kp','Ki','Kd')
             figure;
             grid;
             plot(tempo,Am,'g-');
-            title('FT1-PID-FG: Am')
+            title('FT2-PID-FG: Am')

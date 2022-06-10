@@ -10,7 +10,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Passo 1, definir o vetor tempo:
             Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
-            Tsim = 2000;
+            Tsim = 500;
             nptos = Tsim/Ts;
             ts = linspace(0,Tsim,nptos);
             
@@ -42,8 +42,8 @@
         % 'PR' é a sintomnia do professor
 
         Ctype = 'ZN'%'ZN'; 
-        patamar = 0.05
-        passo = 0.1
+        patamar = 0.25
+        passo = 0.0
         Tamostra = Ts;
     
         % definindo a referencia de controle 

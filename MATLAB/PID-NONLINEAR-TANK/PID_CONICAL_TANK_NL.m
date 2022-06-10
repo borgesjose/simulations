@@ -42,7 +42,7 @@
         % 'PR' é a sintomnia do professor
 
         Ctype = 'ZN'%'ZN'; 
-        patamar = 0.05
+        patamar = 0.25
         passo = 0.0
         Tamostra = Ts;
     
