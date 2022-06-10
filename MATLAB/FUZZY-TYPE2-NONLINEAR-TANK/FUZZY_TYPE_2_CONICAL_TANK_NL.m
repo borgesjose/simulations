@@ -96,7 +96,7 @@ Theta_m_max = 72;
        
        %param = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14];
        
-       param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
+       %param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
 
 %%
 %randpmo criado aleatoriamente por mim

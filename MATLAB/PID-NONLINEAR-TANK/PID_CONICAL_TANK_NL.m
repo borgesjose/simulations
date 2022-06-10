@@ -10,7 +10,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Passo 1, definir o vetor tempo:
             Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
-            Tsim = 1000;
+            Tsim = 2000;
             nptos = Tsim/Ts;
             ts = linspace(0,Tsim,nptos);
 
@@ -166,4 +166,6 @@
              ITSE_pid = objfunc(erro,tempo,'ITSE')
              ITAE_pid = objfunc(erro,tempo,'ITAE')
              IAE_pid  = objfunc(erro,tempo,'IAE')
-       
+             H=nptos;
+             I_pid = esforco_ponderado(erro,u,H,100)
+             
