@@ -42,7 +42,7 @@
         % 'PR' é a sintomnia do professor
 
         Ctype = 'ZN'%'ZN'; 
-        patamar = 0.25
+        patamar = 0.05
         passo = 0.0
         Tamostra = Ts;
     
@@ -57,6 +57,15 @@
 
         end ;
 
+         %Disturbio 
+        disturbio_value = 0.05;
+        disturbio = zeros(1,nptos)
+        tempo_disturbio = 5
+
+        for i=1:nptos,
+            if (i >= nptos/2 & i<=(nptos/2+tempo_disturbio))  disturbio(i) = disturbio(i) + disturbio_value; end;
+        end ;
+        
         %clear h;
         h(4)=h0 ; h(3)=h0 ; h(2)=h0 ; h(1)=h0 ; 
         u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
@@ -115,16 +124,16 @@
        %param = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14];
        
        param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
-       
+  load('ruido.mat')     
         %% Simulation with ode45;
 
         for i=4:nptos
 
             [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
-            h(i) = h0; % store the height for plotting
+            h(i) = h0 + disturbio(i); % store the height for plotting
 
-            erro(i)=ref(i) - h(i); %Erro
+            erro(i)=ref(i) - h(i) %+ ruido_nao_gausian(i); %Erro
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
             Am(i) = FT1_pid_ag(erro(i),rate(i),L,param);
@@ -151,9 +160,16 @@
 
                         tempo(i)=i*Tamostra;
 
-        end
-        
-        %%
+        end 
+            %%
+            H=nptos;
+             I_t1 = esforco_ponderado(erro,u,H,100)
+             ISE_t1  = objfunc(erro,tempo,'ISE')
+             ITSE_t1 = objfunc(erro,tempo,'ITSE')
+             ITAE_t1 = objfunc(erro,tempo,'ITAE')
+             IAE_t1  = objfunc(erro,tempo,'IAE')
+
+ %%
         % plot results
         
         figure;
@@ -174,15 +190,8 @@
         %saveas(gcf,['Sinal_de_controle_R1_',num2str(R1),'R2_',num2str(R2), 'r_',num2str(r),'.png'])
         
         
-            %%
-            H=nptos;
-             I_t1 = esforco_ponderado(erro,u,H,100)
-             ISE_t1  = objfunc(erro,tempo,'ISE')
-             ITSE_t1 = objfunc(erro,tempo,'ITSE')
-             ITAE_t1 = objfunc(erro,tempo,'ITAE')
-             IAE_t1  = objfunc(erro,tempo,'IAE')
-       
-            %% plotar Kp,Kd,Ki
+           
+        %% plotar Kp,Kd,Ki
             figure;
             grid;
             plot(tempo,Kp,'g-');

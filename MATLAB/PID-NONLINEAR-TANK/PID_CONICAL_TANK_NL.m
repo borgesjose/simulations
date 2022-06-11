@@ -42,8 +42,8 @@
         % 'PR' é a sintomnia do professor
 
         Ctype = 'ZN'%'ZN'; 
-        patamar = 0.25
-        passo = 0.0
+        patamar = 0.05
+        passo = 0.00
         Tamostra = Ts;
     
         % definindo a referencia de controle 
@@ -57,6 +57,15 @@
 
         end ;
 
+        %Disturbio 
+        disturbio_value = 0.05;
+        disturbio = zeros(1,nptos)
+        tempo_disturbio = 5
+
+        for i=1:nptos,
+            if (i >= nptos/2 & i<=(nptos/2+tempo_disturbio))  disturbio(i) = disturbio(i) + disturbio_value; end;
+        end ;
+        
         %clear h;
         h(4)=h0 ; h(3)=h0 ; h(2)=h0 ; h(1)=h0 ; 
         u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
@@ -104,16 +113,16 @@
         end;    
             
         
-
+load('ruido.mat')
         %% Simulation with ode45;
 
         for i=4:nptos
 
             [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
-            h(i) = h0; % store the height for plotting
+            h(i) = h0 + disturbio(i); % store the height for plotting
 
-            erro(i)=ref(i) - h(i); %Erro
+            erro(i)=ref(i) - h(i)% + ruido(i); %Erro
 
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
@@ -147,7 +156,7 @@
         plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
-        title(['Resposta Tanque - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
+        title(['Resposta Tanque PID - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
         
         %saveas(gcf,['resultado_R1=',num2str(r),'.png'])
         
@@ -156,7 +165,7 @@
         ylabel('Sinal de entrada m³/s');
         xlabel('Time (s)');
         legend();
-        title(['Sinal de Controle- R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
+        title(['Sinal de Controle PID - R1: ', num2str(R1) , '  R2: ' , num2str(R2), '  r: ' , num2str(r)])
         %saveas(gcf,['Sinal_de_controle_R1_',num2str(R1),'R2_',num2str(R2),
         %'r_',num2str(r),'.png']) 
         
