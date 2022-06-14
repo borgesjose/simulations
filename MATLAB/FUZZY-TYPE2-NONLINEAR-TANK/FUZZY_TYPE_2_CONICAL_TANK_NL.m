@@ -160,7 +160,7 @@ Theta_m_max = 72;
 
 
 
-Itype = 'N'
+Itype = 'L'
      if (Itype == 'L')
        gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
      elseif (Itype == 'N')
@@ -172,6 +172,11 @@ load('ruido_nao_gausian.mat')
 load('disturbio.mat')
 %%
     for i=4:nptos,
+        
+            %RUPTURA NO MODELO
+            % raio do orificio de saida em metros
+            if(i > (nptos/2)) r = 0.006; end;
+            A = pi*r^2;% Area do orificio de saida
 
             [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
             h0 = y(end); % take the last point

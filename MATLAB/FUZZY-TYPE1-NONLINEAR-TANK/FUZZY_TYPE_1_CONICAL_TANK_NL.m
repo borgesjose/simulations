@@ -128,6 +128,11 @@
         %% Simulation with ode45;
 
         for i=4:nptos
+            
+            %RUPTURA NO MODELO
+            % raio do orificio de saida em metros
+            if(i > (nptos/2)) r = 0.006; end;
+            A = pi*r^2;% Area do orificio de saida
 
             [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
