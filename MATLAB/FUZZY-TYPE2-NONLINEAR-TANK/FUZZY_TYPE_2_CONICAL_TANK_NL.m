@@ -80,13 +80,13 @@ Theta_m_max = 72;
 
 %ref = ref+disturbio
 
-        %Disturbio 
-        disturbio_value = 0.05;
-        disturbio = zeros(1,nptos)
-        tempo_disturbio = 5
+        %Quebra no processo
+        qp_value = 0.05;
+        qp = zeros(1,nptos)
+        tempo_qp = 5
 
         for i=1:nptos,
-            if (i >= nptos/2 & i<=(nptos/2+tempo_disturbio))  disturbio(i) = disturbio(i) + disturbio_value; end;
+            if (i >= nptos/2 & i<=(nptos/2+tempo_qp))  qp(i) = qp(i) + qp_value; end;
         end ;
         
         h(4)=h0 ; h(3)=h0 ; h(2)=h0 ; h(1)=h0 ; 
@@ -160,7 +160,7 @@ Theta_m_max = 72;
 
 
 
-Itype = 'L'
+Itype = 'N'
      if (Itype == 'L')
        gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
      elseif (Itype == 'N')
@@ -169,12 +169,13 @@ Itype = 'L'
      
 Param =[gene,1,1];
 load('ruido_nao_gausian.mat')  
+load('disturbio.mat')
 %%
     for i=4:nptos,
 
             [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
-            h(i) = h0 + disturbio(i); % store the height for plotting
+            h(i) = h0 ; % store the height for plotting
           
             erro(i)=ref(i) - h(i)%+ ruido_nao_gausian(i)); %Erro
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
@@ -202,7 +203,7 @@ load('ruido_nao_gausian.mat')
                 beta = -(Kc/Ami)*(1+2*((Td)/Tamostra)-(Tamostra/(2*(Ti))));
                 gama = (Kc/Ami)*(Td)/Tamostra;
 
-                u(i)= u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2);
+                u(i)= u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2) ;%+ disturbio(i);
 
 
            tempo(i)=i*Tamostra;
@@ -213,16 +214,23 @@ load('ruido_nao_gausian.mat')
 H=nptos;
      if (Itype == 'L')
      I_t2_li = esforco_ponderado(erro,u,H,100)
+     
      ISE_t2_li  = objfunc(erro,tempo,'ISE')
      ITSE_t2_li = objfunc(erro,tempo,'ITSE')
      ITAE_t2_li = objfunc(erro,tempo,'ITAE')
      IAE_t2_li  = objfunc(erro,tempo,'IAE')
+     
+     IG_t2li = IG(H,1e4,1e9,1,u,ref,h)
+     
      elseif (Itype == 'N')
      I_t2_nli = esforco_ponderado(erro,u,H,100)
+     
      ISE_t2_nli  = objfunc(erro,tempo,'ISE')
      ITSE_t2_nli = objfunc(erro,tempo,'ITSE')
      ITAE_t2_nli = objfunc(erro,tempo,'ITAE')
      IAE_t2_nli  = objfunc(erro,tempo,'IAE')
+     
+     IG_t2_nli = IG(H,1e4,1e9,1,u,ref,h)
      end;
 
 
