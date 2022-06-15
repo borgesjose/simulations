@@ -12,14 +12,11 @@
 
 % Script que serve como main da aplicação.
 
-        %% Passo 1, definir o vetor tempo:
+        %% Step 1, simulation definition:
 
-        Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
-        Tsim = 500;
-        nptos = Tsim/Ts;
-        ts = linspace(0,Tsim,nptos);
 
-        %% Passo 2 - Dados do problema:
+
+        %% Step 2 - Problem definition:
 
         h0 = 0.001; % ponto inicial
                  
@@ -38,9 +35,6 @@
 
         A = pi*r^2;% Area do orificio de saida
         
-
-
-
         %% Passo 3 - Controller definition: 
         % Ctype definie o tipo de sintonia do controaldor: 
         % 'ZN' é Ziegle-Nichols , 
@@ -52,14 +46,17 @@
         
         [Kc,Ti,Td] = PID(Ctype); % Seleciona o PID 
         
-        %% definindo a referencia de controle 
+         %% Step 1, simulation definition:
+        
+        Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
+        Tsim = 500;
+        nptos = Tsim/Ts;
+        ts = linspace(0,Tsim,nptos);
         
         patamar = 0.05
         passo = 0.00
         Tamostra = Ts;
     
-        
-        
         for i=1:nptos,
 
             if (i<=nptos/4)  ref(i)= patamar; end;
@@ -69,7 +66,10 @@
 
         end ;
 
+        
+        
         %% Quebra no processo
+        
         qp_value = 0.05;
         qp = zeros(1,nptos)
         tempo_qp = 5
