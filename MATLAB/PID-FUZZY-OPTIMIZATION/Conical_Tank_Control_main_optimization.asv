@@ -1,21 +1,28 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-% Universidade Federal do Piaui­                      %
+% Universidade Federal do Piaui                       %
 % Campus Ministro Petronio Portela                    %
-% Copyright 2022 -Jose Borges do Carmo Neto-          %
+% Copyright 2022 -Jose Borges do Carmo Neto           %
 % @author Jose Borges do Carmo Neto                   %
 % @email jose.borges90@hotmail.com                    %
-%  Conical tank control using PID, Fuzzy              %
-%  tipo 1 e Fuzzy tipo 2                              %
+%  Otimização metaheuristica dos controladores PID    %
+%  Fuzzy tipo 1 e  tipo 2 Intervalar                  %
 %                                                     %
-%  -- Version: 1.0  - 14/06/2022                      %
+%  -- Version: 0.1  - 14/06/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Script que serve como main da aplicação.
+% Script que serve como main para algoritmos de otimização
 
-        %% Step 1, simulation definition:
-
-
-
+ %% Step 1, simulation definition:
+        
+        PIDtype = 'ZN';
+        PIDflag = 0;
+        FT1type = 'L'; % L = input linear ; N = input não linear
+        FT2Itype = 'L'; % L = input linear ; N = input não linear
+        flag_load_dist = 0; 
+        flag_noise = 0;
+        
+        Opt_type = '';
+       
         %% Step 2 - Problem definition:
 
         h0 = 0.001; % ponto inicial
@@ -42,11 +49,9 @@
         % 'AT' é Astrom 
         % 'PR' é a sintomnia do professor
 
-        Ctype = 'ZN'; 
+        [Kc,Ti,Td] = PID(PIDtype); % Seleciona o PID 
         
-        [Kc,Ti,Td] = PID(Ctype); % Seleciona o PID 
-        
-         %% Step 1, simulation definition:
+         %% Step 4, simulation definition:
         
         Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
         Tsim = 500;
@@ -130,3 +135,4 @@ load('disturbio.mat')
         end
         
         
+
