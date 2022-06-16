@@ -1,16 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-% Universidade Federal do Piaui                       %
+% Universidade Federal do Piaui­                      %
 % Campus Ministro Petronio Portela                    %
-% Copyright 2022 -Jose Borges do Carmo Neto           %
+% Copyright 2022 -Jose Borges do Carmo Neto-          %
 % @author Jose Borges do Carmo Neto                   %
 % @email jose.borges90@hotmail.com                    %
-%  Otimização metaheuristica dos controladores PID    %
-%  Fuzzy tipo 1 e  tipo 2 Intervalar                  %
+%  Conical tank control using PID, Fuzzy              %
+%  tipo 1 e Fuzzy tipo 2                              %
 %                                                     %
-%  -- Version: 0.1  - 14/06/2022                      %
+%  -- Version: 1.0  - 14/06/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Main script for metaheuristic optimization algorithms applied to a conical tank
+% Script que serve como main da aplicação.
 
  %% Step 1, simulation definition:
  
@@ -29,16 +29,12 @@
        
         %% Step 2 - Problem definition:
 
-        h0 = 0.001; % initial point
-                 
+        h0 = 0.001; % initial point         
         R1 = 0.125;
         R2 = 0.01;
-        
         Cv = 0.97; %velocity coefficient (water 0.97)
-        Cc = 0.97; %contraction coefficient (sharp edge aperture 0.62, well rounded aperture 0.97)
-
+        Cc = 0.97; %contraction coefficient (sharp edge aperture 0.62, well rounded aperture 0.97
         Cd = Cc*Cv; % discharge coefficient
-
         r = 0.005;% output ratio in meters
 
         A = pi*r^2;% output Area
@@ -47,7 +43,7 @@
 
         [Kc,Ti,Td] = PID(PIDtype); % Type PID selection 
         
-        %% Step 4, simulation setings:
+        %% Step 4 - Simulation Setings:
         
         Ts = 5; %  5~10s( Digital control systems,Landau,2006,p.32)
         nptos = Tsim/Ts; %number point of simulation
@@ -70,17 +66,7 @@
         
         if( flag_load_dist == 1) load('disturbio.mat'); end;
         if( flag_noise == 1) load('ruido.mat'); end;
-%% Step 5  - Fuzzy T1 Controller definition:        
-        Am_min = 2; 
-        Am_max = 5;
-        Theta_m_min = 45;
-        Theta_m_max = 72;
-        L = 2;        
-        
-       % o vetor parametros dá os valores das MF's
-       
-       %param = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14];       
-       param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
+
 
         %% Simulation with ode45;
 
