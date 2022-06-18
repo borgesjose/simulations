@@ -113,20 +113,21 @@
         
 load('ruido.mat')
 load('disturbio.mat')
+
         %% Simulation with ode45;
 
         for i=4:nptos
             
             %RUPTURA NO MODELO
             % raio do orificio de saida em metros
-            if(i > (nptos/2)) r = 0.006; end;
+            if(i > (nptos/2)) r = 0.005; end;
             A = pi*r^2;% Area do orificio de saida
 
             [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
             h(i) = h0; % store the height for plotting
 
-            erro(i)=ref(i) - h(i)% + ruido(i); %Erro
+            erro(i)=ref(i) - h(i) + sinusoidal_dist(ts(i))% + ruido(i); %Erro
 
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
@@ -185,4 +186,6 @@ load('disturbio.mat')
              I_pid = esforco_ponderado(erro,u,H,100)
              IG_pid = IG(H,1e4,1e9,1,u,ref,h)
              
+             sy_pid= var(h)
+             su_pid = var(u)
              

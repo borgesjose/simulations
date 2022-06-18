@@ -177,8 +177,8 @@
              
              IG_t1 = IG(H,1e4,1e9,1,u,ref,h)
              
-             sy_t1= var(h)
-             su_t1 = var(u)
+             sy_t1= var(y);
+su_t1 = var(u)
 
  %%
         % plot results

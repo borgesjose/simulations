@@ -160,7 +160,7 @@ Theta_m_max = 72;
 
 
 
-     Itype = 'L'
+     Itype = 'N'
      if (Itype == 'L')
        gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
      elseif (Itype == 'N')
@@ -175,14 +175,14 @@ load('disturbio.mat')
         
             %RUPTURA NO MODELO
             % raio do orificio de saida em metros
-            if(i > (nptos/2)) r = 0.006; end;
+            if(i > (nptos/2)) r = 0.005; end;
             A = pi*r^2;% Area do orificio de saida
 
             [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
             h(i) = h0 ; % store the height for plotting
           
-            erro(i)=ref(i) - h(i)%+ ruido_nao_gausian(i)); %Erro
+            erro(i)=ref(i) - h(i) + sinusoidal_dist(ts(i));%+ ruido_nao_gausian(i)); %Erro
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
          if (PID == 0)
@@ -225,7 +225,10 @@ H=nptos;
      ITAE_t2_li = objfunc(erro,tempo,'ITAE')
      IAE_t2_li  = objfunc(erro,tempo,'IAE')
      
-     IG_t2li = IG(H,1e4,1e9,1,u,ref,h)
+     IG_t2_li = IG(H,1e4,1e9,1,u,ref,h)
+     
+     sy_t2_li= var(h)
+     su_t2_li = var(u)
      
      elseif (Itype == 'N')
      I_t2_nli = esforco_ponderado(erro,u,H,100)
@@ -236,6 +239,10 @@ H=nptos;
      IAE_t2_nli  = objfunc(erro,tempo,'IAE')
      
      IG_t2_nli = IG(H,1e4,1e9,1,u,ref,h)
+     
+     sy_t2_nli= var(h)
+     su_t2_nli = var(u)     
+     
      end;
 
 
