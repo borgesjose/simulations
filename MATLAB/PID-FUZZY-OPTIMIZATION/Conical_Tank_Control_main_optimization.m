@@ -18,6 +18,7 @@
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
         PIDflag = 0;
+        FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
         
@@ -26,28 +27,70 @@
         flag_model_severance = 0;
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
-       
+
+    
         %% Step 2 - Problem definition:
-
-        h0 = 0.001; % initial point
+        %Tank definition structure
+        tank.h0 = 0.001; % initial point
                  
-        R1 = 0.125;
-        R2 = 0.01;
+        tank.R1 = 0.125;
+        tank.R2 = 0.01;
         
-        Cv = 0.97; %velocity coefficient (water 0.97)
-        Cc = 0.97; %contraction coefficient (sharp edge aperture 0.62, well rounded aperture 0.97)
+        tank.Cv = 0.97; %velocity coefficient (water 0.97)
+        tank.Cc = 0.97; %contraction coefficient (sharp edge aperture 0.62, well rounded aperture 0.97)
 
-        Cd = Cc*Cv; % discharge coefficient
+        tank.Cd = tank.Cc*tank.Cv; % discharge coefficient
 
-        r = 0.005;% output ratio in meters
+        tank.r = 0.005;% output ratio in meters
 
-        A = pi*r^2;% output Area
+        tank.A = pi*tank.r^2;% output Area
         
         %% Step 3 - Controller definition: 
 
         [Kc,Ti,Td] = PID(PIDtype); % Type PID selection 
+%% Step 4  - Controller definition:        
+
+    if (PIDflag)
+        disp('lol')
+    else
         
-        %% Step 4, simulation setings:
+    if (FuzzyType == 'T1'),
+        Am_min = 2;
+        Am_max = 5;
+        Theta_m_min = 45;
+        Theta_m_max = 72;
+        L = 2;
+        
+        % o vetor parametros dá os valores das MF's
+        if (FT1type == 'L')
+            param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
+        elseif (FT1type == 'N')
+            gene = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];;
+        end;
+        
+        
+    end
+    
+    if (FuzzyType == 'T2'),
+        Am_min = 2;
+        Am_max = 5;
+        Theta_m_min = 45;
+        Theta_m_max = 72;
+        L = 2;
+        
+        % o vetor parametros dá os valores das MF's:
+        
+        if (FT2Itype == 'L')
+            gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
+        elseif (FT2Itype == 'N')
+            gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
+        end;
+        
+        Param =[gene,1,1];
+    end
+
+            
+        %% Step 5, simulation setings:
         
         Ts = 5; %  5~10s( Digital control systems,Landau,2006,p.32)
         nptos = Tsim/Ts; %number point of simulation
@@ -64,23 +107,13 @@
         ref = ref_def(patamar,passo,nptos);
                 
         %clear h;
-        h(4)=h0 ; h(3)=h0 ; h(2)=h0 ; h(1)=h0 ; 
+        h(4)=tank.h0 ; h(3)=tank.h0 ; h(2)=tank.h0 ; h(1)=tank.h0 ; 
         u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
         erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
         
-        if( flag_load_dist == 1) load('disturbio.mat'); end;
-        if( flag_noise == 1) load('ruido.mat'); end;
-%% Step 5  - Fuzzy T1 Controller definition:        
-        Am_min = 2; 
-        Am_max = 5;
-        Theta_m_min = 45;
-        Theta_m_max = 72;
-        L = 2;        
+        if( flag_load_dist) load('disturbio.mat'); end;
+        if( flag_noise) load('ruido.mat'); end;
         
-       % o vetor parametros dá os valores das MF's
-       
-       %param = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14];       
-       param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
 
         %% Simulation with ode45;
 

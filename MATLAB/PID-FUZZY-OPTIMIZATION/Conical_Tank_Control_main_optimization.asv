@@ -18,6 +18,7 @@
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
         PIDflag = 0;
+        FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
         
@@ -28,20 +29,20 @@
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
        
         %% Step 2 - Problem definition:
-
-        h0 = 0.001; % initial point
+        %Tank definition structure
+        tank.h0 = 0.001; % initial point
                  
-        R1 = 0.125;
-        R2 = 0.01;
+        tank.R1 = 0.125;
+        tank.R2 = 0.01;
         
-        Cv = 0.97; %velocity coefficient (water 0.97)
-        Cc = 0.97; %contraction coefficient (sharp edge aperture 0.62, well rounded aperture 0.97)
+        tank.Cv = 0.97; %velocity coefficient (water 0.97)
+        tank.Cc = 0.97; %contraction coefficient (sharp edge aperture 0.62, well rounded aperture 0.97)
 
-        Cd = Cc*Cv; % discharge coefficient
+        tank.Cd = tank.Cc*tank.Cv; % discharge coefficient
 
-        r = 0.005;% output ratio in meters
+        tank.r = 0.005;% output ratio in meters
 
-        A = pi*r^2;% output Area
+        tank.A = pi*tank.r^2;% output Area
         
         %% Step 3 - Controller definition: 
 
@@ -64,25 +65,45 @@
         ref = ref_def(patamar,passo,nptos);
                 
         %clear h;
-        h(4)=h0 ; h(3)=h0 ; h(2)=h0 ; h(1)=h0 ; 
+        h(4)=tank.h0 ; h(3)=tank.h0 ; h(2)=tank.h0 ; h(1)=tank.h0 ; 
         u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
         erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
         
         if( flag_load_dist == 1) load('disturbio.mat'); end;
         if( flag_noise == 1) load('ruido.mat'); end;
+%% Step 5  - Controller definition:        
 
+if (PIDflag) 
+   
+    print('lol')
+    
+end
+
+%%
+if (FuzzyType == 'T1'),
+        Am_min = 2; 
+        Am_max = 5;
+        Theta_m_min = 45;
+        Theta_m_max = 72;
+        L = 2;        
+        
+       % o vetor parametros dá os valores das MF's
+       
+       %param = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14];       
+       param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
+end     
+       
 
         %% Simulation with ode45;
 
         for i=4:nptos
             
             %Model severance
-            if( flag_load_dist == 1) load('disturbio.mat'); end;
+            if( flag_model_severance == 1) 
+                if(i > (nptos/2)) r = 0.006; end;
+                A = pi*r^2;% output area
+            end;
             
-            % raio do orificio de saida em metros
-            if(i > (nptos/2)) r = 0.006; end;
-            A = pi*r^2;% Area do orificio de saida
-
             [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
             h(i) = h0; % store the height for plotting
@@ -105,7 +126,7 @@
 
                         u(i)= u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2) ;%+ disturbio(i);
 
-                        %saturadores:
+                        %saturation:
                         if(u(i)<5e-5) u(i)=5e-5;end;
                         if(u(i)>2*3.8000e-04) u(i)=2*3.8000e-04;end;
 
