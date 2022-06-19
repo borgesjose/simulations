@@ -17,7 +17,7 @@
         Tsim = 500; % Total simulation time
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
-        PIDflag = 0;
+        PIDflag = 1;
         FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
@@ -33,7 +33,8 @@
         %% Step 2 - Problem definition:
         %Tank definition structure
         tank.h0 = 0.001; % initial point
-                 
+        
+        tank.H = 0.375;          
         tank.R1 = 0.125;
         tank.R2 = 0.01;
         
@@ -96,6 +97,7 @@
         Ts = 5; %  5~10s( Digital control systems,Landau,2006,p.32)
         nptos = Tsim/Ts; %number point of simulation
         ts = linspace(0,Tsim,nptos); % time vector
+        H=nptos; % Horizon
         
         u = zeros(nptos,1); % variavel de entrada
         h = zeros(nptos,1); % variavel de saida
@@ -115,8 +117,7 @@
         if( flag_load_dist) load('disturbio.mat'); end;
         if( flag_noise) load('ruido.mat'); end;
         
-
-        %% Simulation with ode45;
+        %% Step 6, Simulation with ode45;
 
         for i=4:nptos
             
@@ -126,11 +127,20 @@
                 tank.A = pi*tank.r^2;% output area
             end;
             
-            [~,y] = ode45(@(t,y) tank_conical(t,y,tank.A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
+            [~,y] = ode45(@(t,y) tank_conical(t,y,u(i-1),tank),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
             h(i) = h0; % store the height for plotting
-
-            erro(i)=ref(i) - h(i)% + ruido(i); %Erro
+            
+            
+            if( flag_model_severance)
+                erro(i)=ref(i) - h(i) + ruido(i); %Erro
+            elseif( flag_sinusoidal_dist)
+                 erro(i)=ref(i) - h(i) + sinusoidal_dist(ts(i))
+            else
+                erro(i)=ref(i) - h(i);
+            end
+            
+            
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
             if (PIDflag)
@@ -160,7 +170,11 @@
                         beta = -(Kc/Ami)*(1+2*((Td)/Tamostra)-(Tamostra/(2*(Ti))));
                         gama = (Kc/Ami)*(Td)/Tamostra;
 
-                        u(i)= u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2) ;%+ disturbio(i);
+                        if (flag_load_dist) 
+                            u(i)= u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2) + disturbio(i);
+                        else
+                            u(i)= u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2);
+                        end;
 
                         %saturation:
                         if(u(i)<5e-5) u(i)=5e-5;end;
@@ -169,6 +183,199 @@
                         tempo(i)=i*Tamostra;
 
         end
+        %% Step 7, Performance index
+        
+        if (PIDflag)
+            ISE_pid  = objfunc(erro,tempo,'ISE')
+            ITSE_pid = objfunc(erro,tempo,'ITSE')
+            ITAE_pid = objfunc(erro,tempo,'ITAE')
+            IAE_pid  = objfunc(erro,tempo,'IAE')
+            
+            I_pid = esforco_ponderado(erro,u,H,100)
+            IG_pid = IG(H,1e4,1e9,1,u,ref,h)
+            
+            sy_pid= var(h)
+            su_pid = var(u)
+            
+            fileName = ['Resluts for PID - ' , PIDtype];
+            save( ['./results/',fileName])
+            
+        elseif (FuzzyType == 'T1'),
+            
+            if (FT1type == 'L')
+                I_t1 = esforco_ponderado(erro,u,H,100)
+                
+                ISE_t1  = objfunc(erro,tempo,'ISE')
+                ITSE_t1 = objfunc(erro,tempo,'ITSE')
+                ITAE_t1 = objfunc(erro,tempo,'ITAE')
+                IAE_t1  = objfunc(erro,tempo,'IAE')
+                
+                IG_t1 = IG(H,1e4,1e9,1,u,ref,h)
+                
+                sy_t1= var(h)
+                su_t1 = var(u)
+                
+            fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
+            save( ['./results/',fileName])
+                
+            elseif (FT1type == 'N')
+                I_t1 = esforco_ponderado(erro,u,H,100)
+                
+                ISE_t1  = objfunc(erro,tempo,'ISE')
+                ITSE_t1 = objfunc(erro,tempo,'ITSE')
+                ITAE_t1 = objfunc(erro,tempo,'ITAE')
+                IAE_t1  = objfunc(erro,tempo,'IAE')
+                
+                IG_t1 = IG(H,1e4,1e9,1,u,ref,h)
+                
+                sy_t1= var(h)
+                su_t1 = var(u)
+                
+                fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
+                save( ['./results/',fileName])
+                
+            end;
+            
+            
+        elseif (FuzzyType == 'T2'),
+            
+            if (Itype == 'L')
+                I_t2_li = esforco_ponderado(erro,u,H,100)
+                
+                ISE_t2_li  = objfunc(erro,tempo,'ISE')
+                ITSE_t2_li = objfunc(erro,tempo,'ITSE')
+                ITAE_t2_li = objfunc(erro,tempo,'ITAE')
+                IAE_t2_li  = objfunc(erro,tempo,'IAE')
+                
+                IG_t2_li = IG(H,1e4,1e9,1,u,ref,h)
+                
+                sy_t2_li= var(h)
+                su_t2_li = var(u)
+                
+                fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype];
+                save( ['./results/',fileName])
+                
+            elseif (Itype == 'N')
+                I_t2_nli = esforco_ponderado(erro,u,H,100)
+                
+                ISE_t2_nli  = objfunc(erro,tempo,'ISE')
+                ITSE_t2_nli = objfunc(erro,tempo,'ITSE')
+                ITAE_t2_nli = objfunc(erro,tempo,'ITAE')
+                IAE_t2_nli  = objfunc(erro,tempo,'IAE')
+                
+                IG_t2_nli = IG(H,1e4,1e9,1,u,ref,h)
+                
+                sy_t2_nli= var(h)
+                su_t2_nli = var(u)
+                
+                fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype];
+                save( ['./results/',fileName])
+                
+            end;
+            
+        end
+
+        
+%         %% Step 8, Ploting results:
+%          
+%         if (PIDflag)
+%             ISE_pid  = objfunc(erro,tempo,'ISE')
+%             ITSE_pid = objfunc(erro,tempo,'ITSE')
+%             ITAE_pid = objfunc(erro,tempo,'ITAE')
+%             IAE_pid  = objfunc(erro,tempo,'IAE')
+%             
+%             I_pid = esforco_ponderado(erro,u,H,100)
+%             IG_pid = IG(H,1e4,1e9,1,u,ref,h)
+%             
+%             sy_pid= var(h)
+%             su_pid = var(u)
+%             
+%             fileName = ['Resluts for PID - ' , PIDtype];
+%             save( ['//results/',fileName])
+%             
+%         elseif (FuzzyType == 'T1'),
+%             
+%             if (FT1type == 'L')
+%                 I_t1 = esforco_ponderado(erro,u,H,100)
+%                 
+%                 ISE_t1  = objfunc(erro,tempo,'ISE')
+%                 ITSE_t1 = objfunc(erro,tempo,'ITSE')
+%                 ITAE_t1 = objfunc(erro,tempo,'ITAE')
+%                 IAE_t1  = objfunc(erro,tempo,'IAE')
+%                 
+%                 IG_t1 = IG(H,1e4,1e9,1,u,ref,h)
+%                 
+%                 sy_t1= var(h)
+%                 su_t1 = var(u)
+%                 
+%                 fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
+%                 save( fileName)
+%                 
+%             elseif (FT1type == 'N')
+%                 I_t1 = esforco_ponderado(erro,u,H,100)
+%                 
+%                 ISE_t1  = objfunc(erro,tempo,'ISE')
+%                 ITSE_t1 = objfunc(erro,tempo,'ITSE')
+%                 ITAE_t1 = objfunc(erro,tempo,'ITAE')
+%                 IAE_t1  = objfunc(erro,tempo,'IAE')
+%                 
+%                 IG_t1 = IG(H,1e4,1e9,1,u,ref,h)
+%                 
+%                 sy_t1= var(h)
+%                 su_t1 = var(u)
+%                 
+%                 fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
+%                 save( fileName)
+%                 
+%             end;
+%             
+%             
+%         elseif (FuzzyType == 'T2'),
+%             
+%             if (Itype == 'L')
+%                 I_t2_li = esforco_ponderado(erro,u,H,100)
+%                 
+%                 ISE_t2_li  = objfunc(erro,tempo,'ISE')
+%                 ITSE_t2_li = objfunc(erro,tempo,'ITSE')
+%                 ITAE_t2_li = objfunc(erro,tempo,'ITAE')
+%                 IAE_t2_li  = objfunc(erro,tempo,'IAE')
+%                 
+%                 IG_t2_li = IG(H,1e4,1e9,1,u,ref,h)
+%                 
+%                 sy_t2_li= var(h)
+%                 su_t2_li = var(u)
+%                 
+%                 fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype];
+%                 save( fileName)
+%                 
+%             elseif (Itype == 'N')
+%                 I_t2_nli = esforco_ponderado(erro,u,H,100)
+%                 
+%                 ISE_t2_nli  = objfunc(erro,tempo,'ISE')
+%                 ITSE_t2_nli = objfunc(erro,tempo,'ITSE')
+%                 ITAE_t2_nli = objfunc(erro,tempo,'ITAE')
+%                 IAE_t2_nli  = objfunc(erro,tempo,'IAE')
+%                 
+%                 IG_t2_nli = IG(H,1e4,1e9,1,u,ref,h)
+%                 
+%                 sy_t2_nli= var(h)
+%                 su_t2_nli = var(u)
+%                 
+%                 fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype];
+%                 save( fileName)
+%                 
+%             end;
+%             
+%         end
+%         
+%         
+%         
+%         
+%         
+%         
+%         
+%         
+
         
         
 
