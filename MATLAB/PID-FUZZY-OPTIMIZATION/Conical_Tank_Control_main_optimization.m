@@ -24,6 +24,7 @@
         
         flag_load_dist = 0; 
         flag_noise = 0;
+        flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
@@ -120,7 +121,7 @@
         for i=4:nptos
             
             %Model severance
-            if( flag_model_severance == 1) 
+            if( flag_model_severance) 
                 if(i > (nptos/2)) tank.r = 0.006; end;
                 tank.A = pi*tank.r^2;% output area
             end;
@@ -130,21 +131,25 @@
             h(i) = h0; % store the height for plotting
 
             erro(i)=ref(i) - h(i)% + ruido(i); %Erro
-
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
             if (PIDflag)
                 Ami = 1;
             else
-                %Aqui na chamada da função é possivel escolher entre linear input(LI) e não linear input(NLI)
-
-                Am(i) =Inferencia_T2(erro(i),rate(i),L,Param,FT2Itype);              
-                Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
+                if (FuzzyType == 'T1'),
+                    
+                    Am(i) = FT1_pid_ag(erro(i),rate(i),L,param);
+                    Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
+                end
+                
+                if (FuzzyType == 'T2'),
+                    
+                    Am(i) =Inferencia_T2(erro(i),rate(i),L,Param,FT2Itype);
+                    Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
+                    
+                end
                 
             end
-            
-                
-
                         %Controlador:
 
                         Kp(i)= Kc/Ami;
