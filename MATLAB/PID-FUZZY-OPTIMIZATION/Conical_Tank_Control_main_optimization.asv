@@ -27,7 +27,8 @@
         flag_model_severance = 0;
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
-       
+
+    
         %% Step 2 - Problem definition:
         %Tank definition structure
         tank.h0 = 0.001; % initial point
@@ -47,8 +48,49 @@
         %% Step 3 - Controller definition: 
 
         [Kc,Ti,Td] = PID(PIDtype); % Type PID selection 
+%% Step 4  - Controller definition:        
+
+    if (PIDflag)
+        disp('lol')
+    else
         
-        %% Step 4, simulation setings:
+    if (FuzzyType == 'T1'),
+        Am_min = 2;
+        Am_max = 5;
+        Theta_m_min = 45;
+        Theta_m_max = 72;
+        L = 2;
+        
+        % o vetor parametros dá os valores das MF's
+        if (FT1type == 'L')
+            param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
+        elseif (FT1type == 'N')
+            gene = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];;
+        end;
+        
+        
+    end
+    
+    if (FuzzyType == 'T2'),
+        Am_min = 2;
+        Am_max = 5;
+        Theta_m_min = 45;
+        Theta_m_max = 72;
+        L = 2;
+        
+        % o vetor parametros dá os valores das MF's:
+        
+        if (FT2Itype == 'L')
+            gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
+        elseif (FT2Itype == 'N')
+            gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
+        end;
+        
+        Param =[gene,1,1];
+    end
+
+    end      
+        %% Step 5, simulation setings:
         
         Ts = 5; %  5~10s( Digital control systems,Landau,2006,p.32)
         nptos = Tsim/Ts; %number point of simulation
@@ -69,30 +111,9 @@
         u(1)=1e-5 ; u(2)=1e-5 ; u(3)=1e-5; u(4)=1e-5;
         erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
         
-        if( flag_load_dist == 1) load('disturbio.mat'); end;
-        if( flag_noise == 1) load('ruido.mat'); end;
-%% Step 5  - Controller definition:        
-
-if (PIDflag) 
-   
-    print('lol')
-    
-end
-
-%%
-if (FuzzyType == 'T1'),
-        Am_min = 2; 
-        Am_max = 5;
-        Theta_m_min = 45;
-        Theta_m_max = 72;
-        L = 2;        
+        if( flag_load_dist) load('disturbio.mat'); end;
+        if( flag_noise) load('ruido.mat'); end;
         
-       % o vetor parametros dá os valores das MF's
-       
-       %param = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14];       
-       param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
-end     
-       
 
         %% Simulation with ode45;
 
@@ -100,11 +121,11 @@ end
             
             %Model severance
             if( flag_model_severance == 1) 
-                if(i > (nptos/2)) r = 0.006; end;
-                A = pi*r^2;% output area
+                if(i > (nptos/2)) tank.r = 0.006; end;
+                tank.A = pi*tank.r^2;% output area
             end;
             
-            [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
+            [~,y] = ode45(@(t,y) tank_conical(t,y,tank.A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
             h(i) = h0; % store the height for plotting
 
@@ -112,7 +133,19 @@ end
 
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
-            Ami = 1; 
+            if (PIDflag)
+                Ami = 1;
+            else
+                %Aqui na chamada da função é possivel escolher entre linear input(LI) e não linear input(NLI)
+                %Am(i) = Inferencia_T2(erro(i),rate(i),L,Param,'LI');
+                %Am(i) = Inferencia_T2_S(erro(i),rate(i),L,Param,'LI');
+                Am(i) =Inferencia_T2(erro(i),rate(i),L,Param,Itype);
+                %[Am(i),yl(i),yr(i),l(i),r(i)]=EIASC(R(:,1)',R(:,2)',Y(:,1)',Y(:,2)');
+                Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
+                
+            end
+            
+                
 
                         %Controlador:
 

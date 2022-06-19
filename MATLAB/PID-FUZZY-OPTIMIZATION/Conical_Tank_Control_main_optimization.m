@@ -89,7 +89,7 @@
         Param =[gene,1,1];
     end
 
-            
+    end      
         %% Step 5, simulation setings:
         
         Ts = 5; %  5~10s( Digital control systems,Landau,2006,p.32)
@@ -121,11 +121,11 @@
             
             %Model severance
             if( flag_model_severance == 1) 
-                if(i > (nptos/2)) r = 0.006; end;
-                A = pi*r^2;% output area
+                if(i > (nptos/2)) tank.r = 0.006; end;
+                tank.A = pi*tank.r^2;% output area
             end;
             
-            [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
+            [~,y] = ode45(@(t,y) tank_conical(t,y,tank.A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
             h(i) = h0; % store the height for plotting
 
@@ -133,7 +133,17 @@
 
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
-            Ami = 1; 
+            if (PIDflag)
+                Ami = 1;
+            else
+                %Aqui na chamada da função é possivel escolher entre linear input(LI) e não linear input(NLI)
+
+                Am(i) =Inferencia_T2(erro(i),rate(i),L,Param,FT2Itype);              
+                Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
+                
+            end
+            
+                
 
                         %Controlador:
 
