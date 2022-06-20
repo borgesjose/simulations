@@ -199,6 +199,7 @@
             
             fileName = ['Resluts for PID - ' , PIDtype];
             save( ['./results/',fileName])
+            p_pid(ts,h,ref,u,tempo,Kp,Kd,,Ki)
             
         elseif (FuzzyType == 'T1'),
             
@@ -217,6 +218,8 @@
                 
             fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
             save( ['./results/',fileName])
+            
+            plot_results_t1(ts,h,ref,u,tempo,Kp,Kd,,Ki,Am)
                 
             elseif (FT1type == 'N')
                 I_t1 = esforco_ponderado(erro,u,H,100)
@@ -233,6 +236,8 @@
                 
                 fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
                 save( ['./results/',fileName])
+                
+                plot_results_t1(ts,h,ref,u,tempo,Kp,Kd,,Ki,Am)
                 
             end;
             
