@@ -1,4 +1,4 @@
-function r = p_pid(d)
+function [fig1,fig2] = p_pid(ts,h,ref,u,tempo,Kp,Kd,Ki)
 
         fig1 = figure;
         plot(ts,h,'-r','LineWidth', 3,'DisplayName','height'); hold on

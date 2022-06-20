@@ -17,8 +17,8 @@
         Tsim = 500; % Total simulation time
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
-        PIDflag = 1;
-        FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
+        PIDflag = 0;
+        FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
         
@@ -199,7 +199,7 @@
             
             fileName = ['Resluts for PID - ' , PIDtype];
             save( ['./results/',fileName])
-            p_pid(ts,h,ref,u,tempo,Kp,Kd,,Ki)
+           [fig1,fig2] =  p_pid(ts,h,ref,u,tempo,Kp,Kd,Ki)
             
         elseif (FuzzyType == 'T1'),
             
@@ -219,7 +219,7 @@
             fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
             save( ['./results/',fileName])
             
-            plot_results_t1(ts,h,ref,u,tempo,Kp,Kd,,Ki,Am)
+             p_ft1(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 
             elseif (FT1type == 'N')
                 I_t1 = esforco_ponderado(erro,u,H,100)
@@ -237,14 +237,14 @@
                 fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
                 save( ['./results/',fileName])
                 
-                plot_results_t1(ts,h,ref,u,tempo,Kp,Kd,,Ki,Am)
+               p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 
             end;
             
             
         elseif (FuzzyType == 'T2'),
             
-            if (Itype == 'L')
+            if (FT2Itype == 'L')
                 I_t2_li = esforco_ponderado(erro,u,H,100)
                 
                 ISE_t2_li  = objfunc(erro,tempo,'ISE')
@@ -260,7 +260,9 @@
                 fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype];
                 save( ['./results/',fileName])
                 
-            elseif (Itype == 'N')
+                p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
+                
+            elseif (FT2Itype == 'N')
                 I_t2_nli = esforco_ponderado(erro,u,H,100)
                 
                 ISE_t2_nli  = objfunc(erro,tempo,'ISE')
@@ -275,6 +277,8 @@
                 
                 fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype];
                 save( ['./results/',fileName])
+                
+                p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 
             end;
             
