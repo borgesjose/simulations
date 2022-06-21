@@ -20,13 +20,12 @@
  %%  
  figure;hold on
         load('./results/Resluts for PID - ZN.mat')
-        plot(ts,h,'-r','LineWidth', 3,'DisplayName','height'); hold on
+        plot(ts,u,'k','LineWidth', 3,'DisplayName','height'); hold on
         load('./results/Resluts for PID - FT1-FG ZN - T1 - L.mat')
-        plot(ts,h,'-b','LineWidth', 3,'DisplayName','height'); hold on
+        plot(ts,u,'-b','LineWidth', 3,'DisplayName','height'); hold on
         load('./results/Resluts for PID - FT2-FG ZN - T2 - L.mat')
-        plot(ts,h,'-g','LineWidth', 3,'DisplayName','height'); hold on
-        
-        plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
+        plot(ts,u,'-g','LineWidth', 3,'DisplayName','height'); hold on
+       
    
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
