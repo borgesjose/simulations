@@ -17,19 +17,24 @@
         Tsim = 500; % Total simulation time
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
-        PIDflag = 1;
-        FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
+        PIDflag = 0;
+        FuzzyType = 'T2
+        ';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
         flag_noise = 0;
-        flag_sinusoidal_dist = 0;
+        flag_sinusoidal_dist = 1;
         flag_model_severance = 0;
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
 
-    
+        if(flag_load_dist) simName = 'Load_disturbace'; end;
+        if(flag_noise) simName = 'Noise'; end;
+        if(flag_sinusoidal_dist) simName = 'Sinusoidal_Noise'; end;
+        if(flag_model_severance) simName = 'Model_Severance'; end;
+
         %% Step 2 - Problem definition:
         %Tank definition structure
         tank.h0 = 0.001; % initial point
@@ -199,7 +204,7 @@
             sy_pid= var(h)
             su_pid = var(u)
             
-            fileName = ['Resluts for PID - ' , PIDtype,' - ',,,];
+            fileName = ['Resluts for PID - ' , PIDtype,' - ',ref_type,' - ',simName];
             save( ['./results/',fileName])
            [fig1,fig2] =  p_pid(ts,h,ref,u,tempo,Kp,Kd,Ki)
             
@@ -218,7 +223,7 @@
                 sy_t1= var(h)
                 su_t1 = var(u)
                 
-            fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
+            fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type, ' - ',ref_type,' - ',simName];
             save( ['./results/',fileName])
             
              p_ft1(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
@@ -236,7 +241,7 @@
                 sy_t1= var(h)
                 su_t1 = var(u)
                 
-                fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
+                fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type, ' - ',ref_type,' - ',simName];
                 save( ['./results/',fileName])
                 
                p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
@@ -259,7 +264,7 @@
                 sy_t2_li= var(h)
                 su_t2_li = var(u)
                 
-                fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype];
+                fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype, ' - ',ref_type,' - ',simName];
                 save( ['./results/',fileName])
                 
                 p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
@@ -277,7 +282,7 @@
                 sy_t2_nli= var(h)
                 su_t2_nli = var(u)
                 
-                fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype];
+                fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype, ' - ',ref_type,' - ',simName];
                 save( ['./results/',fileName])
                 
                 p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
@@ -285,5 +290,5 @@
             end;
             
         end
-        
+        if(flag_sinusoidal_dist) plot_ruido_senoide(ts); end;
 

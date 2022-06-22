@@ -13,23 +13,27 @@
 % Script que serve como main da aplicação.
 
  %% Step 1, simulation definition:
- 
+        clear;clc;
         Tsim = 500; % Total simulation time
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
-        PIDflag = 0;
+        PIDflag = 1;
         FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
-        flag_noise = 0;
-        flag_sinusoidal_dist = 1;
+        flag_noise = 1;
+        flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
 
-    
+        if(flag_load_dist) simName = 'Load_disturbace'; end;
+        if(flag_noise) simName = 'Noise'; end;
+        if(flag_sinusoidal_dist) simName = 'Sinusoidal_Noise'; end;
+        if(flag_model_severance) simName = 'Model_Severance'; end;
+
         %% Step 2 - Problem definition:
         %Tank definition structure
         tank.h0 = 0.001; % initial point
@@ -68,7 +72,7 @@
         if (FT1type == 'L')
             param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
         elseif (FT1type == 'N')
-            gene = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];;
+            param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];;
         end;
         
         
@@ -84,7 +88,8 @@
         % o vetor parametros dá os valores das MF's:
         
         if (FT2Itype == 'L')
-            gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
+            %gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
+            gene = .3*ones(1,16)
         elseif (FT2Itype == 'N')
             gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
         end;
@@ -199,7 +204,7 @@
             sy_pid= var(h)
             su_pid = var(u)
             
-            fileName = ['Resluts for PID - ' , PIDtype,' - ',ref_type,' - ',];
+            fileName = ['Resluts for PID - ' , PIDtype,' - ',ref_type,' - ',simName];
             save( ['./results/',fileName])
            [fig1,fig2] =  p_pid(ts,h,ref,u,tempo,Kp,Kd,Ki)
             
@@ -218,7 +223,7 @@
                 sy_t1= var(h)
                 su_t1 = var(u)
                 
-            fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
+            fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type, ' - ',ref_type,' - ',simName];
             save( ['./results/',fileName])
             
              p_ft1(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
@@ -236,7 +241,7 @@
                 sy_t1= var(h)
                 su_t1 = var(u)
                 
-                fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type];
+                fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type, ' - ',ref_type,' - ',simName];
                 save( ['./results/',fileName])
                 
                p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
@@ -259,7 +264,7 @@
                 sy_t2_li= var(h)
                 su_t2_li = var(u)
                 
-                fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype];
+                fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype, ' - ',ref_type,' - ',simName];
                 save( ['./results/',fileName])
                 
                 p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
@@ -276,8 +281,8 @@
                 
                 sy_t2_nli= var(h)
                 su_t2_nli = var(u)
-                
-                fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype];
+              
+                fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype, ' - ',ref_type,' - ',simName];
                 save( ['./results/',fileName])
                 
                 p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
@@ -285,5 +290,6 @@
             end;
             
         end
-        
+        if(flag_sinusoidal_dist) plot_ruido_senoide(ts); end;
+        if( flag_noise) plot_ruido(ts); end;
 

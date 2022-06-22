@@ -1,13 +1,17 @@
 % Plotar figuras do artigo
 
 
-        figure;hold on
-        load('./results/Resluts for PID - ZN.mat')
-        plot(ts,h,'-r','LineWidth', 3,'DisplayName','height'); hold on
-        load('./results/Resluts for PID - FT1-FG ZN - T1 - L.mat')
-        plot(ts,h,'-b','LineWidth', 3,'DisplayName','height'); hold on
-        load('./results/Resluts for PID - FT2-FG ZN - T2 - L.mat')
-        plot(ts,h,'-g','LineWidth', 3,'DisplayName','height'); hold on
+        figure;
+        
+        load('./results/Resluts for PID - ZN - st - Sinusoidal_Noise.mat')       
+        hold on
+        plot(ts,h,'-r','LineWidth', 2,'DisplayName','height'); hold on   
+        load('./results/Resluts for PID - FT1-FG ZN - T1 - L - st - Sinusoidal_Noise.mat')  
+        hold on
+        plot(ts,h,'-b','LineWidth', 2,'DisplayName','height'); hold on
+        load('./results/Resluts for PID - FT2-FG ZN - T2 - L - st - Sinusoidal_Noise.mat')
+        hold on
+        plot(ts,h,'-g','LineWidth', 2,'DisplayName','height'); hold on
         
         plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
    
@@ -58,5 +62,7 @@
         plot(tempo,Am,'g-');
         title('FT1-PID-FG: Am')
         saveas(gcf,['./figures/',num2str(h0),'.png'])
-        
+%%
+
+
         
