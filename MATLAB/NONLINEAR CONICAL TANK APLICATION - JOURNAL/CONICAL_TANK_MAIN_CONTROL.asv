@@ -17,14 +17,14 @@
         Tsim = 500; % Total simulation time
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
-        PIDflag = 0;
-        FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
+        PIDflag = 1;
+        FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
         flag_noise = 0;
-        flag_sinusoidal_dist = 1;
+        flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
@@ -199,7 +199,7 @@
             sy_pid= var(h)
             su_pid = var(u)
             
-            fileName = ['Resluts for PID - ' , PIDtype,' - ',ref_type,' - ',];
+            fileName = ['Resluts for PID - ' , PIDtype,' - ',,,];
             save( ['./results/',fileName])
            [fig1,fig2] =  p_pid(ts,h,ref,u,tempo,Kp,Kd,Ki)
             

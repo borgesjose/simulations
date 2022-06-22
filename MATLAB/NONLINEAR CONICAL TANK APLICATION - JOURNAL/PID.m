@@ -3,9 +3,9 @@ function [Kc,Ti,Td] = PID(Ctype),
       if (Ctype == 'ZN')
             L =  0.158;
             T1 = 2.83;
-            Kc = 1.2*(3.8000e-04/0.2056)*((T1)/(L))*10^-3
-            Ti = 2*L
-            Td = 0.5*L         
+            Kc = 1.2*(3.8000e-04/0.2056)*((T1)/(L))*10^-3;
+            Ti = 2*L;
+            Td = 0.5*L;       
         end;
         
         if (Ctype == 'CC')
@@ -40,6 +40,5 @@ function [Kc,Ti,Td] = PID(Ctype),
             %Td = 0.0;
         end; 
    
-        
-end;
+
             
