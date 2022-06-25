@@ -288,7 +288,7 @@
                 p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 
             end;
-            
+             
         end
         if(flag_sinusoidal_dist) plot_ruido_senoide(ts); end;
         if( flag_noise) plot_ruido(ts,ruido); end;
