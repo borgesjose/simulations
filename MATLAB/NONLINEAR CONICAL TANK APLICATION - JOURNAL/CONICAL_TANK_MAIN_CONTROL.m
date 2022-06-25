@@ -104,7 +104,7 @@
         nptos = Tsim/Ts; %number point of simulation
         ts = linspace(0,Tsim,nptos); % time vector
         H=nptos; % Horizon
-        
+       
         u = zeros(nptos,1); % variavel de entrada
         h = zeros(nptos,1); % variavel de saida
         

@@ -11,7 +11,10 @@
 %  -- Version: 1.0  - 20/02/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
+
 %clear; clc; close all;
+
+
 
 L = 2;
 M=[];
@@ -49,12 +52,12 @@ end
 %PLOTAGEM DAS MF DO ERRO:
 figure; hold on
 
-plot(x,M(:,4),'Color',[0.4660 0.6740 0.1880]); % gráfico conjunto fuzzy erro ZERO UPPER
-plot(x,M(:,5),'Color',[0.4660 0.6740 0.1880]); % gráfico conjunto fuzzy erro ZERO LOWER
+plot(x,M(:,4),'-.g'); % gráfico conjunto fuzzy erro ZERO UPPER
+plot(x,M(:,5),'-.g'); % gráfico conjunto fuzzy erro ZERO LOWER
 x2 = [x, fliplr(x)];
 inBetween = [M(:,5)', fliplr(M(:,4)')];
-fill(x2, inBetween, [0.4660 0.6740 0.1880]);
-plot(x,M(:,2),'Color',[0.4660 0.6740 0.1880]); % gráfico conjunto fuzzy erro ZERO
+fill(x2, inBetween, 'g');
+plot(x,M(:,2),'g-'); % gráfico conjunto fuzzy erro ZERO
 
 plot(x,M(:,6),'r-'); % gráfico conjunto fuzzy erro NEGATIVO UPPER
 plot(x,M(:,7),'r-'); % gráfico conjunto fuzzy erro NEGATIVO LOWER
@@ -64,47 +67,46 @@ fill(x2, inBetween, 'r');
 plot(x,M(:,1),'r-'); % gráfico conjunto fuzzy erro NEGATIVO
 
 
-plot(x,M(:,8),'Color',[0.4940 0.1840 0.5560]); % gráfico conjunto fuzzy erro POSITIVO UPPER
-plot(x,M(:,9),'Color',[0.4940 0.1840 0.5560]); % gráfico conjunto fuzzy erro POSITIVO LOWER
+plot(x,M(:,8),'b-'); % gráfico conjunto fuzzy erro POSITIVO UPPER
+plot(x,M(:,9),'b-'); % gráfico conjunto fuzzy erro POSITIVO LOWER
 x2 = [x, fliplr(x)];
 inBetween = [M(:,9)', fliplr(M(:,8)')];
-fill(x2, inBetween, [0.4940 0.1840 0.5560]);
-plot(x,M(:,3),'Color',[0.4940 0.1840 0.5560]); % gráfico conjunto fuzzy erro POSITIVO
+fill(x2, inBetween, 'b');
+plot(x,M(:,3),'b-'); % gráfico conjunto fuzzy erro POSITIVO
 
 
 hold off
 axis([-2*L 2*L 0 1.2]);
 xlabel('ERRO');
 %legend('','','POSITIVO','NEGATIVO','ZERO','POSITIVO','NEGATIVO','ZERO','POSITIVO')
-%saveas(gcf,['./figures/','FT2-PID-FG: Pertinencias ERRO','.png'])
+
 %%
 
 %PLOTAGEM1 DAS MF DO RATE:
 figure; hold on
 
-plot(x,M1(:,4),'Color',[0.6350 0.0780 0.1840]); % gráfico conjunto fuzzy RATE ZERO UPPER
-plot(x,M1(:,5),'Color',[0.6350 0.0780 0.1840]); % gráfico conjunto fuzzy RATE ZERO LOWER
+plot(x,M1(:,4),'-.r'); % gráfico conjunto fuzzy RATE ZERO UPPER
+plot(x,M1(:,5),'-.r'); % gráfico conjunto fuzzy RATE ZERO LOWER
 x2 = [x, fliplr(x)];
 inBetween = [M1(:,5)', fliplr(M1(:,4)')];
-fill(x2, inBetween, [0.6350 0.0780 0.1840]);
-plot(x,M1(:,2),'Color',[0.6350 0.0780 0.1840]); % gráfico conjunto fuzzy RATE ZERO
+fill(x2, inBetween, 'r');
+plot(x,M1(:,2),'r-'); % gráfico conjunto fuzzy RATE ZERO
 
 
-plot(x,M1(:,6),'Color',[0 0.4470 0.7410]); % gráfico conjunto fuzzy RATE NEGATIVO UPPER
-plot(x,M1(:,7),'Color',[0 0.4470 0.7410]); % gráfico conjunto fuzzy RATE NEGATIVO LOWER
+plot(x,M1(:,6),'b-'); % gráfico conjunto fuzzy RATE NEGATIVO UPPER
+plot(x,M1(:,7),'b-'); % gráfico conjunto fuzzy RATE NEGATIVO LOWER
 x2 = [x, fliplr(x)];
 inBetween = [M1(:,7)', fliplr(M1(:,6)')];
 fill(x2, inBetween,[0 0.4470 0.7410]);
-plot(x,M1(:,1),'Color',[0 0.4470 0.7410]); % gráfico conjunto fuzzy RATE NEGATIVO
+plot(x,M1(:,1),'b-'); % gráfico conjunto fuzzy RATE NEGATIVO
 
 
-
-plot(x,M1(:,8),'Color',[0.9290 0.6940 0.1250]); % gráfico conjunto fuzzy RATE POSITIVO UPPER
-plot(x,M1(:,9),'Color',[0.9290 0.6940 0.1250]); % gráfico conjunto fuzzy RATE POSITIVO LOWER
+plot(x,M1(:,8),'y-'); % gráfico conjunto fuzzy RATE POSITIVO UPPER
+plot(x,M1(:,9),'y-'); % gráfico conjunto fuzzy RATE POSITIVO LOWER
 x2 = [x, fliplr(x)];
 inBetween = [M1(:,9)', fliplr(M1(:,8)')];
-fill(x2, inBetween, [0.9290 0.6940 0.1250]);
-plot(x,M1(:,3),'Color',[0.9290 0.6940 0.1250]); % gráfico conjunto fuzzy RATE POSITIVO
+fill(x2, inBetween, 'y');
+plot(x,M1(:,3),'y-'); % gráfico conjunto fuzzy RATE POSITIVO
 
 hold off
 axis([-2*L 2*L 0 1.2]);
