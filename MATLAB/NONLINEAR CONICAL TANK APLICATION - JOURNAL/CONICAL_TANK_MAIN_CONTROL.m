@@ -20,12 +20,12 @@
         PIDflag = 0;
         FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
-        FT2Itype = 'L'; % L = input linear ; N = input non linear
+        FT2Itype = 'N'; % L = input linear ; N = input non linear
         
-        flag_load_dist = 0; 
+        flag_load_dist = 1; 
         flag_noise = 0;
         flag_sinusoidal_dist = 0;
-        flag_model_severance = 1;
+        flag_model_severance = 0;
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
 

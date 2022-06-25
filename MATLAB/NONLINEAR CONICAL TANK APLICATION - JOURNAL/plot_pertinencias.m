@@ -17,19 +17,19 @@ for i=1:length(x), % De 1 até o No. total de medidas da variavel linguistica...
 end
 
 figure; hold on
-plot(x,M(:,1),'r-'); % gráfico conjunto fuzzy erro NEGATIVO
-plot(x,M(:,2),'b-'); % gráfico conjunto fuzzy erro ZERO
-plot(x,M(:,3),'m-'); % gráfico conjunto fuzzy erro POSITIVO
+plot(x,M(:,1),'Color',[0.4660 0.6740 0.1880],"LineWidth",3); % gráfico conjunto fuzzy erro NEGATIVO
+plot(x,M(:,2),'r-',"LineWidth",3); % gráfico conjunto fuzzy erro ZERO
+plot(x,M(:,3),'Color',[0.4940 0.1840 0.5560],"LineWidth",3); % gráfico conjunto fuzzy erro POSITIVO
 hold off
-%axis([0 0.2 0 1.2]);
+axis([-2*L 2*L 0 1.2]);
 xlabel('ERRO');
-legend('NEGATIVO','ZERO','POSITIVO')
+%legend('NEGATIVO','ZERO','POSITIVO')
 
 figure; hold on
-plot(y,M1(:,1),'r-'); % gráfico conjunto fuzzy rate NEGATIVO
-plot(y,M1(:,2),'b-'); % gráfico conjunto fuzzy rate ZERO
-plot(y,M1(:,3),'m-'); % gráfico conjunto fuzzy rate POSITIVO
+plot(y,M1(:,1),'Color',[0.6350 0.0780 0.1840],"LineWidth",3); % gráfico conjunto fuzzy rate NEGATIVO
+plot(y,M1(:,2),'Color',[0 0.4470 0.7410],"LineWidth",3); % gráfico conjunto fuzzy rate ZERO
+plot(y,M1(:,3),'Color',[0.9290 0.6940 0.1250],"LineWidth",3); % gráfico conjunto fuzzy rate POSITIVO
 hold off
-%axis([0 0.2 0 1.2]);
+axis([-2*L 2*L 0 1.2]);
 xlabel('RATE');
-legend('NEGATIVO','ZERO','POSITIVO')
+%legend('NEGATIVO','ZERO','POSITIVO')

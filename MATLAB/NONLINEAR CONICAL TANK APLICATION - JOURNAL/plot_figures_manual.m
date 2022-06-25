@@ -1,6 +1,5 @@
 % Plotar figuras do artigo
 
-
         figure;
         
         load('./results/Resluts for PID - ZN - st - Sinusoidal_Noise.mat')       
@@ -17,43 +16,88 @@
    
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
-        title('Resposta Tanque')
+        
         legend('PID','FT1-PID-FG','FT2I-PID-FG')
         %saveas(gcf,['./figures/','Resposta Tanque - PID - T1 - T2I','.png'])
         
- %% 
-         figure;
+%%  
+        figure;
+        
+        load('./results/Resluts for PID - ZN - st - Sinusoidal_Noise.mat')       
+        hold on
+        plot(ts,u,'-r','LineWidth', 2,'DisplayName','height'); hold on   
+        load('./results/Resluts for PID - FT1-FG ZN - T1 - L - st - Sinusoidal_Noise.mat')  
+        hold on
+        plot(ts,u,'-b','LineWidth', 2,'DisplayName','height'); hold on
+        load('./results/Resluts for PID - FT2-FG ZN - T2 - L - st - Sinusoidal_Noise.mat')
+        hold on
+        plot(ts,u,'-g','LineWidth', 2,'DisplayName','height'); hold on
+        
+
+   
+        ylabel('Control signal');
+        xlabel('Time (s)');
+        
+        legend('PID','FT1-PID-FG','FT2I-PID-FG')
+        %saveas(gcf,['./figures/','Resposta Tanque - PID - T1 - T2I','.png'])
+        
+        
+        %%
+        figure;
         
         load('./results/Resluts for PID - ZN - st - Noise.mat')       
         hold on
-        plot(ts,u,'-r','LineWidth', 2,'DisplayName','height'); hold on   
+        plot(ts,h,'-r','LineWidth', 2,'DisplayName','height'); hold on   
         load('./results/Resluts for PID - FT1-FG ZN - T1 - L - st - Noise.mat')  
         hold on
-        plot(ts,u,'-b','LineWidth', 2,'DisplayName','height'); hold on
+        plot(ts,h,'-b','LineWidth', 2,'DisplayName','height'); hold on
         load('./results/Resluts for PID - FT2-FG ZN - T2 - L - st - Noise.mat')
+        hold on
+        plot(ts,h,'-g','LineWidth', 2,'DisplayName','height'); hold on
+        
+        plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
+   
+        ylabel('Tank Height (m)');
+        xlabel('Time (s)');
+        
+        legend('PID','FT1-PID-FG','FT2I-PID-FG')
+        
+        %%
+        figure;
+        
+        load('./results/Resluts for PID - ZN - st - Noise.mat')       
+        hold on
+        plot(ts,u,'r:','LineWidth', 2,'DisplayName','height'); hold on   
+        load('./results/Resluts for PID - FT1-FG ZN - T1 - L - st - Noise.mat')  
+        hold on
+        plot(ts,u,'b:','LineWidth', 2,'DisplayName','height'); hold on
+        load('./results/Resluts for PID - FT2-FG ZN - T2 - L - st - Noise.mat')
+        hold on
+        plot(ts,u,'g:','LineWidth', 2,'DisplayName','height'); hold on
+        
+        
+        ylabel('Control signal');
+        xlabel('Time (s)');
+        
+        legend('PID','FT1-PID-FG','FT2I-PID-FG')
+        %saveas(gcf,['./figures/','Resposta Tanque - PID - T1 - T2I','.png'])
+%%        
+ figure;
+        
+        load('./results/Resluts for PID - ZN - st - Load_disturbace.mat')       
+        hold on
+        plot(ts,u,'-r','LineWidth', 2,'DisplayName','height'); hold on   
+        load('./results/Resluts for PID - FT1-FG ZN - T1 - L - st - Load_disturbace.mat')  
+        hold on
+        plot(ts,u,'-b','LineWidth', 2,'DisplayName','height'); hold on
+        load('./results/Resluts for PID - FT2-FG ZN - T2 - L - st - Load_disturbace.mat')
         hold on
         plot(ts,u,'-g','LineWidth', 2,'DisplayName','height'); hold on
         
         
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
-        title('Resposta Tanque')
-        legend('PID','FT1-PID-FG','FT2I-PID-FG')
-        %saveas(gcf,['./figures/','Resposta Tanque - PID - T1 - T2I','.png'])
-%%        
- figure;hold on
-        load('./results/Resluts for PID - ZN.mat')
-        plot(ts,h,'-r','LineWidth', 3,'DisplayName','height'); hold on
-        load('./results/Resluts for PID - FT1-FG ZN - T1 - L.mat')
-        plot(ts,h,'-b','LineWidth', 3,'DisplayName','height'); hold on
-        load('./results/Resluts for PID - FT2-FG ZN - T2 - L.mat')
-        plot(ts,h,'-g','LineWidth', 3,'DisplayName','height'); hold on
-        
-        plot(ts,ref,'k:','LineWidth', 3,'DisplayName','reference'); hold off
-   
-        ylabel('Tank Height (m)');
-        xlabel('Time (s)');
-        title('Resposta Tanque')
+        %title('Resposta Tanque')
         legend('PID','FT1-PID-FG','FT2I-PID-FG')
  
  %%
