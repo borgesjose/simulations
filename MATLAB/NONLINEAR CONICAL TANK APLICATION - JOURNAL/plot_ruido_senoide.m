@@ -6,7 +6,7 @@ function f = plot_ruido_senoide(ts)
    
         ylabel('Ruido');
         xlabel('Time (s)');
-        title('Sinusoidal Disturbance Signal')
+        %title('Sinusoidal Disturbance Signal')
         
 
 

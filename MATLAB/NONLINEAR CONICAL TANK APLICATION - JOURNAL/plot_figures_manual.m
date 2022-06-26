@@ -2,13 +2,13 @@
 
         figure;
         
-        load('./results/Resluts for PID - ZN - st - Sinusoidal_Noise.mat')       
+        load('./results/Resluts for PID - ZN - us - Sinusoidal_Noise.mat')       
         hold on
         plot(ts,h,'-r','LineWidth', 2,'DisplayName','height'); hold on   
-        load('./results/Resluts for PID - FT1-FG ZN - T1 - L - st - Sinusoidal_Noise.mat')  
+        load('./results/Resluts for PID - FT1-FG ZN - T1 - L - us - Sinusoidal_Noise.mat')  
         hold on
         plot(ts,h,'-b','LineWidth', 2,'DisplayName','height'); hold on
-        load('./results/Resluts for PID - FT2-FG ZN - T2 - L - st - Sinusoidal_Noise.mat')
+        load('./results/Resluts for PID - FT2-FG ZN - T2 - N - us - Sinusoidal_Noise.mat')
         hold on
         plot(ts,h,'-g','LineWidth', 2,'DisplayName','height'); hold on
         
@@ -23,18 +23,17 @@
 %%  
         figure;
         
-        load('./results/Resluts for PID - ZN - st - Sinusoidal_Noise.mat')       
+        load('./results/Resluts for PID - ZN - us - Sinusoidal_Noise.mat')       
         hold on
-        plot(ts,u,'-r','LineWidth', 2,'DisplayName','height'); hold on   
-        load('./results/Resluts for PID - FT1-FG ZN - T1 - L - st - Sinusoidal_Noise.mat')  
+        plot(ts,u,'r:','LineWidth', 2,'DisplayName','height'); hold on   
+        load('./results/Resluts for PID - FT1-FG ZN - T1 - L - us - Sinusoidal_Noise.mat')  
         hold on
-        plot(ts,u,'-b','LineWidth', 2,'DisplayName','height'); hold on
-        load('./results/Resluts for PID - FT2-FG ZN - T2 - L - st - Sinusoidal_Noise.mat')
+        plot(ts,u,'b:','LineWidth', 2,'DisplayName','height'); hold on
+        load('./results/Resluts for PID - FT2-FG ZN - T2 - N - us - Sinusoidal_Noise.mat')
         hold on
-        plot(ts,u,'-g','LineWidth', 2,'DisplayName','height'); hold on
+        plot(ts,u,'g:','LineWidth', 2,'DisplayName','height'); hold on
         
 
-   
         ylabel('Control signal');
         xlabel('Time (s)');
         

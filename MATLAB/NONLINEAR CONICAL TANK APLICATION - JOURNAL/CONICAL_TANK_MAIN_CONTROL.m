@@ -17,18 +17,22 @@
         Tsim = 500; % Total simulation time
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
-        PIDflag = 0;
+        PIDflag = 1;
         FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'N'; % L = input linear ; N = input non linear
         
-        flag_load_dist = 1; 
+        flag_load_dist = 0; 
         flag_noise = 0;
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
-
+        
+        if(PIDflag) simName = 'PID';
+        else simName = FuzzyType;
+        end;
+        
         if(flag_load_dist) simName = 'Load_disturbace'; end;
         if(flag_noise) simName = 'Noise'; end;
         if(flag_sinusoidal_dist) simName = 'Sinusoidal_Noise'; end;
@@ -108,9 +112,9 @@
         u = zeros(nptos,1); % variavel de entrada
         h = zeros(nptos,1); % variavel de saida
         
-        ref_type = 'st'; % st = step ; us = upper stair ; ls = lower stair;
+        ref_type = 'us'; % st = step ; us = upper stair ; ls = lower stair;
         patamar = 0.05;
-        passo = 0.00;
+        passo = 0.10;
         Tamostra = Ts;
     
         ref = ref_def(patamar,passo,nptos);

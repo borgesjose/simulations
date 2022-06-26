@@ -18,13 +18,14 @@ M=[];
 M1=[];
 x=-2*L:0.001:2*L;
 y=-2*L:0.001:2*L;
-%gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
 
-%gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
-%gene = thebest{1:1}(1:16);
-%
-gene = .3*ones(1,16)
- Param = [gene,1,1];
+%Para Linear 
+%gene = .3*ones(1,16)
+
+%Para Não-Linear 
+gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
+
+Param = [gene,1,1];
 % 
  Itype = 'LI';
 % for i=1:length(x)
@@ -32,8 +33,8 @@ gene = .3*ones(1,16)
 % end
 
 for i=1:length(x), % De 1 até o No. total de medidas da variavel linguistica...
-  [mi, mo] = pertinencias_T2(x(i),y(i),L,Param,Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
-  %[mi, mo] = pertinencias_T2_NL(x(i),y(i),L,Param,Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
+  %[mi, mo] = pertinencias_T2(x(i),y(i),L,Param,Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
+  [mi, mo] = pertinencias_T2_NL(x(i),y(i),L,Param,Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
   M=[M; mi];
   M1=[M1; mo];
 end
