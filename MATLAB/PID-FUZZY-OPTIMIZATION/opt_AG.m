@@ -28,6 +28,10 @@ fobj = ag.objfunction
         populacao = {};% crio a cell que sera a minha população
         N_mais_aptos = 32; %Numero dos individuos mais aptos que serão salvos para a proxima geração.
 
+        
+        
+        
+        
         for j=1:populacao_size %A criação da população 
            
            genetic_code = [];
@@ -40,8 +44,10 @@ fobj = ag.objfunction
             populacao{j,2} = score;
            end
         end
-        thebest = populacao(j,:);
+        
+thebest = populacao(j,:);
 memoria_thebest(1,:)= thebest;
+
 %% PASSO 2:%Criar o loop de evolução:
 convergencia = 0;
 geracao = 1;
@@ -50,7 +56,7 @@ while convergencia == 0,
      % Avaliação dos individuos da população:
     
     for h=1:populacao_size %Etapa de avaliação da população para o AG   
-        script_CN_T2_PID_FG; %Chama o script com o controlador implementado
+        script_PID_FT2I_FG; %Chama o script com o controlador implementado
         J=fobj(erro,tempo,'ITAE');
         populacao{h,2} = (1/J)*10^4;
     end
@@ -90,8 +96,8 @@ gene = thebest{1,1}
 figure;plot((1./[memoria_thebest{:,2}])*10^4);
 plot_pertinencias_T2
 
-fileName = ['Resluts for AG - ', FuzzyType ,' - ' , FT2Itype, ' - ',ref_type,' - ',simName];
-save( ['./results/AG_',fileName])
+fileName = ['Resluts for AG - ', FuzzyType];
+save( ['./results/AG',fileName])
 
 end
 
