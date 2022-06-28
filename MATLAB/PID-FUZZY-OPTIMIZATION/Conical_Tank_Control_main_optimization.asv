@@ -91,13 +91,10 @@
         Theta_m_max = 72;
         L = 2;
         
-        % o vetor parametros dá os valores das MF's:
-        
+        % o vetor parametros dá os valores das MF's:        
         if (FT2Itype == 'L')
             %gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
-            %gene = .3*ones(1,16)
-            
-            
+            gene = .3*ones(1,16)
         elseif (FT2Itype == 'N')
             gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
         end;
@@ -116,9 +113,9 @@
         u = zeros(nptos,1); % variavel de entrada
         h = zeros(nptos,1); % variavel de saida
         
-        ref_type = 'us'; % st = step ; us = upper stair ; ls = lower stair;
+        ref_type = 'st'; % st = step ; us = upper stair ; ls = lower stair;
         patamar = 0.05;
-        passo = 0.10;
+        passo = 0.00;
         Tamostra = Ts;
     
         ref = ref_def(patamar,passo,nptos);
@@ -131,14 +128,30 @@
         if( flag_load_dist) load('disturbio.mat'); end;
         if( flag_noise) load('ruido.mat'); end;
         
-        %% Step 6, Otimização:
+        %% Step 6, Definições de otimização:
+        pso.noP = ;
+        pso.max_iter = ;
+        pso.Max = ;
+        pso.wMin= ;
+        pso.c1= ;
+        pso.c2= ;
+        pso.vMax = (problem.ub - problem.lb).*0.2;
+        pso.vmin = -pso.vMax;
         
-        if()         
-        [] = opt_AG();
+        ag.
+
+        
+        %% Step 7, Otimização:
+        
+        if(Opt_type == 'AG') 
+            [param] = opt_AG(FuzzyType,FT1type,FT2Itype,ag,);
+        end;
+        if(Opt_type == 'PS')         
+            [param] = opt_PSO(FuzzyType,FT1type,FT2Itype,pso);
         end;
         
         
-        %% Step 7, Simulation with ode45;
+        %% Step 8, Simulation with ode45;
 
         for i=4:nptos
             
