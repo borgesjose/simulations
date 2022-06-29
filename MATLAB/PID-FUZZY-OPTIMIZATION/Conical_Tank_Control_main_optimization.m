@@ -138,6 +138,15 @@
        % pso.vMax = (problem.ub - problem.lb).*0.2;
        % pso.vmin = -pso.vMax;
         
+       % AG
+       
+        ag.prob_mutation = 0.05;%rand(1);
+        ag.prob_crossover = 0.85;%rand(1);
+        ag.geracoes = 50;
+        
+        ag.populacao_size = 128; %defino o tamanho da população
+        ag.N_mais_aptos = 32;
+        
         ag.objfunction = @objfunc;
         
         %% Step 7, Otimização:

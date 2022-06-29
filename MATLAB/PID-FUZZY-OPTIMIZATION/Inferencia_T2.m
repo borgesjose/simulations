@@ -29,7 +29,7 @@ Y(1,:) = [(exp(-R(1,1)*4)), (exp(-R(1,2)*4))];
 %REGRA 2: 
 
 R(2,:) = [mi(7)*mo(5),mi(6)*mo(4)];
-Y(2,:) = [(invgauss(R(2,1),0.5)),(invgauss(R(2,2),0.5))]
+Y(2,:) = [(invgauss(R(2,1),0.5)),(invgauss(R(2,2),0.5))];
 
 %REGRA 3: 
 

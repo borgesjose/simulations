@@ -1,4 +1,4 @@
-function [param] = opt_AG(FuzzyType,FT1type,FT2Itype,L,ag)
+function [gene] = opt_AG(FuzzyType,FT1type,FT2Itype,L,ag)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 % Universidade Federal do Piauí                       %
 % Campus Ministro Petronio Portela                    %
@@ -14,8 +14,8 @@ function [param] = opt_AG(FuzzyType,FT1type,FT2Itype,L,ag)
 %Definições do AG
 %Parametro de reprodução:
 
-   prob_mutation = 0.05;%rand(1);
-   prob_crossover = 0.85;%rand(1);
+   prob_mutation = ag.prob_mutation;%rand(1);
+   prob_crossover = ag.prob_crossover;%rand(1);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %CODIFICAÇÃO:Real
@@ -24,9 +24,9 @@ fobj = ag.objfunction
 %%
 %PASSO 1: 
     %INICIAR A POPULAÇÃO:
-        populacao_size = 128; %defino o tamanho da população
+        populacao_size = ag.populacao_size; %defino o tamanho da população
         populacao = {};% crio a cell que sera a minha população
-        N_mais_aptos = 32; %Numero dos individuos mais aptos que serão salvos para a proxima geração.
+        N_mais_aptos = ag.N_mais_aptos; %Numero dos individuos mais aptos que serão salvos para a proxima geração.
 
         
         if (FuzzyType == 'T1'),

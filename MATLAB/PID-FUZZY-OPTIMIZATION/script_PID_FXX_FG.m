@@ -44,7 +44,11 @@
         erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
 
-        
+        Am_min = 2;
+        Am_max = 5;
+        Theta_m_min = 45;
+        Theta_m_max = 72;
+        L = 2;        
 gene = populacao{hh,1}(1:12);
 Param = gene;
 
