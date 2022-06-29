@@ -21,14 +21,14 @@
         PIDflag = 0;
         FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
-        FT2Itype = 'N'; % L = input linear ; N = input non linear
+        FT2Itype = 'L'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
         flag_noise = 0;
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
-        Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
+        Opt_type = 'AG'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
 
 %%        
         if(PIDflag) simName = 'PID';
@@ -60,6 +60,37 @@
         %% Step 3 - Controller definition: 
 
         [Kc,Ti,Td] = PID(PIDtype); % Type PID selection 
+
+        %% Step 6, Definições de otimização:
+        pso.noP = 4;
+        pso.max_iter = 500;
+        pso.wMax = 0.9;
+        pso.wMin= 0.2;
+        pso.c1= 0;
+        pso.c2= 0;
+       % pso.vMax = (problem.ub - problem.lb).*0.2;
+       % pso.vmin = -pso.vMax;
+        
+       % AG
+       
+        ag.prob_mutation = 0.05;%rand(1);
+        ag.prob_crossover = 0.85;%rand(1);
+        ag.geracoes = 50;
+        
+        ag.populacao_size = 128; %defino o tamanho da população
+        ag.N_mais_aptos = 32;
+        
+        ag.objfunction = @objfunc;
+        
+        %% Step 7, Otimização:
+        
+        if(Opt_type == 'AG') 
+            [param] = opt_AG(FuzzyType,FT1type,FT2Itype,L,ag);
+        end;
+        if(Opt_type == 'PS')         
+            [param] = opt_PSO(FuzzyType,FT1type,FT2Itype,pso);
+        end;
+        
         
 %% Step 4  - Controller definition:        
 
@@ -76,9 +107,9 @@
         
         % o vetor parametros dá os valores das MF's
         if (FT1type == 'L')
-            param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
+            %param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
         elseif (FT1type == 'N')
-            param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];;
+            %param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];;
         end;
         
         
@@ -94,12 +125,13 @@
         % o vetor parametros dá os valores das MF's:        
         if (FT2Itype == 'L')
             %gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
-            gene = .3*ones(1,16)
+            %param = .3*ones(1,16)
+           param =[param,1,1];
         elseif (FT2Itype == 'N')
-            gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
+            %gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
+            %param = [0.3232,0.4712,0.0218,0.4454,0.5986,0.1102,0.2554,0.0081,0.3159,1.9916,0.9286,0.2525]
         end;
         
-        Param =[gene,1,1];
     end
 
     end      
@@ -115,7 +147,7 @@
         
         ref_type = 'st'; % st = step ; us = upper stair ; ls = lower stair;
         patamar = 0.05;
-        passo = 0.00;
+        passo = 0.10;
         Tamostra = Ts;
     
         ref = ref_def(patamar,passo,nptos);
@@ -128,29 +160,8 @@
         if( flag_load_dist) load('disturbio.mat'); end;
         if( flag_noise) load('ruido.mat'); end;
         
-        %% Step 6, Definições de otimização:
-        pso.noP = ;
-        pso.max_iter = ;
-        pso.Max = ;
-        pso.wMin= ;
-        pso.c1= ;
-        pso.c2= ;
-        pso.vMax = (problem.ub - problem.lb).*0.2;
-        pso.vmin = -pso.vMax;
-        
-        ag.
 
-        
-        %% Step 7, Otimização:
-        
-        if(Opt_type == 'AG') 
-            [param] = opt_AG(FuzzyType,FT1type,FT2Itype,ag,);
-        end;
-        if(Opt_type == 'PS')         
-            [param] = opt_PSO(FuzzyType,FT1type,FT2Itype,pso);
-        end;
-        
-        
+               
         %% Step 8, Simulation with ode45;
 
         for i=4:nptos
