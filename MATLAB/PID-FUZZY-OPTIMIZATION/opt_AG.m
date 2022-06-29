@@ -62,7 +62,7 @@ fobj = ag.objfunction
             
            for i=1:gene_size
                 genetic_code = [genetic_code ,abs(-0.5+rand);];
-            
+                
             populacao{j,1} = genetic_code;
             populacao{j,2} = score;
            end
@@ -70,6 +70,8 @@ fobj = ag.objfunction
         
 thebest = populacao(j,:);
 memoria_thebest(1,:)= thebest;
+
+
 
 %% PASSO 2:%Criar o loop de evolução:
 convergencia = 0;
