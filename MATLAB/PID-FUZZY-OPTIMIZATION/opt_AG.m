@@ -1,4 +1,4 @@
-function [param] = opt_AG(FuzzyType,FT1type,FT2Itype)
+function [param] = opt_AG(FuzzyType,FT1type,FT2Itype,L,ag)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 % Universidade Federal do Piauí                       %
 % Campus Ministro Petronio Portela                    %
@@ -78,10 +78,10 @@ while convergencia == 0,
     
      % Avaliação dos individuos da população:
     
-    for h=1:populacao_size %Etapa de avaliação da população para o AG   
+    for hh=1:populacao_size %Etapa de avaliação da população para o AG   
         script_PID_FXX_FG; %Chama o script com o controlador implementado
         J=fobj(erro,tempo,'ITAE');
-        populacao{h,2} = (1/J)*10^4;
+        populacao{hh,2} = (1/J)*10^4;
     end
     
   % Retorna um vetor com os valores dos cromossomos do melhores e outro com a cell contendo os melhores e seu score

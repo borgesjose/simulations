@@ -1,5 +1,6 @@
         Tsim = 1500; % Total simulation time
-        
+        PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
+        PIDflag = 0;
         %% Step 2 - Problem definition:
         %Tank definition structure
         tank.h0 = 0.001; % initial point
@@ -16,7 +17,7 @@
         tank.r = 0.005;% output ratio in meters
 
         tank.A = pi*tank.r^2;% output Area
-        
+        L=2;
         %% Step 3 - Controller definition: 
 
         [Kc,Ti,Td] = PID(PIDtype); % Type PID selection 
@@ -43,25 +44,42 @@
         erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
 
+        
+gene = populacao{hh,1}(1:12);
+Param = gene;
 
-
-%% Step 8, Simulation with ode45;
+        %% Step 8, Simulation with ode45;
 
         for i=4:nptos
-                   
+            
+            
             [~,y] = ode45(@(t,y) tank_conical(t,y,u(i-1),tank),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
             h(i) = h0; % store the height for plotting
             
             
-                    erro(i)=ref(i) - h(i);
+           erro(i)=ref(i) - h(i);
 
-                    rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
+            rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
+            if (PIDflag)
+                Ami = 1;
+            else
+                if (FuzzyType == 'T1'),
+                    
+                    Am(i) = FT1_pid_ag(erro(i),rate(i),L,Param);
+                    Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
+                end
+                
+                if (FuzzyType == 'T2'),
+                    
                     Am(i) =Inferencia_T2(erro(i),rate(i),L,Param,FT2Itype);
                     Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
                     
-         %Controlador:
+                end
+                
+            end
+                        %Controlador:
 
                         Kp(i)= Kc/Ami;
                         Kd(i)= (Td)*Kc/Ami;
@@ -71,8 +89,7 @@
                         beta = -(Kc/Ami)*(1+2*((Td)/Tamostra)-(Tamostra/(2*(Ti))));
                         gama = (Kc/Ami)*(Td)/Tamostra;
 
-                        u(i)= u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2);
-
+                            u(i)= u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2);
 
                         %saturation:
                         if(u(i)<5e-5) u(i)=5e-5;end;

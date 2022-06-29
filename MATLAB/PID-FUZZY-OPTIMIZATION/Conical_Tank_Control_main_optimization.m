@@ -28,7 +28,7 @@
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
-        Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
+        Opt_type = 'AG'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
 
 %%        
         if(PIDflag) simName = 'PID';
@@ -133,17 +133,17 @@
         pso.max_iter = 500;
         pso.wMax = 0.9;
         pso.wMin= 0.2;
-        pso.c1= ;
-        pso.c2= ;
-        pso.vMax = (problem.ub - problem.lb).*0.2;
-        pso.vmin = -pso.vMax;
+        pso.c1= 0;
+        pso.c2= 0;
+       % pso.vMax = (problem.ub - problem.lb).*0.2;
+       % pso.vmin = -pso.vMax;
         
         ag.objfunction = @objfunc;
         
         %% Step 7, Otimização:
         
         if(Opt_type == 'AG') 
-            [param] = opt_AG(FuzzyType,FT1type,FT2Itype,ag);
+            [param] = opt_AG(FuzzyType,FT1type,FT2Itype,L,ag);
         end;
         if(Opt_type == 'PS')         
             [param] = opt_PSO(FuzzyType,FT1type,FT2Itype,pso);
