@@ -29,7 +29,30 @@ fobj = ag.objfunction
         N_mais_aptos = 32; %Numero dos individuos mais aptos que serão salvos para a proxima geração.
 
         
-        
+        if (FuzzyType == 'T1'),
+            
+            if (FT1type == 'L')
+                gene_size = 14;
+                
+            elseif (FT1type == 'N')
+                
+                gene_size = 6;
+    
+            end;
+            
+            
+         elseif (FuzzyType == 'T2'),
+            
+            if (FT2Itype == 'L')
+                
+                gene_size = 16;
+                
+            elseif (FT2Itype == 'N')
+                
+                gene_size = 12;
+                
+            end;
+         end
         
         
         for j=1:populacao_size %A criação da população 
@@ -37,7 +60,7 @@ fobj = ag.objfunction
            genetic_code = [];
            score = 0;
             
-           for i=1:12
+           for i=1:gene_size
                 genetic_code = [genetic_code ,abs(-0.5+rand);];
             
             populacao{j,1} = genetic_code;
@@ -56,7 +79,7 @@ while convergencia == 0,
      % Avaliação dos individuos da população:
     
     for h=1:populacao_size %Etapa de avaliação da população para o AG   
-        script_PID_FT2I_FG; %Chama o script com o controlador implementado
+        script_PID_FXX_FG; %Chama o script com o controlador implementado
         J=fobj(erro,tempo,'ITAE');
         populacao{h,2} = (1/J)*10^4;
     end
