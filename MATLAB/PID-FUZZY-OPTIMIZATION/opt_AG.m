@@ -119,7 +119,20 @@ end
 
 gene = thebest{1,1}
 figure;plot((1./[memoria_thebest{:,2}])*10^4);
-plot_pertinencias_T2
+
+
+
+,                if (FuzzyType == 'T1'),
+                    
+                    plot_pertinencias(gene,FT1type,L)
+                    
+                end
+                
+                if (FuzzyType == 'T2'),
+                    
+                    plot_pertinencias_T2(gene,FT2Itype,L)
+                    
+                end
 
 fileName = ['Resluts for AG - ', FuzzyType];
 save( ['./results/AG',fileName])

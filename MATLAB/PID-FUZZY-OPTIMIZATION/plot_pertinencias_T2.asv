@@ -1,4 +1,4 @@
-function plot_pertinencias_T2(gene,FT2Itype,L)
+function plot_pertinencias_T2(gene)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
@@ -16,7 +16,7 @@ function plot_pertinencias_T2(gene,FT2Itype,L)
 
 %clear; clc; close all;
 
-
+L = 2;
 M=[];
 M1=[];
 x=-2*L:0.001:2*L;
@@ -27,20 +27,23 @@ y=-2*L:0.001:2*L;
 
 %Para Não-Linear 
  
+
+Param = [gene,1,1];
+% 
+ Itype = 'LI';
 % for i=1:length(x)
 %     Ami(i) = Inferencia_T2(x(i),y(i),L,Param,Itype);
 % end
 
 for i=1:length(x), % De 1 até o No. total de medidas da variavel linguistica...
-                
-                if (FT2Itype == 'L'), 
-                    Param = [gene,1,1];
-                    [mi, mo] = pertinencias_T2(x(i),y(i),L,Param,Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
+                if (FuzzyType == 'T1'),
+                    
+                [mi, mo] = pertinencias_T2(x(i),y(i),L,Param,Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
                 end
                 
-                if (FT2Itype == 'N'),
-                    Param = gene;
-                    [mi, mo] = pertinencias_T2_NL(x(i),y(i),L,Param,Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
+                if (FuzzyType == 'T2'),
+                    
+                [mi, mo] = pertinencias_T2_NL(x(i),y(i),L,Param,Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
                     
                 end
       
