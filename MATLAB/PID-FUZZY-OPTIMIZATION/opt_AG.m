@@ -135,7 +135,7 @@ figure;plot((1./[memoria_thebest{:,2}])*10^4);
                 end
 
 fileName = ['Resluts for AG - ', FuzzyType];
-save( ['./results/AG',fileName])
+save( ['./results/AG/',fileName])
 
 end
 
