@@ -122,7 +122,7 @@ figure;plot((1./[memoria_thebest{:,2}])*10^4);
 
 
 
-,                if (FuzzyType == 'T1'),
+                if (FuzzyType == 'T1'),
                     
                     plot_pertinencias(gene,FT1type,L)
                     

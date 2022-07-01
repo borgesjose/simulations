@@ -35,12 +35,12 @@ for i=1:length(x), % De 1 até o No. total de medidas da variavel linguistica...
                 
                 if (FT2Itype == 'L'), 
                     Param = [gene,1,1];
-                    [mi, mo] = pertinencias_T2(x(i),y(i),L,Param,Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
+                    [mi, mo] = pertinencias_T2(x(i),y(i),L,Param,FT2Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
                 end
                 
                 if (FT2Itype == 'N'),
                     Param = gene;
-                    [mi, mo] = pertinencias_T2_NL(x(i),y(i),L,Param,Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
+                    [mi, mo] = pertinencias_T2_NL(x(i),y(i),L,Param,FT2Itype);  % pertinencia aos conjuntos fuzzy (curvatura)
                     
                 end
       
