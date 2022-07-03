@@ -50,14 +50,17 @@
         Theta_m_max = 72;
         L = 2;        
 
- if (FuzzyType == 'T1'),
+
+if (FuzzyType == 'T1'),
             
             if (FT1type == 'L')
-                gene_size = 14;
+                gene = currentX;
+                Param = gene;
                 
             elseif (FT1type == 'N')
                 
-                gene_size = 6;
+               gene = currentX;
+               Param = gene;
     
             end;
             
@@ -66,17 +69,18 @@
             
             if (FT2Itype == 'L')
                 
-                gene_size = 16;
+                gene = currentX;
+                Param =[gene,1,1];
                 
             elseif (FT2Itype == 'N')
                 
-                gene_size = 12;
+                gene = currentX;
+                Param = gene;
                 
             end;
-         end
+ end
          
-gene = populacao{hh,1}(1:gene_size);
-Param = gene;
+
 
         %% Step 8, Simulation with ode45;
 

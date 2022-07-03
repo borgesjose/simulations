@@ -50,7 +50,8 @@
         Theta_m_max = 72;
         L = 2;        
 
- if (FuzzyType == 'T1'),
+
+if (FuzzyType == 'T1'),
             
             if (FT1type == 'L')
                 gene = populacao{hh,1}(1:gene_size);
@@ -77,7 +78,7 @@
                 Param = gene;
                 
             end;
-         end
+ end
          
 
 

@@ -28,7 +28,7 @@
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
-        Opt_type = 'AG'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
+        Opt_type = 'PS'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
 
 %%        
         if(PIDflag) simName = 'PID';
@@ -62,25 +62,36 @@
         [Kc,Ti,Td] = PID(PIDtype); % Type PID selection 
 
         %% Step 6, Definições de otimização:
-        pso.noP = 4;
-        pso.max_iter = 500;
-        pso.wMax = 0.9;
-        pso.wMin= 0.2;
-        pso.c1= 0;
-        pso.c2= 0;
-       % pso.vMax = (problem.ub - problem.lb).*0.2;
-       % pso.vmin = -pso.vMax;
+       
+        % PSO
+            pso.noP = 4;
+            pso.max_iter = 500;
+            pso.wMax = 0.9;
+            pso.wMin= 0.2;
+            pso.c1= 2;
+            pso.c2= 2;
+            pso.vMax = (problem.ub - problem.lb).*0.2;
+            pso.vmin = -pso.vMax;
+           
+            pso.noP = 8; 
+            pso.maxIter = 500; 
+            pso.visFlag = 1;
+            
+%             pso.ub = ;
+%             pso.lb = ;
+            pso.fobj = @objfunc;
+
         
        % AG
        
-        ag.prob_mutation = 0.05;%rand(1);
-        ag.prob_crossover = 0.85;%rand(1);
-        ag.geracoes = 50;
-        
-        ag.populacao_size = 128; %defino o tamanho da população
-        ag.N_mais_aptos = 32;
-        
-        ag.objfunction = @objfunc;
+            ag.prob_mutation = 0.05;%rand(1);
+            ag.prob_crossover = 0.85;%rand(1);
+            ag.geracoes = 50;
+
+            ag.populacao_size = 128; %defino o tamanho da população
+            ag.N_mais_aptos = 32;
+
+            ag.objfunction = @objfunc;
         
         %% Step 7, Otimização:
         
@@ -127,7 +138,7 @@
             %gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
             
             %Resultado´para AG:
-            %gene = [0.1809,0.3258,0.1362,0.2374,0.0156,0.2217,0.6816,0.0021,0.5516,0.2100,0.0979,0.0679,0.0178,0.2848,1.8989,0.0048]
+            param = [0.1809,0.3258,0.1362,0.2374,0.0156,0.2217,0.6816,0.0021,0.5516,0.2100,0.0979,0.0679,0.0178,0.2848,1.8989,0.0048]
             
            %Resultado para PSO:
            
