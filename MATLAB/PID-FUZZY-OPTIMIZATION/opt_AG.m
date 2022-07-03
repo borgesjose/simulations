@@ -118,8 +118,9 @@ while convergencia == 0,
 end
 
 gene = thebest{1,1}
-figure;plot((1./[memoria_thebest{:,2}])*10^4);
-
+figure;
+plot((1./[memoria_thebest{:,2}])*10^4);
+xlabel('Iteração');
 
 
                 if (FuzzyType == 'T1'),

@@ -64,16 +64,14 @@
         %% Step 6, Definições de otimização:
        
         % PSO
-            pso.noP = 4;
-            pso.max_iter = 500;
+            pso.noP = 16;
+            pso.maxIter = 5;
             pso.wMax = 0.9;
             pso.wMin= 0.2;
             pso.c1= 2;
             pso.c2= 2;
 
-           
-            pso.noP = 8; 
-            pso.maxIter = 500; 
+
             pso.visFlag = 1;
             
 
@@ -90,7 +88,8 @@
             ag.N_mais_aptos = 32;
 
             ag.objfunction = @objfunc;
-        
+   
+            L = 2;
         %% Step 7, Otimização:
         
         if(Opt_type == 'AG') 

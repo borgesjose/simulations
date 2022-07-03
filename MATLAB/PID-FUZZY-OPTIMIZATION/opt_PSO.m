@@ -53,8 +53,8 @@ c2 = pso.c2;
             end;
         end
 
-         ub = L * ones(1, nVar);
-         lb = -L * ones(1, nVar);
+         ub = (L/4) * ones(1, nVar);
+         lb = -(L/4) * ones(1, nVar);
          
          vMax =  (ub - lb).*0.2;
          vMin =  -vMax;
@@ -145,6 +145,23 @@ for t = 1 : maxIter
     save( ['./results/PSO/',fileName])
 end
 GBEST = Swarm.GBEST;
+param = GBEST.X
+figure;
+plot(cgCurve);
+xlabel('Iteração');
+ylabel('ITAE');
+title(['Convergence Performance'])
 
+                if (FuzzyType == 'T1'),
+                    
+                    plot_pertinencias(param,FT1type,L)
+                    
+                end
+                
+                if (FuzzyType == 'T2'),
+                    
+                    plot_pertinencias_T2(param,FT2Itype,L)
+                    
+                end
         
 end
