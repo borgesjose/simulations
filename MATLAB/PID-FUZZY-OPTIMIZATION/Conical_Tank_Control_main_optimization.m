@@ -65,7 +65,7 @@
        
         % PSO
             pso.noP = 16;
-            pso.maxIter = 5;
+            pso.maxIter = 500;
             pso.wMax = 0.9;
             pso.wMin= 0.2;
             pso.c1= 2;

@@ -114,12 +114,10 @@ while convergencia == 0,
                             convergencia = 1;
                             break;
                     end
-  
-  
-  fileName = ['Resluts for AG / ',FuzzyType, ' after generation # ' , num2str(geracao)];
-  save( ['./results/AG/',fileName])
-  
   geracao = geracao +1 
+  
+  fileName = ['Resluts for AG / ',FuzzyType, ' after iteration # ' , num2str(t)];
+  save( ['./results/AG/',fileName])
 end
 
 gene = thebest{1,1}
