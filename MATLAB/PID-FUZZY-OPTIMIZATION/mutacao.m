@@ -1,4 +1,4 @@
-function pop =  mutacao(populacao,prob_mutation)
+function pop =  mutacao(populacao,prob_mutation,lb,ub)
 
     chromosome_lenght = size(populacao{1,1},2);
     populacao_size = size(populacao,1);
@@ -15,6 +15,10 @@ function pop =  mutacao(populacao,prob_mutation)
                 ponto = randi([1,chromosome_lenght]);
                 u = -0.05 + (0.05+0.05)*rand;
                 mutante(ponto) = mutante(ponto)+(u);
+                %saturation:
+                if(mutante(ponto)<lb) mutante(ponto)=lb;end;
+                if(mutante(ponto)>ub) mutante(ponto)=ub;end;
+                
             end
        populacao{index,1}= mutante; 
      end
