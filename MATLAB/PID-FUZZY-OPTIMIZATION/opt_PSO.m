@@ -35,7 +35,7 @@ c2 = pso.c2;
                 
             elseif (FT1type == 'N')
                 
-                nVar =  6;
+                nVar =  12;
     
             end;
             

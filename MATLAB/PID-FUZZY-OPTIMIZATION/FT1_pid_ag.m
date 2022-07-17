@@ -34,12 +34,12 @@ function Am = FT1_pid_ag(erro,rate,L,param,Itype)
 
             %Funções de pertinencia para o erro:
             erro_N = 1-sigmoid_mf_t1(erro,param_erro_N);
-            erro_Z = tri_mf_t1(erro,param_erro_Z); 
+            erro_Z = gauss_mf_t1(erro,param_erro_Z); 
             erro_P = sigmoid_mf_t1(erro,param_erro_P);
 
             % Funções de pertinencia para o rate:
             rate_N = 1-sigmoid_mf_t1(erro,param_rate_N);
-            rate_Z = tri_mf_t1(erro,param_rate_Z);
+            rate_Z = gauss_mf_t1(erro,param_rate_Z);
             rate_P = sigmoid_mf_t1(erro,param_rate_P);
             
             

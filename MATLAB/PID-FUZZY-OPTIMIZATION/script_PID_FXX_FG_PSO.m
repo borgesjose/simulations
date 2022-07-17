@@ -101,7 +101,7 @@ if (FuzzyType == 'T1'),
             else
                 if (FuzzyType == 'T1'),
                     
-                    Am(i) = FT1_pid_ag(erro(i),rate(i),L,Param);
+                    Am(i) = FT1_pid_ag(erro(i),rate(i),L,Param,FT1type);
                     Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
                 end
                 

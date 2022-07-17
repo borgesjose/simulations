@@ -10,6 +10,7 @@ function [gene] = opt_AG(FuzzyType,FT1type,FT2Itype,L,ag)
 %  -- Version: 1.0  - 07/03/2019                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %% Algoritmo genetico:
+dataVis = ag.visFlag;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Definições do AG
 %Parametro de reprodução:
@@ -19,7 +20,7 @@ function [gene] = opt_AG(FuzzyType,FT1type,FT2Itype,L,ag)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %CODIFICAÇÃO:Real
-geracoes = 50;
+geracoes = ag.geracoes;
 fobj = ag.objfunction
 %%
 %PASSO 1: 
@@ -36,7 +37,7 @@ fobj = ag.objfunction
                 
             elseif (FT1type == 'N')
                 
-                gene_size = 6;
+                gene_size = 12;
     
             end;
             
@@ -116,7 +117,7 @@ while convergencia == 0,
                     end
                     
    if dataVis == 1
-        outmsg = ['Generation# ', num2str(geracao) , ' thebest = ' , num2str(thebest)];
+        outmsg = ['Generation# ', num2str(geracao) , ' thebest = ' , num2str(thebest{2})];
         disp(outmsg);
    end
     
