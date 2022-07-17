@@ -9,7 +9,7 @@
 %  -- Version: 1.0  - 21/05/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Passo 1, definir o vetor tempo:
-            Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
+            Ts = 0.01; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
             Tsim = 500;
             nptos = Tsim/Ts;
             ts = linspace(0,Tsim,nptos);

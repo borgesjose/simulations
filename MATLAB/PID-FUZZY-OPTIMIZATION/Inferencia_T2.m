@@ -1,10 +1,10 @@
 function Am =inferencia_T2(erro,rate,L,T,Itype)
-%%
-%% Maquina de inferencia TYPE-2
-%% 
-%%
-%% Autor: jose borges 
-%% Data: 04/03/2019
+
+% Maquina de inferencia TYPE-2
+% 
+%
+% Autor: jose borges 
+% Data: 04/03/2019
 
 if (Itype == 'L')
     [mi mo]=pertinencias_T2(erro,rate,L,T,Itype); % Pertinencias para variavel de entrada ERRO

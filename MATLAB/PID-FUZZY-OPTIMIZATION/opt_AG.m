@@ -114,10 +114,17 @@ while convergencia == 0,
                             convergencia = 1;
                             break;
                     end
-  
-  
-  fileName = ['Resluts for AG / ',FuzzyType, ' after generation # ' , num2str(geracao)];
+                    
+   if dataVis == 1
+        outmsg = ['Generation# ', num2str(geracao) , ' thebest = ' , num2str(thebest)];
+        disp(outmsg);
+   end
+    
+  fileName = ['Resluts after iteration # ' , num2str(geracao)];
   save( ['./results/AG/',fileName])
+    
+  %fileName = ['Resluts for AG / ',FuzzyType, ' after generation # ' , num2str(geracao)];
+  %save( ['./results/AG/',fileName])
   
   geracao = geracao +1 
 end
@@ -126,6 +133,8 @@ gene = thebest{1,1}
 figure;
 plot((1./[memoria_thebest{:,2}])*10^4);
 xlabel('Iteração');
+ylabel('ITAE');
+title(['Convergence Performance'])
 
 
                 if (FuzzyType == 'T1'),

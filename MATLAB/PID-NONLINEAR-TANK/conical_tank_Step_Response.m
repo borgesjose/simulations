@@ -41,8 +41,8 @@ A = pi*r^2;% Area do orificio de saida
 vazao_max = .00038;
  for i=1:nptos, 
     if (i<=nptos/3)  u(i)=.000001; end;
-    if (i>nptos/3 & i<=2*nptos/3 )   u(i) = 2*vazao_max; end;
-    if (i>2*nptos/3)   u(i) = 2*vazao_max; end;
+    if (i>nptos/3 & i<=2*nptos/3 )   u(i) = 1*vazao_max; end;
+    if (i>2*nptos/3)   u(i) = 1*vazao_max; end;
 end ;
 
 % Simulation with ode45;

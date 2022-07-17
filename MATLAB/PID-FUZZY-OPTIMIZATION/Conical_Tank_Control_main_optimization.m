@@ -19,16 +19,16 @@
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
         PIDflag = 0;
-        FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
+        FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
-        FT2Itype = 'L'; % L = input linear ; N = input non linear
+        FT2Itype = 'N'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
         flag_noise = 0;
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
-        Opt_type = 'PS'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
+        Opt_type = 'PS'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
 
 %%        
         if(PIDflag) simName = 'PID';
@@ -64,10 +64,10 @@
         %% Step 6, Definições de otimização:
        
         % PSO
-            pso.noP = 16;
-            pso.maxIter = 500;
+            pso.noP = 128;
+            pso.maxIter = 50;
             pso.wMax = 0.9;
-            pso.wMin= 0.2;
+            pso.wMin= 0.3;
             pso.c1= 2;
             pso.c2= 2;
 
@@ -80,8 +80,8 @@
         
        % AG
        
-            ag.prob_mutation = 0.05;%rand(1);
-            ag.prob_crossover = 0.85;%rand(1);
+            ag.prob_mutation = 0.10;%rand(1);
+            ag.prob_crossover = 0.9;%rand(1);
             ag.geracoes = 50;
 
             ag.populacao_size = 128; %defino o tamanho da população
@@ -137,14 +137,13 @@
             %Resultado´para AG:
             %param = [0.1809,0.3258,0.1362,0.2374,0.0156,0.2217,0.6816,0.0021,0.5516,0.2100,0.0979,0.0679,0.0178,0.2848,1.8989,0.0048]
             
-           %Resultado para PSO:
-           
-            
+            %Resultado para PSO:
+
             %param = .3*ones(1,16)
            Param =[param,1,1];
         elseif (FT2Itype == 'N')
             %gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
-            %param = [0.3232,0.4712,0.0218,0.4454,0.5986,0.1102,0.2554,0.0081,0.3159,1.9916,0.9286,0.2525]
+            %param=[0.3232,0.4712,0.0218,0.4454,0.5986,0.1102,0.2554,0.0081,0.3159,1.9916,0.9286,0.2525];
         end;
         
     end

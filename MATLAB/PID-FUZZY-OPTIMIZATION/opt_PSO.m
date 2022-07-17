@@ -53,8 +53,8 @@ c2 = pso.c2;
             end;
         end
 
-         ub = (L/4) * ones(1, nVar);
-         lb = -(L/4) * ones(1, nVar);
+         ub = (L) * ones(1, nVar);
+         lb = -(L) * ones(1, nVar);
          
          vMax =  (ub - lb).*0.2;
          vMin =  -vMax;

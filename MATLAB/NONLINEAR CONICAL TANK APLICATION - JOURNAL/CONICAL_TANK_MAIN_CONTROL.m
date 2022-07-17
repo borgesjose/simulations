@@ -13,21 +13,21 @@
 % Script que serve como main da aplicação.
 
  %% Step 1, simulation definition:
-        clear;clc;
+        %clear;clc;
         Tsim = 500; % Total simulation time
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
         PIDflag = 0;
-        FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
+        FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
-        FT2Itype = 'N'; % L = input linear ; N = input non linear
+        FT2Itype = 'L'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
         flag_noise = 0;
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
-        Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
+        Opt_type = 'AG'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
         
         if(PIDflag) simName = 'PID';
         else simName = FuzzyType;
@@ -76,7 +76,7 @@
         if (FT1type == 'L')
             param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
         elseif (FT1type == 'N')
-            param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];;
+            param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
         end;
         
         
@@ -93,7 +93,7 @@
         
         if (FT2Itype == 'L')
             %gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
-            gene = .3*ones(1,16)
+            gene = .2*ones(1,16);
         elseif (FT2Itype == 'N')
             gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
         end;
@@ -104,8 +104,8 @@
     end      
         %% Step 5, simulation setings:
         
-        Ts = 5; %  5~10s( Digital control systems,Landau,2006,p.32)
-        nptos = Tsim/Ts; %number point of simulation
+        Ts = 0.01; %  5~10s( Digital control systems,Landau,2006,p.32)
+        nptos = round(Tsim/Ts); %number point of simulation
         ts = linspace(0,Tsim,nptos); % time vector
         H=nptos; % Horizon
        
@@ -113,8 +113,8 @@
         h = zeros(nptos,1); % variavel de saida
         
         ref_type = 'us'; % st = step ; us = upper stair ; ls = lower stair;
-        patamar = 0.05;
-        passo = 0.10;
+        patamar = 0.25;
+        passo = 0.00;
         Tamostra = Ts;
     
         ref = ref_def(patamar,passo,nptos);
