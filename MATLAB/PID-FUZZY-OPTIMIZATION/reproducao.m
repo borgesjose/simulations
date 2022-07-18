@@ -1,4 +1,4 @@
-function pop = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,Itype,lb,ub)
+function pop = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,FuzzyType,Itype,lb,ub)
         
             chromosome_lenght = size(populacao{1,1},2);
             

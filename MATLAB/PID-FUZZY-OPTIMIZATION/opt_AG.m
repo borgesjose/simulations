@@ -119,8 +119,8 @@ while convergencia == 0,
  %% PASSO 3:
     %Seleção, Reprodução e Mutação:
               
-                filhos = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,FT1type,lb,ub);%Reprodução dos individuos mais aptos
-                populacao = mutacao(populacao,prob_mutation,FT1type,lb,ub);% Realiza a mutação sobre individuos da população
+                filhos = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,FuzzyType,FT1type,lb,ub);%Reprodução dos individuos mais aptos
+                populacao = mutacao(populacao,prob_mutation,FuzzyType,FT1type,lb,ub);% Realiza a mutação sobre individuos da população
                 resto = escolher_resto(populacao,N_mais_aptos,populacao_size); %escolhe os outros valores para a proxima população
                 clear populacao; %Limpa populacao
                 populacao = [teste;filhos;resto];%cria a proxima população que tera todos os elementos filhos criados com score = 0,
