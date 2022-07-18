@@ -19,8 +19,8 @@
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
         PIDflag = 0;
-        FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
-        FT1type = 'N'; % L = input linear ; N = input non linear
+        FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
+        FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'N'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
@@ -28,7 +28,7 @@
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
-        Opt_type = 'AG'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
+        Opt_type = 'PS'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
 
 %%        
         if(PIDflag) simName = 'PID';
@@ -39,7 +39,7 @@
         if(flag_noise) simName = 'Noise'; end;
         if(flag_sinusoidal_dist) simName = 'Sinusoidal_Noise'; end;
         if(flag_model_severance) simName = 'Model_Severance'; end;
-
+  
         %% Step 2 - Problem definition:
         %Tank definition structure
         tank.h0 = 0.001; % initial point
@@ -215,7 +215,7 @@
                 
                 if (FuzzyType == 'T2'),
                     
-                    Am(i) =Inferencia_T2(erro(i),rate(i),L,Param,FT2Itype);
+                    Am(i) =Inferencia_T2(erro(i),rate(i),L,param,FT2Itype);
                     Ami = Am(i)*Am_max + Am_min*(1 - Am(i));
                     
                 end

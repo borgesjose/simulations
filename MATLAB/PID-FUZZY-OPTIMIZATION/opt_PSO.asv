@@ -38,8 +38,8 @@ c2 = pso.c2;
             elseif (FT1type == 'N')
                 
                 nVar =  12;
-                ub = [0,0, L,L, 1,2*L,  0,0, L,L, 1,2*L];
-                lb = [1,-2*L, -L,-L, 1,0, 1,-2*L, -L,-L, 0,0];
+                ub = [0,0, L,L,L, 2*L,2*L, 0,0, L,L,L, 2*L,2*L];
+                lb = [-2*L,-2*L, -L,-L,-L, 0,0, -2*L,-2*L, -L,-L,-L, 0,0];
     
             end;
             
@@ -140,7 +140,7 @@ for t = 1 : maxIter
         Swarm.Particles(k).X(index2) = lb(index2);
         
         %Check construction:
-        %Swarm.Particles(k).X = sort(Swarm.Particles(k).X);
+        Swarm.Particles(k).X = sort(Swarm.Particles(k).X);
         
     end
     

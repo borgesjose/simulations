@@ -20,6 +20,8 @@ function pop =  mutacao(populacao,prob_mutation,lb,ub)
                 if(mutante(ponto)>ub) mutante(ponto)=ub;end;
                 
             end
+            
+       mutante = eval_candidates(mutante,FuzzyType,Itype);
        populacao{index,1}= mutante; 
      end
      pop = populacao;

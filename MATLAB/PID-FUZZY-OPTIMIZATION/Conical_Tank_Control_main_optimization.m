@@ -20,7 +20,7 @@
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
         PIDflag = 0;
         FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
-        FT1type = 'N'; % L = input linear ; N = input non linear
+        FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'N'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
@@ -39,7 +39,7 @@
         if(flag_noise) simName = 'Noise'; end;
         if(flag_sinusoidal_dist) simName = 'Sinusoidal_Noise'; end;
         if(flag_model_severance) simName = 'Model_Severance'; end;
-
+  
         %% Step 2 - Problem definition:
         %Tank definition structure
         tank.h0 = 0.001; % initial point
@@ -64,10 +64,10 @@
         %% Step 6, Definições de otimização:
        
         % PSO
-            pso.noP = 128;
-            pso.maxIter = 50;
+            pso.noP = 8;
+            pso.maxIter = 100;
             pso.wMax = 0.9;
-            pso.wMin= 0.3;
+            pso.wMin= 0.2;
             pso.c1= 2;
             pso.c2= 2;
 
@@ -82,7 +82,7 @@
        
             ag.prob_mutation = 0.10;%rand(1);
             ag.prob_crossover = 0.9;%rand(1);
-            ag.geracoes = 2;
+            ag.geracoes = 50;
 
             ag.populacao_size = 128; %defino o tamanho da população
             ag.N_mais_aptos = 32;

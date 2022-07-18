@@ -11,8 +11,6 @@ function [gene] = opt_AG(FuzzyType,FT1type,FT2Itype,L,ag)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %% Algoritmo genetico:
 dataVis = ag.visFlag;
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Definições do AG
 %Parametro de reprodução:
@@ -57,8 +55,8 @@ fobj = ag.objfunction
             end;
         end
         
-        ub = (L) * ones(1, gene_size);%limite superior
-        lb = -(L) * ones(1, gene_size);%limite inferior
+        ub = (L);%limite superior
+        lb = -(L);%limite inferior
         
         for j=1:populacao_size %A criação da população 
            
@@ -71,11 +69,13 @@ fobj = ag.objfunction
                 if(new_gene<lb) new_gene=lb;end;
                 if(new_gene>ub) new_gene=ub;end;
                 
-                genetic_code = [genetic_code , new_gene];
-                
+                genetic_code = [genetic_code , new_gene;];
+                 
             populacao{j,1} = genetic_code;
             populacao{j,2} = score;
            end
+           
+           populacao{j,1} = eval_candidates(populacao{j,1},FuzzyType,Itype);
         end
         
 thebest = populacao(j,:);
@@ -107,7 +107,7 @@ while convergencia == 0,
                 memoria_thebest(geracao,:) = thebest;
  %% PASSO 3:
     %Seleção, Reprodução e Mutação:
-                
+              
                 filhos = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,lb,ub);%Reprodução dos individuos mais aptos
                 populacao = mutacao(populacao,prob_mutation,lb,ub);% Realiza a mutação sobre individuos da população
                 resto = escolher_resto(populacao,N_mais_aptos,populacao_size); %escolhe os outros valores para a proxima população
