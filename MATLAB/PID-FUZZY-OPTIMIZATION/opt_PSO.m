@@ -32,8 +32,8 @@ c2 = pso.c2;
             
             if (FT1type == 'L')
                 nVar = 14;
-                ub = [0,0, L,L,L, 2*L,2*L, 0,0, L,L,L, 2*L,2*L];
-                lb = [-2*L,-2*L, -L,-L,-L, 0,0, -2*L,-2*L, -L,-L,-L, 0,0];
+                ub = [0,0, 2*L,2*L,2*L, 2*L,2*L, 0,0, 2*L,2*L,2*L, 2*L,2*L];
+                lb = [-2*L,-2*L, -2*L,-2*L,-2*L, 0,0, -2*L,-2*L, -2*L,-2*L,-2*L, 0,0];
                 
             elseif (FT1type == 'N')
                 
@@ -78,7 +78,7 @@ position_history = zeros(noP , maxIter , nVar );
 %% Step1: Randomly initialize Swarm population of N particles
 
 for k = 1 : noP
-    Swarm.Particles(k).X = sort((ub-lb) .* rand(1,nVar) + lb);
+    Swarm.Particles(k).X = eval_candidates((ub-lb) .* rand(1,nVar) + lb, FuzzyType, FT1type);
     Swarm.Particles(k).V = zeros(1, nVar);
     Swarm.Particles(k).PBEST.X = zeros(1,nVar);
     Swarm.Particles(k).PBEST.O = inf;
@@ -140,7 +140,7 @@ for t = 1 : maxIter
         Swarm.Particles(k).X(index2) = lb(index2);
         
         %Check construction:
-        %Swarm.Particles(k).X = sort(Swarm.Particles(k).X);
+        Swarm.Particles(k).X = eval_candidates(Swarm.Particles(k).X,FuzzyType,FT1type);
         
     end
     

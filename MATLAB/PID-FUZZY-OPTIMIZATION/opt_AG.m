@@ -35,6 +35,9 @@ fobj = ag.objfunction
             if (FT1type == 'L')
                 gene_size = 14;
                 
+                ub = [0,0, 2*L,2*L,2*L, 2*L,2*L, 0,0, 2*L,2*L,2*L, 2*L,2*L];
+                lb = [-2*L,-2*L, -2*L,-2*L,-2*L, 0,0, -2*L,-2*L, -2*L,-2*L,-2*L, 0,0];
+                
             elseif (FT1type == 'N')
                 
                 gene_size = 12;
@@ -65,9 +68,6 @@ fobj = ag.objfunction
             
            for i=1:gene_size
                 new_gene = abs(-0.5+rand);
-                %saturation:
-                if(new_gene<lb) new_gene=lb;end;
-                if(new_gene>ub) new_gene=ub;end;
                 
                 genetic_code = [genetic_code , new_gene;];
                  
@@ -75,7 +75,18 @@ fobj = ag.objfunction
             populacao{j,2} = score;
            end
            
-           populacao{j,1} = eval_candidates(populacao{j,1},FuzzyType,Itype);
+          
+%                 if(new_gene<lb) new_gene=lb;end;
+%                 if(new_gene>ub) new_gene=ub;end;
+             %saturation:
+            index1 = find(populacao{j,1} > ub);
+            index2 = find(populacao{j,1} < lb);
+
+            populacao{j,1}(index1) = ub(index1);
+            populacao{j,1}(index2) = lb(index2);
+           
+            populacao{j,1} = eval_candidates(populacao{j,1},FuzzyType,FT1type);
+            
         end
         
 thebest = populacao(j,:);
@@ -108,8 +119,8 @@ while convergencia == 0,
  %% PASSO 3:
     %Seleção, Reprodução e Mutação:
               
-                filhos = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,lb,ub);%Reprodução dos individuos mais aptos
-                populacao = mutacao(populacao,prob_mutation,lb,ub);% Realiza a mutação sobre individuos da população
+                filhos = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,FT1type,lb,ub);%Reprodução dos individuos mais aptos
+                populacao = mutacao(populacao,prob_mutation,FT1type,lb,ub);% Realiza a mutação sobre individuos da população
                 resto = escolher_resto(populacao,N_mais_aptos,populacao_size); %escolhe os outros valores para a proxima população
                 clear populacao; %Limpa populacao
                 populacao = [teste;filhos;resto];%cria a proxima população que tera todos os elementos filhos criados com score = 0,
