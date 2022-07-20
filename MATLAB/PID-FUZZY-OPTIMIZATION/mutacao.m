@@ -1,4 +1,4 @@
-function pop =  mutacao(populacao,prob_mutation,FuzzyType,Itype,lb,ub)
+function pop =  mutacao(populacao,prob_mutation,FuzzyType,FT1type,FT2Itype,lb,ub)
 
     chromosome_lenght = size(populacao{1,1},2);
     populacao_size = size(populacao,1);
@@ -21,7 +21,7 @@ function pop =  mutacao(populacao,prob_mutation,FuzzyType,Itype,lb,ub)
                 
             end
             
-       mutante = eval_candidates(mutante,FuzzyType,Itype);
+       mutante = eval_candidates(mutante,FuzzyType,FT1type,FT2Itype);
        populacao{index,1}= mutante; 
      end
      pop = populacao;

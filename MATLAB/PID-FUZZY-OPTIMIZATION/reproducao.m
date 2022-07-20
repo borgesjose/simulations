@@ -1,4 +1,4 @@
-function pop = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,FuzzyType,Itype,lb,ub)
+function pop = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,FuzzyType,FT1type,FT2Itype,lb,ub)
         
             chromosome_lenght = size(populacao{1,1},2);
             
@@ -36,8 +36,8 @@ function pop = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,Fuz
                         end
                         %saturation:
 
-                        F1 = eval_candidates(F1,FuzzyType,Itype);
-                        F2 = eval_candidates(F2,FuzzyType,Itype);
+                        F1 = eval_candidates(F1,FuzzyType,FT1type,FT2Itype);
+                        F2 = eval_candidates(F2,FuzzyType,FT1type,FT2Itype);
                         
       
                         pop = [pop;{F1,score};{F2,score}];

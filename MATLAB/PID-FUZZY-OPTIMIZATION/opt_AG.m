@@ -41,6 +41,8 @@ fobj = ag.objfunction
             elseif (FT1type == 'N')
                 
                 gene_size = 12;
+                ub = [1,0, L,L, 1,2*L,  1,0, L,L, 1,2*L];
+                lb = [0,-2*L, -L,-L, 0,0, 0,-2*L, -L,-L, 0,0];
     
             end;
             
@@ -58,8 +60,8 @@ fobj = ag.objfunction
             end;
         end
         
-        ub = (L);%limite superior
-        lb = -(L);%limite inferior
+        %ub = (L);%limite superior
+        %lb = -(L);%limite inferior
         
         for j=1:populacao_size %A criação da população 
            
@@ -85,7 +87,7 @@ fobj = ag.objfunction
             populacao{j,1}(index1) = ub(index1);
             populacao{j,1}(index2) = lb(index2);
            
-            populacao{j,1} = eval_candidates(populacao{j,1},FuzzyType,FT1type);
+            populacao{j,1} = eval_candidates(populacao{j,1},FuzzyType,FT1type,FT2Itype);
             
         end
         
@@ -119,8 +121,8 @@ while convergencia == 0,
  %% PASSO 3:
     %Seleção, Reprodução e Mutação:
               
-                filhos = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,FuzzyType,FT1type,lb,ub);%Reprodução dos individuos mais aptos
-                populacao = mutacao(populacao,prob_mutation,FuzzyType,FT1type,lb,ub);% Realiza a mutação sobre individuos da população
+                filhos = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,FuzzyType,FT1type,FT2Itype,lb,ub);%Reprodução dos individuos mais aptos
+                populacao = mutacao(populacao,prob_mutation,FuzzyType,FT1type,FT2Itype,lb,ub);% Realiza a mutação sobre individuos da população
                 resto = escolher_resto(populacao,N_mais_aptos,populacao_size); %escolhe os outros valores para a proxima população
                 clear populacao; %Limpa populacao
                 populacao = [teste;filhos;resto];%cria a proxima população que tera todos os elementos filhos criados com score = 0,
@@ -161,7 +163,7 @@ title(['Convergence Performance'])
 
                 if (FuzzyType == 'T1'),
                     
-                    plot_pertinencias(gene,FT1type,L)
+                    plot_pertinencia_T1(gene,FT1type,L)
                     
                 end
                 

@@ -1,9 +1,9 @@
-function param = eval_candidates(param,FuzzyType,Itype),
+function param = eval_candidates(param,FuzzyType,FT1type,FT2Itype),
 
 
     if (FuzzyType == 'T1'),
 
-            if (Itype == 'L'),
+            if (FT1type == 'L'),
                 param_erro_N = param(1:2);
                 param_erro_Z = param(3:5);
                 param_erro_P = param(6:7);
@@ -21,7 +21,7 @@ function param = eval_candidates(param,FuzzyType,Itype),
                 if(param_rate_P(2)<= param_rate_P(1)) param_rate_P = sort(param_rate_P); end 
             
             
-            elseif (Itype == 'N'),
+            elseif (FT1type == 'N'),
                 param_erro_N = param(1:2);
                 param_erro_Z = param(3:4);
                 param_erro_P = param(5:6);
@@ -39,10 +39,10 @@ function param = eval_candidates(param,FuzzyType,Itype),
     
     if (FuzzyType == 'T2'),
              
-        if (Itype == 'L')
+        if (FT2Itype == 'L')
             
 
-        elseif (Itype == 'N')
+        elseif (FT2Itype == 'N')
             
         end;
         

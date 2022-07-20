@@ -20,7 +20,7 @@
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
         PIDflag = 0;
         FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
-        FT1type = 'L'; % L = input linear ; N = input non linear
+        FT1type = 'N'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
@@ -28,7 +28,7 @@
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
-        Opt_type = 'AG'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
+        Opt_type = 'PS'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
 
 %%        
         if(PIDflag) simName = 'PID';
@@ -64,7 +64,7 @@
         %% Step 6, Definições de otimização:
        
         % PSO
-            pso.noP = 8;
+            pso.noP = 16;
             pso.maxIter = 100;
             pso.wMax = 0.9;
             pso.wMin= 0.2;

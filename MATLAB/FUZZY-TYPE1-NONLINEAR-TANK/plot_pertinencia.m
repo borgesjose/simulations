@@ -1,6 +1,6 @@
 % Script para testas am Membership functions
 
-L = 8;
+L = 2;
 
 x=-2*L:0.001:2*L;
 y=-2*L:0.001:2*L;
@@ -11,7 +11,7 @@ rate = -2*L:0.001:2*L;
 param = [-L/2,0,L/2];
 paramT = [-L,-L/2,L/2,L];
 
-paramS = [0.8,0];
+paramS = [0.1379,0.0017];
 
 
 for i=1:length(x), % De 1 até o No. total de medidas da variavel linguistica...

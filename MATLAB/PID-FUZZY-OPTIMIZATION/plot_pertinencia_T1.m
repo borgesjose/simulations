@@ -1,4 +1,4 @@
-function plot_pertinencias(param,FT1type,L)
+function plot_pertinencia_T1(param,FT1type,L)
 %clear; clc; close all;
 
 x=-2*L:0.001:2*L;

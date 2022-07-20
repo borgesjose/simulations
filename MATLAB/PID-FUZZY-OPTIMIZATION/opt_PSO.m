@@ -38,8 +38,8 @@ c2 = pso.c2;
             elseif (FT1type == 'N')
                 
                 nVar =  12;
-                ub = [0,0, L,L, 1,2*L,  0,0, L,L, 1,2*L];
-                lb = [1,-2*L, -L,-L, 1,0, 1,-2*L, -L,-L, 0,0];
+                ub = [1,0, L,L, 1,2*L,  1,0, L,L, 1,2*L];
+                lb = [0,-2*L, -L,-L, 0,0, 0,-2*L, -L,-L, 0,0];
     
             end;
             
@@ -78,7 +78,7 @@ position_history = zeros(noP , maxIter , nVar );
 %% Step1: Randomly initialize Swarm population of N particles
 
 for k = 1 : noP
-    Swarm.Particles(k).X = eval_candidates((ub-lb) .* rand(1,nVar) + lb, FuzzyType, FT1type);
+    Swarm.Particles(k).X = eval_candidates((ub-lb) .* rand(1,nVar) + lb, FuzzyType, FT1type,FT2Itype);
     Swarm.Particles(k).V = zeros(1, nVar);
     Swarm.Particles(k).PBEST.X = zeros(1,nVar);
     Swarm.Particles(k).PBEST.O = inf;
@@ -140,7 +140,7 @@ for t = 1 : maxIter
         Swarm.Particles(k).X(index2) = lb(index2);
         
         %Check construction:
-        Swarm.Particles(k).X = eval_candidates(Swarm.Particles(k).X,FuzzyType,FT1type);
+        Swarm.Particles(k).X = eval_candidates(Swarm.Particles(k).X,FuzzyType,FT1type,FT2Itype);
         
     end
     
@@ -165,7 +165,7 @@ title(['Convergence Performance'])
 
                 if (FuzzyType == 'T1'),
                     
-                    plot_pertinencias(param,FT1type,L)
+                    plot_pertinencia_T1(param,FT1type,L)
                     
                 end
                 
