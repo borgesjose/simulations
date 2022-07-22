@@ -12,7 +12,7 @@ function param = opt_PSO(FuzzyType,FT1type,FT2Itype,L,pso)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %% Particle Swarm Optimization:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+folderName = pso.folder
 noP = pso.noP; 
 maxIter = pso.maxIter; 
 dataVis = pso.visFlag;
@@ -55,8 +55,8 @@ c2 = pso.c2;
             elseif (FT2Itype == 'N')
                 
                 nVar =  12;
-                ub = (2*L) * ones(1, nVar);
-                lb = -(2*L) * ones(1, nVar);
+                ub = (L) * ones(1, nVar);
+                lb = -(L) * ones(1, nVar);
                 
             end;
         end
@@ -153,7 +153,10 @@ for t = 1 : maxIter
     average_objective(t) = average_objective(t) / noP;
     
     fileName = ['Resluts after iteration # ' , num2str(t)];
-    save( ['./results/PSO/',fileName])
+    trail = ['./results/PS/',folderName];
+    if (~exist(trail))mkdir trail;end   
+    save( [trail,'/',fileName])
+    
 end
 GBEST = Swarm.GBEST;
 param = GBEST.X

@@ -21,7 +21,7 @@
         PIDflag = 0;
         FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'N'; % L = input linear ; N = input non linear
-        FT2Itype = 'L'; % L = input linear ; N = input non linear
+        FT2Itype = 'N'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
         flag_noise = 0;
@@ -29,6 +29,8 @@
         flag_model_severance = 0;
         
         Opt_type = 'PS'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
+        
+        folderName = 'h025';
 
 %%        
         if(PIDflag) simName = 'PID';
@@ -71,7 +73,7 @@
             pso.c1= 2;
             pso.c2= 2;
 
-
+            pso.folder = 'h025'
             pso.visFlag = 1;
             
 
@@ -80,7 +82,8 @@
         
        % AG
        
-            ag.prob_mutation = 0.10;%rand(1);
+            ag.prob_mutation = 0.10;%rand(1);+
+            
             ag.prob_crossover = 0.9;%rand(1);
             ag.geracoes = 50;
 
@@ -162,8 +165,8 @@
         h = zeros(nptos,1); % variavel de saida
         
         ref_type = 'st'; % st = step ; us = upper stair ; ls = lower stair;
-        patamar = 0.05;
-        passo = 0.10;
+        patamar = 0.10;
+        passo = 0.00;
         Tamostra = Ts;
     
         ref = ref_def(patamar,passo,nptos);
@@ -259,7 +262,8 @@
             su_pid = var(u)
             
             fileName = ['Resluts for PID - ' , PIDtype,' - ',ref_type,' - ',simName];
-            save( ['./results/',fileName])
+            
+            save( ['./results/',folderName,'/',fileName])
            [fig1,fig2] =  p_pid(ts,h,ref,u,tempo,Kp,Kd,Ki)
             
         elseif (FuzzyType == 'T1'),
@@ -278,7 +282,8 @@
                 su_t1 = var(u)
                 
             fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type, ' - ',ref_type,' - ',simName];
-            save( ['./results/',fileName])
+            
+            save( ['./results/', Opt_type,'/',folderName,'/',fileName])
             
              p_ft1(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 
@@ -296,7 +301,8 @@
                 su_t1 = var(u)
                 
                 fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type, ' - ',ref_type,' - ',simName];
-                save( ['./results/',fileName])
+                
+                save( ['./results/', Opt_type,'/',folderName,'/',fileName])
                 
                p_ft1_nl(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 
@@ -319,7 +325,8 @@
                 su_t2_li = var(u)
                 
                 fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype, ' - ',ref_type,' - ',simName];
-                save( ['./results/',fileName])
+                
+                save( ['./results/', Opt_type,'/',folderName,'/',fileName])
                 
                 p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 
@@ -337,7 +344,8 @@
                 su_t2_nli = var(u)
               
                 fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype, ' - ',ref_type,' - ',simName];
-                save( ['./results/',fileName])
+                
+                save( ['./results/', Opt_type,'/',folderName,'/',fileName])
                 
                 p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 

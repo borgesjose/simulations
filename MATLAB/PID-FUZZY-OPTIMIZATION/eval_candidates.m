@@ -32,10 +32,10 @@ function param = eval_candidates(param,FuzzyType,FT1type,FT2Itype),
 
             end;
 
-
+        param = [param_erro_N,param_erro_Z,param_erro_P,param_rate_N,param_rate_Z,param_rate_P];
     end
     
-    param = [param_erro_N,param_erro_Z,param_erro_P,param_rate_N,param_rate_Z,param_rate_P];
+    
     
     if (FuzzyType == 'T2'),
              
