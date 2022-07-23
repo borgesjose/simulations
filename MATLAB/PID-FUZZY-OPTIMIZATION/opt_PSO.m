@@ -154,7 +154,7 @@ for t = 1 : maxIter
     
     fileName = ['Resluts after iteration # ' , num2str(t)];
     trail = ['./results/PS/',folderName];
-    if (~exist(trail))mkdir trail;end   
+    if (~exist(trail)) mkdir(trail);end   
     save( [trail,'/',fileName])
     
 end

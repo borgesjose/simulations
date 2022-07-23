@@ -11,7 +11,7 @@ function [gene] = opt_AG(FuzzyType,FT1type,FT2Itype,L,ag)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %% Algoritmo genetico:
 dataVis = ag.visFlag;
-folderName = ag.
+folderName = ag.folder;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Definições do AG
 %Parametro de reprodução:
@@ -176,7 +176,7 @@ title(['Convergence Performance'])
 
     fileName = ['Resluts for AG - ', FuzzyType];
     trail = ['./results/AG/',folderName];
-    if (~exist(trail))mkdir trail;end   
+    if (~exist(trail)) mkdir(trail);end   
     save( [trail,'/',fileName])
 
 end

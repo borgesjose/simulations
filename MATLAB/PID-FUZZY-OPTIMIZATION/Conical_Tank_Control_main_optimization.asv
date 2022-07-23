@@ -262,6 +262,9 @@
             su_pid = var(u)
             
             fileName = ['Resluts for PID - ' , PIDtype,' - ',ref_type,' - ',simName];
+    trail = ['./results/PS/',folderName];
+    if (~exist(trail))mkdir trail;end   
+    save( [trail,'/',fileName])
             save( ['./results/',folderName,'/',fileName])
            [fig1,fig2] =  p_pid(ts,h,ref,u,tempo,Kp,Kd,Ki)
             
@@ -281,6 +284,7 @@
                 su_t1 = var(u)
                 
             fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type, ' - ',ref_type,' - ',simName];
+            
             save( ['./results/', Opt_type,'/',folderName,'/',fileName])
             
              p_ft1(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
@@ -299,6 +303,7 @@
                 su_t1 = var(u)
                 
                 fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type, ' - ',ref_type,' - ',simName];
+                
                 save( ['./results/', Opt_type,'/',folderName,'/',fileName])
                 
                p_ft1_nl(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
@@ -322,6 +327,7 @@
                 su_t2_li = var(u)
                 
                 fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype, ' - ',ref_type,' - ',simName];
+                
                 save( ['./results/', Opt_type,'/',folderName,'/',fileName])
                 
                 p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)

@@ -73,7 +73,7 @@
             pso.c1= 2;
             pso.c2= 2;
 
-            pso.folder = 'h025'
+            pso.folder = folderName
             pso.visFlag = 1;
             
 
@@ -93,6 +93,7 @@
             ag.objfunction = @objfunc;
             
             ag.visFlag = 1;
+            ag.folder = folderName;
    
             L = 2;
         %% Step 7, Otimização:
@@ -262,8 +263,10 @@
             su_pid = var(u)
             
             fileName = ['Resluts for PID - ' , PIDtype,' - ',ref_type,' - ',simName];
-            
-            save( ['./results/',folderName,'/',fileName])
+            trail = ['./results/',folderName];
+            if (~exist(trail)) mkdir(trail);end   
+            save( [trail,'/',fileName])
+
            [fig1,fig2] =  p_pid(ts,h,ref,u,tempo,Kp,Kd,Ki)
             
         elseif (FuzzyType == 'T1'),
@@ -282,8 +285,10 @@
                 su_t1 = var(u)
                 
             fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type, ' - ',ref_type,' - ',simName];
+            trail = ['./results/', Opt_type,'/',folderName];
+            if (~exist(trail)) mkdir(trail);end   
+            save( [trail,'/',fileName])
             
-            save( ['./results/', Opt_type,'/',folderName,'/',fileName])
             
              p_ft1(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 
@@ -301,8 +306,9 @@
                 su_t1 = var(u)
                 
                 fileName = ['Resluts for PID - FT1-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT1type, ' - ',ref_type,' - ',simName];
-                
-                save( ['./results/', Opt_type,'/',folderName,'/',fileName])
+                trail = ['./results/', Opt_type,'/',folderName];
+                if (~exist(trail)) mkdir(trail);end   
+                save( [trail,'/',fileName])
                 
                p_ft1_nl(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 
@@ -326,7 +332,9 @@
                 
                 fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype, ' - ',ref_type,' - ',simName];
                 
-                save( ['./results/', Opt_type,'/',folderName,'/',fileName])
+                trail = ['./results/', Opt_type,'/',folderName];
+                if (~exist(trail)) mkdir(trail);end   
+                save( [trail,'/',fileName])
                 
                 p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 
@@ -345,7 +353,9 @@
               
                 fileName = ['Resluts for PID - FT2-FG ' , PIDtype, ' - ', FuzzyType ,' - ' , FT2Itype, ' - ',ref_type,' - ',simName];
                 
-                save( ['./results/', Opt_type,'/',folderName,'/',fileName])
+                trail = ['./results/', Opt_type,'/',folderName];
+                if (~exist(trail)) mkdir(trail);end   
+                save( [trail,'/',fileName])
                 
                 p_ft2(ts,h,ref,u,tempo,Kp,Kd,Ki,Am)
                 
