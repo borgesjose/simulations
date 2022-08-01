@@ -68,9 +68,9 @@ fobj = ag.objfunction
            
            genetic_code = [];
            score = 0;
-            
+           xx = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L]; 
            for i=1:gene_size
-                new_gene = abs(-0.5+rand);
+                new_gene = xx(i)+rand;%abs(xx(i)+rand)
                 
                 genetic_code = [genetic_code , new_gene;];
                  
@@ -87,7 +87,7 @@ fobj = ag.objfunction
 
             populacao{j,1}(index1) = ub(index1);
             populacao{j,1}(index2) = lb(index2);
-           
+           %sort(populacao{j,1});
             populacao{j,1} = eval_candidates(populacao{j,1},FuzzyType,FT1type,FT2Itype);
             
         end
@@ -106,7 +106,8 @@ while convergencia == 0,
     
     for hh=1:populacao_size %Etapa de avaliação da população para o AG   
         script_PID_FXX_FG; %Chama o script com o controlador implementado
-        J=fobj(erro,tempo,'ITAE');
+        Mp = max(h);
+        J= 2*Mp + fobj(erro,tempo,'ITAE');
         populacao{hh,2} = (1/J)*10^4;
     end
     

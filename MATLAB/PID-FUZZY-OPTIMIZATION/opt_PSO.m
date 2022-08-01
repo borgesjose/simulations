@@ -78,7 +78,7 @@ position_history = zeros(noP , maxIter , nVar );
 %% Step1: Randomly initialize Swarm population of N particles
 
 for k = 1 : noP
-    Swarm.Particles(k).X = eval_candidates((ub-lb) .* rand(1,nVar) + lb, FuzzyType, FT1type,FT2Itype);
+    Swarm.Particles(k).X = sort((ub-lb) .* rand(1,nVar) + lb);%eval_candidates((ub-lb) .* rand(1,nVar) + lb, FuzzyType, FT1type,FT2Itype);
     Swarm.Particles(k).V = zeros(1, nVar);
     Swarm.Particles(k).PBEST.X = zeros(1,nVar);
     Swarm.Particles(k).PBEST.O = inf;
@@ -96,8 +96,8 @@ for t = 1 : maxIter
         position_history(k , t , : ) = currentX;
         
         script_PID_FXX_FG_PSO;
-        
-        Swarm.Particles(k).O = fobj(erro,tempo,'ITAE');%fobj(currentX);
+        Mp = max(h);
+        Swarm.Particles(k).O = 2*Mp + fobj(erro,tempo,'ITAE');%fobj(erro,tempo,'ITAE');%fobj(currentX);
         average_objective(t) =  average_objective(t)  + Swarm.Particles(k).O;
         
         % Update the PBEST
@@ -140,7 +140,8 @@ for t = 1 : maxIter
         Swarm.Particles(k).X(index2) = lb(index2);
         
         %Check construction:
-        Swarm.Particles(k).X = eval_candidates(Swarm.Particles(k).X,FuzzyType,FT1type,FT2Itype);
+        Swarm.Particles(k).X = sort(Swarm.Particles(k).X);
+        %Swarm.Particles(k).X = eval_candidates(Swarm.Particles(k).X,FuzzyType,FT1type,FT2Itype);
         
     end
     

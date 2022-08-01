@@ -21,7 +21,7 @@ function pop =  mutacao(populacao,prob_mutation,FuzzyType,FT1type,FT2Itype,lb,ub
                 
             end
             
-       mutante = eval_candidates(mutante,FuzzyType,FT1type,FT2Itype);
+       mutante = eval_candidates(mutante,FuzzyType,FT1type,FT2Itype);%sort(mutante);
        populacao{index,1}= mutante; 
      end
      pop = populacao;
