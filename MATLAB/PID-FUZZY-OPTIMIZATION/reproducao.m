@@ -28,10 +28,8 @@ function pop = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,Fuz
                             u = int_min + (int_max-int_min)*rand;
                             F2(i) =  abs(u);
                             
-                        if(F1(i)<lb) F1(i)=lb;end;
-                        if(F1(i)>ub) F1(i)=ub;end;
-                        if(F2(i)<lb) F2(i)=lb;end;
-                        if(F2(i)>ub) F2(i)=ub;end;
+                        if abs(F1(i))>1;F1(i)=1;end
+                        if abs(F2(i))>1;F2(i)=1;end
                                    
                         end
                         
