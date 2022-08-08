@@ -159,6 +159,7 @@ for t = 1 : maxIter
     save( [trail,'/',fileName])
     
 end
+%%
 GBEST = Swarm.GBEST;
 param = GBEST.X
 figure;
@@ -178,5 +179,5 @@ title(['Convergence Performance'])
                     plot_pertinencias_T2(param,FT2Itype,L)
                     
                 end
-        
+ %%       
 end
