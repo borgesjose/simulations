@@ -14,7 +14,9 @@
 
 %% Step 1, simulation definition:
         %clear;clc;
-        
+        format shortg;
+        data_horario_test = datestr(clock);
+       
         Tsim = 500; % Total simulation time
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
@@ -30,7 +32,7 @@
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
         
-        folderName = ['h015','-',Opt_type];
+        folderName = ['h015','-',Opt_type,'-',data_horario_test];
 
 %%        
         if(PIDflag) simName = 'PID';
@@ -66,11 +68,11 @@
         %% Step 6, Definições de otimização:
        
         % PSO
-            pso.noP = 16;
+            pso.noP = 30;
             pso.maxIter = 100;
             pso.wMax = 0.9;
             pso.wMin= 0.2;
-            pso.c1= 2;
+            pso.c1= 3;
             pso.c2= 2;
 
             pso.folder = folderName

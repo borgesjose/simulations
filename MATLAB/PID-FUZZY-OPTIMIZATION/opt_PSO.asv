@@ -1,4 +1,4 @@
-function param = opt_PSO(FuzzyType,FT1type,FT2Itype,L,pso)
+00function param = opt_PSO(FuzzyType,FT1type,FT2Itype,L,pso)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 % Universidade Federal do Piauí                       %
@@ -32,8 +32,8 @@ c2 = pso.c2;
             
             if (FT1type == 'L')
                 nVar = 14;
-                ub = [0,0, L,L,L, L,L, 0,0, L,L,L, L,L];
-                lb = [-L,-L, -L,L,-L, 0,0, -L,-L, -L,-L,-L, 0,0];
+                ub = [0,0, 2*L,2*L,2*L, 2*L,2*L, 0,0, 2*L,2*L,2*L, 2*L,2*L];
+                lb = [-2*L,-2*L, -2*L,-2*L,-2*L, 0,0, -2*L,-2*L, -2*L,-2*L,-2*L, 0,0];
                 
             elseif (FT1type == 'N')
                 
@@ -164,7 +164,7 @@ param = GBEST.X
 figure;
 plot(cgCurve);
 xlabel('Iteração');
-ylabel('J1');
+ylabel('ITAE');
 title(['Convergence Performance'])
 
                 if (FuzzyType == 'T1'),
