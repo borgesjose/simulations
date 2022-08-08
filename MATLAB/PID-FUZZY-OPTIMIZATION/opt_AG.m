@@ -53,6 +53,8 @@ fobj = ag.objfunction
             if (FT2Itype == 'L')
                 
                 gene_size = 16;
+                ub = (L) * ones(1, gene_size);
+                lb = -(L) * ones(1, gene_size);
                 
             elseif (FT2Itype == 'N')
                 
@@ -68,27 +70,40 @@ fobj = ag.objfunction
            
            genetic_code = [];
            score = 0;
-           xx = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L]; 
-           for i=1:gene_size
-                new_gene = xx(i)+rand;%abs(xx(i)+rand)
-                
-                genetic_code = [genetic_code , new_gene;];
-                 
-            populacao{j,1} = genetic_code;
-            populacao{j,2} = score;
-           end
+           if (FuzzyType == 'T1')
+               xx = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
+
+               for i=1:gene_size
+                    new_gene = xx(i)+rand;%abs(xx(i)+rand)
+
+                    genetic_code = [genetic_code , new_gene;];
+
+                populacao{j,1} = genetic_code;
+                populacao{j,2} = score;
+               end
+               
+           else
+               for i=1:gene_size
+                   
+                    new_gene = abs(rand);
+                    genetic_code = [genetic_code , new_gene;];
+
+                populacao{j,1} = genetic_code;
+                populacao{j,2} = score;
+               end
            
+           end;
           
-%                 if(new_gene<lb) new_gene=lb;end;
-%                 if(new_gene>ub) new_gene=ub;end;
+            %if(new_gene<lb) new_gene=lb;end;
+            %if(new_gene>ub) new_gene=ub;end;
              %saturation:
             index1 = find(populacao{j,1} > ub);
             index2 = find(populacao{j,1} < lb);
 
             populacao{j,1}(index1) = ub(index1);
             populacao{j,1}(index2) = lb(index2);
-           %sort(populacao{j,1});
-            populacao{j,1} = eval_candidates(populacao{j,1},FuzzyType,FT1type,FT2Itype);
+            populacao{j,1} = sort(populacao{j,1});
+            %populacao{j,1} = eval_candidates(populacao{j,1},FuzzyType,FT1type,FT2Itype);
             
         end
         
@@ -159,7 +174,7 @@ gene = thebest{1,1}
 figure;
 plot((1./[memoria_thebest{:,2}])*10^4);
 xlabel('Iteração');
-ylabel('ITAE');
+ylabel('J1');
 title(['Convergence Performance'])
 
 

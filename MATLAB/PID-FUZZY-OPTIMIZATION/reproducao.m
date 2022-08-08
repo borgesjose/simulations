@@ -35,8 +35,8 @@ function pop = reproducao(populacao,mais_aptos,populacao_size,prob_crossover,Fuz
                         
                         %saturation:
 
-                        F1 =  eval_candidates(F1,FuzzyType,FT1type,FT2Itype);%sort(F1);
-                        F2 =  eval_candidates(F2,FuzzyType,FT1type,FT2Itype);%sort(F2);
+                        F1 =  sort(F1);%eval_candidates(F1,FuzzyType,FT1type,FT2Itype);
+                        F2 =  sort(F2);%eval_candidates(F2,FuzzyType,FT1type,FT2Itype);
                         
       
                         pop = [pop;{F1,score};{F2,score}];

@@ -28,9 +28,9 @@
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
-        Opt_type = 'AG'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
+        Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
         
-        folderName = ['h030','-',Opt_type];
+        folderName = ['h015','-',Opt_type];
 
 %%        
         if(PIDflag) simName = 'PID';
@@ -147,14 +147,14 @@
             
             %Resultado´para AG:
             %param = [0.1809,0.3258,0.1362,0.2374,0.0156,0.2217,0.6816,0.0021,0.5516,0.2100,0.0979,0.0679,0.0178,0.2848,1.8989,0.0048]
-            
+            param =[param,1,1];
             %Resultado para PSO:
             if (Opt_type == 'NO')
                 param = .3*ones(1,16);
                 param =[param,1,1];
             end;
             
-           
+            
         elseif (FT2Itype == 'N')
             %gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
             %param=[0.3232,0.4712,0.0218,0.4454,0.5986,0.1102,0.2554,0.0081,0.3159,1.9916,0.9286,0.2525];
@@ -178,8 +178,8 @@
         h = zeros(nptos,1); % variavel de saida
         
         ref_type = 'st'; % st = step ; us = upper stair ; ls = lower stair;
-        patamar = 0.30;
-        passo = 0.00;
+        patamar = 0.15;
+        passo = 0.05;
         Tamostra = Ts;
     
         ref = ref_def(patamar,passo,nptos);
