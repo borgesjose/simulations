@@ -15,13 +15,13 @@
 %% Step 1, simulation definition:
         %clear;clc;
         format shortg;
-        data_horario_test = datestr(clock);
+        data_horario_test = datestr(clock,'yyyy-mm-dd THH-MM-SS');
        
         Tsim = 500; % Total simulation time
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
-        PIDflag = 0;
-        FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
+        PIDflag = 1;
+        FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
         
@@ -32,7 +32,7 @@
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
         
-        folderName = ['h015','-',Opt_type,'-',data_horario_test];
+        folderName = ['h015', '-', FuzzyType,'-',Opt_type,'-',data_horario_test];
 
 %%        
         if(PIDflag) simName = 'PID';
