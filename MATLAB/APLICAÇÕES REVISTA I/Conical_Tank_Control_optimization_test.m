@@ -4,13 +4,13 @@
 % Copyright 2022 -Jose Borges do Carmo Neto           %
 % @author Jose Borges do Carmo Neto                   %
 % @email jose.borges90@hotmail.com                    %
-%  Otimização metaheuristica dos controladores PID    %
+%  Teste dos controladores PID  otimizados            %
 %  Fuzzy tipo 1 e  tipo 2 Intervalar                  %
 %                                                     %
-%  -- Version: 0.1  - 14/06/2022                      %
+%  -- Version: 0.1  - 14/08/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Main script for metaheuristic optimization algorithms applied to a conical tank
+% Main script for test of optimal controllers applied to a conical tank
 
 %% Step 1, simulation definition:
         %clear;clc;
@@ -64,49 +64,6 @@
         %% Step 3 - Controller definition: 
 
         [Kc,Ti,Td] = PID(PIDtype); % Type PID selection 
-
-        %% Step 6, Definições de otimização:
-       
-        % PSO
-            pso.noP = 30;
-            pso.maxIter = 100;
-            pso.wMax = 0.9;
-            pso.wMin= 0.2;
-            pso.c1= 3;
-            pso.c2= 2;
-
-            pso.folder = folderName
-            pso.visFlag = 1;
-            
-
-            pso.fobj = @objfunc;
-
-        
-       % AG
-       
-            ag.prob_mutation = 0.10;%rand(1);+
-            
-            ag.prob_crossover = 0.9;%rand(1);
-            ag.geracoes = 50;
-
-            ag.populacao_size = 128; %defino o tamanho da população
-            ag.N_mais_aptos = 32;
-
-            ag.objfunction = @objfunc;
-            
-            ag.visFlag = 1;
-            ag.folder = folderName;
-   
-            L = 2;
-        %% Step 7, Otimização:
-        
-        if(Opt_type == 'AG') 
-            [param] = opt_AG(FuzzyType,FT1type,FT2Itype,L,ag);
-        end;
-        if(Opt_type == 'PS')         
-            [param] = opt_PSO(FuzzyType,FT1type,FT2Itype,L,pso);
-        end;
-        
         
 %% Step 4  - Controller definition:        
 
@@ -124,10 +81,24 @@
         
         % o vetor parametros dá os valores das MF's
         if (FT1type == 'L')
+            if (Opt_type == 'AG')
+                param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
+            end;
+            if (Opt_type == 'PS')
+                param = [-1.1315,-0.9545,0,0, 0.4670, 0.5544, 0.7647, 1.2665, 1.2889, 1.4262, 1.8816, 1.9272, 2.0000, 2.0000];
+            end;
+            
             if (Opt_type == 'NO')
                 param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
             end;
+        
         elseif (FT1type == 'N')
+            if (Opt_type == 'AG')
+                param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
+            end;
+            if (Opt_type == 'PS')
+                param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
+            end;            
             if (Opt_type == 'NO')
                 param = [-L,0,-L,0,L,0,L,-L,0,-L,0,L,0,L];
             end;
@@ -145,18 +116,21 @@
         
         % o vetor parametros dá os valores das MF's:        
         if (FT2Itype == 'L')
-            %gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
             
-            %Resultado´para AG:
-            %param = [0.1809,0.3258,0.1362,0.2374,0.0156,0.2217,0.6816,0.0021,0.5516,0.2100,0.0979,0.0679,0.0178,0.2848,1.8989,0.0048]
-            param =[param,1,1];
             %Resultado para PSO:
-            if (Opt_type == 'NO')
-                param = .3*ones(1,16);
-                param =[param,1,1];
+            if (Opt_type == 'AG')
+                param = .3*ones(1,16);   
             end;
             
+            if (Opt_type == 'PS')
+                param = [ -4.0000,-3.9509,-2.9262,-2.7615,-1.5759,-1.5165,-0.9248,-0.7246,-0.2196, 1.1298, 1.5116, 1.6241, 1.7757, 2.8473,3.2940,4.0000];   
+            end;
             
+            if (Opt_type == 'NO')
+                param = .3*ones(1,16);   
+            end;
+            
+        param =[param,1,1];    
         elseif (FT2Itype == 'N')
             %gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
             %param=[0.3232,0.4712,0.0218,0.4454,0.5986,0.1102,0.2554,0.0081,0.3159,1.9916,0.9286,0.2525];
