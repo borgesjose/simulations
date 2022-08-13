@@ -53,8 +53,7 @@ end ;
 
     n = 30; % Numero de pontos de análise
 
-    eps = 0.01;
-    
+    eps = 0.01; 
     d = 12e-4;
 
     %nptos = 100;
@@ -68,16 +67,13 @@ end ;
     grid;
     plot(yr,'c-');
     hold on;
-    figure;
-    ddd = 1*10^3;
-    plot(ur);
+    %figure;
+    ddd = 1;
+    plot(ur*10^3);
 %% 4 Identificar os parametros a partir do experimento com relé:
     
 %    [gw,w,arm,Kp]=Identificar(n, d, eps,Ts,yr,ur);
-tc1 = Ts;
-y = yr;
-u = ur;
-%%
+tc1     
     %********** Calculo do Valor de Pico **************
 arm=0;
 for t=1:n,

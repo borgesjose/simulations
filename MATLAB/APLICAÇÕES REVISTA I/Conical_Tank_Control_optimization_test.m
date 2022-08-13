@@ -20,7 +20,7 @@
         Tsim = 500; % Total simulation time
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
-        PIDflag = 0;
+        PIDflag = 1;
         FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
@@ -30,9 +30,9 @@
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
-        Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
+        Opt_type = 'PS'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
         
-        folderName = ['h015', '-', FuzzyType,'-',Opt_type,'-',data_horario_test];
+        folderName = ['h005', '-', FuzzyType,'-',Opt_type,'-',data_horario_test];
 
 %%        
         if(PIDflag) simName = 'PID';
@@ -154,8 +154,8 @@
         h = zeros(nptos,1); % variavel de saida
         
         ref_type = 'st'; % st = step ; us = upper stair ; ls = lower stair;
-        patamar = 0.15;
-        passo = 0.05;
+        patamar = 0.05;
+        passo = 0.00;
         Tamostra = Ts;
     
         ref = ref_def(patamar,passo,nptos);
@@ -189,6 +189,8 @@
                 erro(i)=ref(i) - h(i) ; %Erro
             elseif( flag_sinusoidal_dist)
                  erro(i)=ref(i) - h(i) + sinusoidal_dist(ts(i))
+            elseif( flag_noise)
+                erro(i)=ref(i) - h(i) + ruido(i)
             else
                 erro(i)=ref(i) - h(i);
             end
