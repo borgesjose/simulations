@@ -11,10 +11,11 @@ function [h,u]=rele_h_nl(n, Tc, d, eps, A,Cd);
     h(1)=0.01 ; h(2)=0.01 ; h(3)=0.01 ; h(4)=0.01; h(5)=0.01;
 
     u(1)=0.00001 ; u(2)=0.00001 ; u(3)=0.00001 ; u(4)=0.00001; u(5)=dmax;
-
+    h0 = h(5);
+    
     for i=5:n,
         
-        [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i),Cd),[0,Tc],h(i));
+        [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i),Cd),[0,Tc],h0);
         h0 = y(end); % take the last point
         h(i+1) = h0; % store the height for plotting
 

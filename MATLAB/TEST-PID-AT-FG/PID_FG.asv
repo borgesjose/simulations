@@ -1,0 +1,100 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+% Universidade Federal do Piauí                       %
+% Campus Ministro Petronio Portela                    %
+% Copyright 2022 -José Borges do Carmo Neto-          %
+% @author José Borges do Carmo Neto                   %
+% @email jose.borges90@hotmail.com                    %
+%  PID controller for the Phase                      %
+%  and Gain Margins of the System                     % 
+%                                                     %
+%  -- Version: 2.0  - 13/08/2022                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Definir o vetor tempo:
+Ts = 5; % periodo de amostragem para processo de um tanque ( Landau,2006)
+Tsim = 1500;
+nptos = Tsim/Ts;
+ts = linspace(0,Tsim,nptos);
+Tamostra = Ts;
+
+%% Dados do problema:
+
+h0 = 0.01; % ponto inicial
+
+u = zeros(nptos,1); % variavel de entrada
+h = zeros(nptos,1); % variavel de saida
+
+Cv = 0.97; %velocity coefficient (water 0.97)
+Cc = 0.97; %contraction coefficient (sharp edge aperture 0.62, well rounded aperture 0.97)
+
+Cd = Cc*Cv; % discharge coefficient
+
+r = 0.008;% raio do orificio de saida em metros
+
+A = pi*r^2;% Area do orificio de saida
+
+%% Relay Identification:
+% Agora é o momento de aplicar o relé a planta: (rele com histerese)
+% Chama a função rele com histerese passando os paramentros do rele e os polos e ganho do proceso de 2 ordem
+% Retorna o vetor yr, e ur com os resultados da aplicação do relé:
+
+n = 30; % Numero de pontos de análise
+d0 = 12e-4;
+d = 9e-4;
+dmax = d0+d;
+dmin = d0-d;
+eps = 0.01;
+
+
+[yr,ur] = histeresis_relay(n, Ts, d0, d, d, eps, A,Cd);
+    
+figure;
+grid;
+plot(yr,'c-');
+hold on;
+figure;
+ddd = 1*10^3;
+plot(ur);
+
+%%
+% --- Calcula período
+kont = 0;								
+for t = 4:n,								
+   if ur(t) ~= ur(t-1)
+      kont = kont + 1;
+      ch(kont) = t;
+   end
+end
+
+%%
+Tu1 = (ch(7) - ch(6))*Tamostra;
+Tu2 = (ch(8) - ch(7))*Tamostra;
+Tu = Tu1 + Tu2 %Periodo critico;
+omega = (2*pi)/(Tu)
+aux1 = ch(5);aux2 = ch(7);
+% --- Calcula valor de pico positivo
+arm = eps;										
+for t = aux1:aux2,
+   if yr(t) >= arm  arm = yr(t); end;
+end;
+Au = arm;
+% --- Calcula valor de pico negativo
+arm = eps;										
+for t = aux1:aux2,
+   if yr(t) <= arm  arm = yr(t); end;
+end;
+Ad = arm;
+a = (abs(Au) + abs(Ad))/2
+% --- Calcula ganho critico
+Ku = (4*d)/(pi*sqrt(a^2 - eps^2));
+% --- Constantes da planta
+
+
+%% PID-FG Tuning:
+
+%% --- Sintonia por Ziegler-Nichols
+Kc = 0.6*Ku
+Ti = 0.5*Tu
+Td = Ti/4
+
+
+%%

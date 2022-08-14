@@ -30,7 +30,7 @@
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
         
-        Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
+        Opt_type = 'PS'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
         
         folderName = ['h015', '-', FuzzyType,'-',Opt_type,'-',data_horario_test];
 
@@ -68,11 +68,11 @@
         %% Step 6, Definições de otimização:
        
         % PSO
-            pso.noP = 30;
+            pso.noP = 64;
             pso.maxIter = 100;
             pso.wMax = 0.9;
             pso.wMin= 0.2;
-            pso.c1= 3;
+            pso.c1= 2;
             pso.c2= 2;
 
             pso.folder = folderName
@@ -137,9 +137,9 @@
     end
     
     if (FuzzyType == 'T2'),
-        Am_min = 2;
+        Am_min = 1;
         Am_max = 5;
-        Theta_m_min = 45;
+        Theta_m_min = 35;
         Theta_m_max = 72;
         L = 2;
         

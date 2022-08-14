@@ -97,7 +97,7 @@ for t = 1 : maxIter
         
         script_PID_FXX_FG_PSO;
         Mp = max(h);
-        Swarm.Particles(k).O = 2*Mp + fobj(erro,tempo,'ITAE');%fobj(erro,tempo,'ITAE');%fobj(currentX);
+        Swarm.Particles(k).O = 2*Mp + fobj(erro,tempo,'IAE');%fobj(erro,tempo,'ITAE');%fobj(currentX);
         average_objective(t) =  average_objective(t)  + Swarm.Particles(k).O;
         
         % Update the PBEST
