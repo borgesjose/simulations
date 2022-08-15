@@ -20,14 +20,14 @@
         Tsim = 500; % Total simulation time
         
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
-        PIDflag = 1;
+        PIDflag = 0;
         FuzzyType = 'T2';% 'T1' = Tipo 1, 'T2' = Tipo 2;
         FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
         flag_noise = 0;
-        flag_sinusoidal_dist = 0;
+        flag_sinusoidal_dist = 0; r_level = 1.0e-2;
         flag_model_severance = 0;
         
         Opt_type = 'PS'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
@@ -188,7 +188,8 @@
             if( flag_model_severance)
                 erro(i)=ref(i) - h(i) ; %Erro
             elseif( flag_sinusoidal_dist)
-                 erro(i)=ref(i) - h(i) + sinusoidal_dist(ts(i))
+                 rr_ss(i) = r_senoide(ts(i),r_level,0.3);
+                 erro(i)= ref(i) - h(i) + r_senoide(ts(i),r_level,0.3); %rr_ss(i);%ruido_senoidal_db(ts(i),db_level);
             elseif( flag_noise)
                 erro(i)=ref(i) - h(i) + ruido(i)
             else
@@ -453,7 +454,17 @@
             
         end;
         
-        if(flag_sinusoidal_dist) plot_ruido_senoide(ts); end;
+        if(flag_sinusoidal_dist)
+             figure
+            plot(rr_ss);
+           
+            ruido_db_level = snr(h',rr_ss)
+        end;%plot_ruido_senoide(ts); end;
+        
         if( flag_noise) plot_ruido(ts,ruido); end;
+        
+
+        
+        
 
         

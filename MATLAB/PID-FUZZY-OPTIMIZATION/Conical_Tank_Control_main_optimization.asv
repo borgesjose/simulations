@@ -28,7 +28,7 @@
         
         flag_load_dist = 0; 
         flag_noise = 0;
-        flag_sinusoidal_dist = 1; r_level = 1.5e-2;
+        flag_sinusoidal_dist = 1;
         flag_model_severance = 0;
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm ; NO = No optimization
@@ -215,8 +215,8 @@
             if( flag_model_severance)
                 erro(i)= ref(i) - h(i) ; %Erro
             elseif( flag_sinusoidal_dist)
-                 rr_ss(i) = r_senoide(ts(i),r_level,0.3);
-                 erro(i)= ref(i) - h(i) + r_senoide(ts(i),r_level,0.3); %rr_ss(i);%ruido_senoidal_db(ts(i),db_level);
+                 rr_ss(i) = r_senoide(ts(i),1.5e-2,0.3);
+                 erro(i)= ref(i) - h(i) + r_senoide(ts(i),1.5e-2,0.3); %rr_ss(i);%ruido_senoidal_db(ts(i),db_level);
             else
                 erro(i)= ref(i) - h(i);
             end
@@ -479,7 +479,7 @@
             
         end;
         
-        if(flag_sinusoidal_dist) plot(rr_ss); end;%plot_ruido_senoide(ts); end;
+        if(flag_sinusoidal_dist) plot_ruido_senoide(ts); end;
         if( flag_noise) plot_ruido(ts,ruido); end;
 
         
