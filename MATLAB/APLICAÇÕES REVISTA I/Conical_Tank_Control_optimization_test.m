@@ -123,7 +123,8 @@
             end;
             
             if (Opt_type == 'PS')
-                param = [ -4.0000,-3.9509,-2.9262,-2.7615,-1.5759,-1.5165,-0.9248,-0.7246,-0.2196, 1.1298, 1.5116, 1.6241, 1.7757, 2.8473,3.2940,4.0000];   
+                %param = [ -4.0000,-3.9509,-2.9262,-2.7615,-1.5759,-1.5165,-0.9248,-0.7246,-0.2196, 1.1298, 1.5116, 1.6241, 1.7757, 2.8473,3.2940,4.0000];
+                param = [-3.9942,-3.3537,-3.3442,-3.0757,-3.0199,-2.5421,-2.3652,-2.114,-1.8211,-1.2238,0.98891,1.0293,1.4328,1.8321,1.9001,1.973];
             end;
             
             if (Opt_type == 'NO')
@@ -134,6 +135,15 @@
         elseif (FT2Itype == 'N')
             %gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
             %param=[0.3232,0.4712,0.0218,0.4454,0.5986,0.1102,0.2554,0.0081,0.3159,1.9916,0.9286,0.2525];
+           if (Opt_type == 'AG')
+                param = .3*ones(1,16);   
+            end;
+            
+            if (Opt_type == 'PS')
+                
+                param = [-3.9942,-3.3537,-3.3442,-3.0757,-3.0199,-2.5421,-2.3652,-2.114,-1.8211,-1.2238,0.98891,1.0293,1.4328,1.8321,1.9001,1.973];
+            end;
+            
             if (Opt_type == 'NO')
                 param = .3*ones(1,12);
             end;
@@ -153,9 +163,9 @@
         u = zeros(nptos,1); % variavel de entrada
         h = zeros(nptos,1); % variavel de saida
         
-        ref_type = 'st'; % st = step ; us = upper stair ; ls = lower stair;
+        ref_type = 'us'; % st = step ; us = upper stair ; ls = lower stair;
         patamar = 0.05;
-        passo = 0.00;
+        passo = 0.10;
         Tamostra = Ts;
     
         ref = ref_def(patamar,passo,nptos);
@@ -253,6 +263,8 @@
             sy_pid= var(h)
             su_pid = var(u)
             
+            [ Mp_pid, Te_pid, Ms_pid ] =  find_Mp_Te_Ms(h,ref,Ts);
+            
             fileName = ['Resluts for PID - ' ,' - ', Opt_type , ' - ', PIDtype,' - ',ref_type,' - ',simName];
             trail = ['./results/',folderName];
             if (~exist(trail)) mkdir(trail);end   
@@ -273,6 +285,8 @@
                     IAE_t1  = objfunc(erro,tempo,'IAE')
 
                     IG_t1 = IG(H,1e4,1e9,1,u,ref,h)
+                    
+                    [ Mp_t1, Te_t1, Ms_t1 ] =  find_Mp_Te_Ms(h,ref,Ts)
 
                     sy_t1= var(h)
                     su_t1 = var(u)
@@ -294,6 +308,8 @@
                     IAE_t1  = objfunc(erro,tempo,'IAE')
 
                     IG_t1 = IG(H,1e4,1e9,1,u,ref,h)
+                    
+                    [ Mp_t1, Te_t1, Ms_t1 ] =  find_Mp_Te_Ms(h,ref,Ts)
 
                     sy_t1= var(h)
                     su_t1 = var(u)
@@ -320,6 +336,8 @@
                 
                 IG_t2_li = IG(H,1e4,1e9,1,u,ref,h)
                 
+                [ Mp_t2_li, Te_t2_li, Ms_t2_li ] =  find_Mp_Te_Ms(h,ref,Ts)
+                
                 sy_t2_li= var(h)
                 su_t2_li = var(u)
                 
@@ -340,6 +358,8 @@
                 IAE_t2_nli  = objfunc(erro,tempo,'IAE')
                 
                 IG_t2_nli = IG(H,1e4,1e9,1,u,ref,h)
+                
+                [ Mp_t2_nli, Te_t2_nli, Ms_t2_nli ] =  find_Mp_Te_Ms(h,ref,Ts)
                 
                 sy_t2_nli= var(h)
                 su_t2_nli = var(u)
@@ -368,6 +388,8 @@
                     IAE_t1_no  = objfunc(erro,tempo,'IAE')
 
                     IG_t1_no = IG(H,1e4,1e9,1,u,ref,h)
+                    
+                    [ Mp_t1_no, Te_t1_no, Ms_t1_no ] =  find_Mp_Te_Ms(h,ref,Ts)
 
                     sy_t1_no= var(h)
                     su_t1_no = var(u)
@@ -389,6 +411,8 @@
                     IAE_t1_n_no  = objfunc(erro,tempo,'IAE')
 
                     IG_t1_n_no = IG(H,1e4,1e9,1,u,ref,h)
+                    
+                    [ Mp_t1_n_no, Te_t1_n_no, Ms_t1_n_no ] =  find_Mp_Te_Ms(h,ref,Ts)
 
                     sy_t1_n_no = var(h)
                     su_t1_n_no = var(u)
@@ -415,6 +439,9 @@
                 
                 IG_t2_li_no = IG(H,1e4,1e9,1,u,ref,h)
                 
+                [ Mp_t2_li_no, Te_t2_li_no, Ms_t2_li_no ] =  find_Mp_Te_Ms(h,ref,Ts)
+
+                
                 sy_t2_li_no= var(h)
                 su_t2_li_no = var(u)
                 
@@ -435,6 +462,8 @@
                 IAE_t2_nli_no  = objfunc(erro,tempo,'IAE')
                 
                 IG_t2_nli_no = IG(H,1e4,1e9,1,u,ref,h)
+                
+                [ Mp_t2_nli_no, Te_t2_nli_no, Ms_t2_nli_no ] =  find_Mp_Te_Ms(h,ref,Ts)
                 
                 sy_t2_nli_no= var(h)
                 su_t2_nli_no = var(u)

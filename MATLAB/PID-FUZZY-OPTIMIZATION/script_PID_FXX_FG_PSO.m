@@ -32,7 +32,7 @@
         h = zeros(nptos,1); % variavel de saida
         
         %ref_type = 'st'; % st = step ; us = upper stair ; ls = lower stair;
-        patamar = 0.25;
+        patamar = 0.15;
         passo = 0.00;
         Tamostra = Ts;
     

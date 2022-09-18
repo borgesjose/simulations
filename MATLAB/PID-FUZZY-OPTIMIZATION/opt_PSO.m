@@ -49,8 +49,8 @@ c2 = pso.c2;
             if (FT2Itype == 'L')
                 
                 nVar =  16;
-                ub = (2*L) * ones(1, nVar);
-                lb = -(2*L) * ones(1, nVar);
+                ub = (L/4) * ones(1, nVar);
+                lb = -(L/4) * ones(1, nVar);
                 
             elseif (FT2Itype == 'N')
                 
@@ -97,7 +97,7 @@ for t = 1 : maxIter
         
         script_PID_FXX_FG_PSO;
         Mp = max(h);
-        Swarm.Particles(k).O = 2*Mp + fobj(erro,tempo,'IAE');%fobj(erro,tempo,'ITAE');%fobj(currentX);
+        Swarm.Particles(k).O = 2*Mp + fobj(erro,tempo,'ITAE');%fobj(erro,tempo,'ITAE');%fobj(currentX);
         average_objective(t) =  average_objective(t)  + Swarm.Particles(k).O;
         
         % Update the PBEST
