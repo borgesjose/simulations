@@ -39,7 +39,7 @@
         if(PIDflag) simName = 'PID';
         else simName = FuzzyType;
         end;
-        
+         
         if(flag_load_dist) simName = 'Load_disturbace'; end;
         if(flag_noise) simName = 'Noise'; end;
         if(flag_sinusoidal_dist) simName = 'Sinusoidal_Noise'; end;
