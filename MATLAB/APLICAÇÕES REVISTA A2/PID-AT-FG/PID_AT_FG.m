@@ -9,8 +9,8 @@
 %  -- Version: 1.0  - 21/05/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Passo 1, definir o vetor tempo:
-            Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
-            Tsim = 500;
+            Ts = .1; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
+            Tsim = 1000;
             nptos = Tsim/Ts;
             ts = linspace(0,Tsim,nptos);
 
@@ -32,16 +32,82 @@
         r = 0.005;% raio do orificio de saida em metros
 
         A = pi*r^2;% Area do orificio de saida
-        
-        %% Passo 3 - Controller definition: 
-        % Ctype definie o tipo de sintonia do controaldor: 
-        % 'ZN' é Ziegle-Nichols , 
-        % 'CC' é Choen Coon, 
-        % 'AT' é Astrom 
-        % 'PR' é a sintonia do professor
 
+ %% 2 - Aplicando o rele:
+% Agora é o momento de aplicar o relé a planta: (rele com histerese)
+
+    n = 200; % Numero de pontos de análise
+
+    eps = 0.0; 
+    d = .00023;
+
+    %nptos = 1000;
+
+% Chama a função rele com histerese passando os paramentros do rele e os polos e ganho do proceso de 2 ordem
+% Retorna o vetor yr, e ur com os resultados da aplicação do relé: 
+
+    [yr,ur] = rele_nh_nl(n, Ts, d, A,Cd); 
+%%
+    figure;
+    grid;
+    plot(yr,'c-');
+    hold on;
+    %%
+    figure;
+    grid;
+    plot(ur);
+
+%% 3 Identificar os parametros a partir do experimento com relé:
+
+    %[gw,w,arm,Kp]=Identificar(n, d, eps,Ts,yr,ur);
+
+    Ku = (4*d)/pi*0.0076;
+  %%
+    %Tu = (2*pi)/w;
+    Tu = 11;
+    w = (2*pi)/Tu;
+%%
+
+Kp = 2130;
+
+L = .3;
+
+%%   
+    c = 1/Kp;
+    b = sin(w*L)/(w*Ku);
+    a = (c + cos(w*L))/(w^2);
+ 
+%% 3.1 teste modelo:
+%  a = 1/0.2133;
+%  b = 0.6667/0.2133;
+%  c = 0.1067/0.2133;
+%% Definições do controlador AT-PID-FG: 
+
+    Am = 10;
+
+    Am_min = 1; 
+    Am_max = 5;
+    Theta_m_min = 45;
+    Theta_m_max = 72;
+    
+    %Theta_m = (180/2)*(1-(1/Am));
+
+%% Sintonizanodo o PID:
+
+    K = (pi/(2*Am*L))*[b;c;a];
+    Kc = K(1);
+    Ki = K(2);
+    Kd = K(3);
+    K
+        %% Passo 3 - Controller definition: 
+% Ti=Kc/Kd;
+% Td=Kd/Kc;
+Ti=0.443;
+Td=0.0225;
+
+%%
         Ctype = 'PR'%'ZN'; 
-        patamar = 0.05
+        patamar = 0.10
         passo = 0.00
         Tamostra = Ts;
     
@@ -70,64 +136,21 @@
         erro(1)=1 ; erro(2)=1 ; erro(3)=1; erro(4)=1;
 
 
-        if (Ctype == 'ZN')
-            L =  0.158;
-            T1 = 2.83;
-            Kc = 1.2*(3.8000e-04/0.2056)*((T1)/(L))*10^-3
-            Ti = 2*L
-            Td = 0.5*L         
-        end;
-        
-        if (Ctype == 'CC')
-            Kc = .0001;
-            Ti = 0.2;
-            Td = 0.079;            
-        end;
-        
-        if (Ctype == 'AT')
-            Kc = .0001;
-            Ti = 0.2;
-            Td = 0.079;            
-            
-        end;   
-        
-        if (Ctype == 'FG')
-             
-            K = AT_PID_FG(Am,L,a,b,c);
-            
-            Kc = K(1);
-            Ti = Kc/K(2);
-            Td = K(3)/Kc;
-            
-        end; 
-        
-        if(Ctype == 'PR')
-            disp("Selecione um controlador: ZN , CC, AT ") 
-            %SINTONIA PROFESSOR:
-            Kc = .00005;
-            Ti = 0.2;
-            Td = 0.079;
-            %Td = 0.0;
-        end;    
-            
-        
-load('ruido.mat')
-load('disturbio.mat')
-
         %% Simulation with ode45;
 
         for i=4:nptos
             
             %RUPTURA NO MODELO
-            % raio do orificio de saida em metros
-            if(i > (nptos/2)) r = 0.005; end;
-            A = pi*r^2;% Area do orificio de saida
+%             % raio do orificio de saida em metros
+%             if(i > (nptos/2)) r = 0.005; end;
+%             A = pi*r^2;% Area do orificio de saida
 
             [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
+            
             h0 = y(end); % take the last point
             h(i) = h0; % store the height for plotting
 
-            erro(i)=ref(i) - h(i) + sinusoidal_dist(ts(i));% + ruido(i); %Erro
+            erro(i)=ref(i) - h(i);
 
             rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
 
@@ -135,15 +158,15 @@ load('disturbio.mat')
 
                         %Controlador:
 
-                        Kp(i)= Kc/Ami;
-                        Kd(i)= (Td)*Kc/Ami;
-                        Ki(i)= (Kc/Ami)/(Ti);
+                        %Kp(i)= Kc/Ami;
+                        %Kd(i)= (Td)*Kc/Ami;
+                       % Ki(i)= (Kc/Ami)/(Ti);
 
                         alpha = (Kc/Ami)*(1+((Td)/Tamostra)+(Tamostra/(2*(Ti))));
                         beta = -(Kc/Ami)*(1+2*((Td)/Tamostra)-(Tamostra/(2*(Ti))));
                         gama = (Kc/Ami)*(Td)/Tamostra;
 
-                        u(i)= h(i-1)%u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2) ;%+ disturbio(i);
+                        u(i)= u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2) ;%+ disturbio(i);
 
                         %saturadores:
                         if(u(i)<5e-5) u(i)=5e-5;end;
@@ -178,14 +201,14 @@ load('disturbio.mat')
         %%
         
              H=nptos;
-             ISE_pid  = objfunc(erro,tempo,'ISE')
-             ITSE_pid = objfunc(erro,tempo,'ITSE')
-             ITAE_pid = objfunc(erro,tempo,'ITAE')
-             IAE_pid  = objfunc(erro,tempo,'IAE')
+             ISE_pid_FG  = objfunc(erro,tempo,'ISE')
+             ITSE_pid_FG = objfunc(erro,tempo,'ITS E')
+             ITAE_pid_FG = objfunc(erro,tempo,'ITAE')
+             IAE_pid_FG  = objfunc(erro,tempo,'IAE')
              
-             I_pid = esforco_ponderado(erro,u,H,100)
-             IG_pid = IG(H,1e4,1e9,1,u,ref,h)
+             I_pid_FG = esforco_ponderado(erro,u,H,100)
+             IG_pid_FG = IG(H,1e4,1e9,1,u,ref,h)
              
-             sy_pid= var(h)
-             su_pid = var(u)
+             sy_pid_FG = var(h)
+             su_pid_FG = var(u)
              

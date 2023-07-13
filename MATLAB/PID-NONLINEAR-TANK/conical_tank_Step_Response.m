@@ -11,7 +11,7 @@
 
 
 %Passo 1, definir o vetor tempo:
-    Ts = .01; % periodo de amostragem para processo de um tanque ( Landau,2006)
+    Ts = .1; % periodo de amostragem para processo de um tanque ( Landau,2006)
     Tsim = 150
     nptos = Tsim/Ts;
     ts = linspace(0,Tsim,nptos+1);

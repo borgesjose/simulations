@@ -6,7 +6,7 @@ function [fig1,fig2] = p_pid(ts,h,ref,u,tempo,Kp,Kd,Ki)
         ylabel('Tank Height (m)');
         xlabel('Time (s)');
         title(['Resposta Tanque PID '])
-        saveas(gcf,['./figures/','Resposta Tanque PID ','.png'])
+        %saveas(gcf,['./figures/','Resposta Tanque PID ','.png'])
         
         fig2 = figure;
         plot(ts,u,'k:','LineWidth', 3,'DisplayName','input'); hold off
@@ -14,7 +14,7 @@ function [fig1,fig2] = p_pid(ts,h,ref,u,tempo,Kp,Kd,Ki)
         xlabel('Time (s)');
         legend();
         title(['Sinal de Controle PID '])
-        saveas(gcf,['./figures/','Sinal de Controle PID ','.png'])
+        %saveas(gcf,['./figures/','Sinal de Controle PID ','.png'])
         
 
 

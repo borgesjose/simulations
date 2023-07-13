@@ -19,14 +19,13 @@
         PIDtype = 'ZN'; %'ZN' = Ziegle-Nichols , 'CC' = Choen Coon,'AT' = Astrom, 'PR' = Teacher tunning;
         PIDflag = 0;
         FuzzyType = 'T1';% 'T1' = Tipo 1, 'T2' = Tipo 2;
-        FT1type = 'N'; % L = input linear ; N = input non linear
+        FT1type = 'L'; % L = input linear ; N = input non linear
         FT2Itype = 'L'; % L = input linear ; N = input non linear
         
         flag_load_dist = 0; 
         flag_noise = 0;
         flag_sinusoidal_dist = 0;
         flag_model_severance = 0;
-        
         
         Opt_type = 'NO'; % AG = Genetic Algorithm ; PS = Particle Swarm Optimization; NO = No optimization
         
@@ -93,8 +92,8 @@
         % o vetor parametros dá os valores das MF's:
         
         if (FT2Itype == 'L')
-            gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
-            %gene = .2*ones(1,16);
+            %gene = [0.2377,0.0306,-0.2588,0.4572,0.5397,0.2005,0.0634,0.0350,0.4868,0.2303,0.1049,-0.0324,0.0481,0.3489,0.4641,0.2081];
+            gene = .2*ones(1,16);
         elseif (FT2Itype == 'N')
             gene =[0.2146,0.3760,-0.1644,0.4906,0.0376,0.2273,0.2379,-0.0310,0.4428,0.5785,0.3263,0.3500];
         end;

@@ -9,8 +9,8 @@
 %  -- Version: 1.0  - 21/05/2022                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %% Passo 1, definir o vetor tempo:
-            Ts = 5; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
-            Tsim = 500;
+            Ts = .1; % periodo de amostragem para processo de nivel em um tanque  5~10s( Digital control systems,Landau,2006,p.32)
+            Tsim = 1000;
             nptos = Tsim/Ts;
             ts = linspace(0,Tsim,nptos);
 
@@ -27,7 +27,7 @@
         Cv = 0.97 %velocity coefficient (water 0.97)
         Cc = 0.97 %contraction coefficient (sharp edge aperture 0.62, well rounded aperture 0.97)
 
-        Cd = Cc*Cv % discharge coefficient
+        Cd = Cc*Cv; % discharge coefficient
 
         r = 0.005;% raio do orificio de saida em metros
 
@@ -111,8 +111,7 @@
         end;    
             
         
-load('ruido.mat')
-load('disturbio.mat')
+
 
         %% Simulation with ode45;
 
@@ -126,25 +125,7 @@ load('disturbio.mat')
             [~,y] = ode45(@(t,y) tank_conical(t,y,A,u(i-1),Cd,R1,R2),[0,Ts],h(i-1));
             h0 = y(end); % take the last point
             h(i) = h0; % store the height for plotting
-
-            erro(i)=ref(i) - h(i) + sinusoidal_dist(ts(i));% + ruido(i); %Erro
-
-            rate(i)=(erro(i) - erro(i-1));%/Tc; %Rate of erro
-
-            Ami = 1; 
-
-                        %Controlador:
-
-                        Kp(i)= Kc/Ami;
-                        Kd(i)= (Td)*Kc/Ami;
-                        Ki(i)= (Kc/Ami)/(Ti);
-
-                        alpha = (Kc/Ami)*(1+((Td)/Tamostra)+(Tamostra/(2*(Ti))));
-                        beta = -(Kc/Ami)*(1+2*((Td)/Tamostra)-(Tamostra/(2*(Ti))));
-                        gama = (Kc/Ami)*(Td)/Tamostra;
-
-                        u(i)= h(i-1)%u(i-1) + alpha*erro(i) + beta*erro(i-1) + gama*erro(i-2) ;%+ disturbio(i);
-
+            u(i)=23e-5;
                         %saturadores:
                         if(u(i)<5e-5) u(i)=5e-5;end;
                         if(u(i)>2*3.8000e-04) u(i)=2*3.8000e-04;end;
@@ -176,16 +157,16 @@ load('disturbio.mat')
         
         
         %%
-        
-             H=nptos;
-             ISE_pid  = objfunc(erro,tempo,'ISE')
-             ITSE_pid = objfunc(erro,tempo,'ITSE')
-             ITAE_pid = objfunc(erro,tempo,'ITAE')
-             IAE_pid  = objfunc(erro,tempo,'IAE')
-             
-             I_pid = esforco_ponderado(erro,u,H,100)
-             IG_pid = IG(H,1e4,1e9,1,u,ref,h)
-             
-             sy_pid= var(h)
-             su_pid = var(u)
-             
+%         
+%              H=nptos;
+%              ISE_pid  = objfunc(erro,tempo,'ISE')
+%              ITSE_pid = objfunc(erro,tempo,'ITSE')
+%              ITAE_pid = objfunc(erro,tempo,'ITAE')
+%              IAE_pid  = objfunc(erro,tempo,'IAE')
+%              
+%              I_pid = esforco_ponderado(erro,u,H,100)
+%              IG_pid = IG(H,1e4,1e9,1,u,ref,h)
+%              
+%              sy_pid= var(h)
+%              su_pid = var(u)
+%              
